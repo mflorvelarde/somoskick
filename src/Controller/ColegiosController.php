@@ -87,6 +87,12 @@ class ColegiosController extends AppController{
         return $this->redirect(['action' => 'index']);
     }
 
+    public function viewCamadas ($id = null) {
+        return $this->redirect(
+            ['controller' => 'Camadas', 'action' => 'index', $id]
+        );
+    }
+
     /**
      * Edit method
      *

@@ -13,15 +13,18 @@ use Cake\I18n\Time;
 
 class CamadasController extends AppController{
 
-
     /**
      * Index method
      * @return \Cake\Network\Response|null
      */
-    public function index() {
-        $camadas = $this->paginate($this->Camadas);
-
-        $this->set(compact('camadas'));
+    public function index($colegio_id = null) {
+        if ($colegio_id != null) {
+            $query = $this->Camadas->find('all')->where(['colegios_id' => $colegio_id]);
+            $this->set('camadas', $this->paginate($query));
+        } else {
+            $camadas = $this->paginate($this->Camadas);
+            $this->set(compact('camadas'));
+        }
         $this->set('_serialize', ['camadas']);
     }
 
