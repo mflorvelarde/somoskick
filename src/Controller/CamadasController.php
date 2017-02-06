@@ -54,26 +54,23 @@ class CamadasController extends AppController{
                 ]
             ]);
 
-            $camada->grupos = TableRegistry::get('Grupos')->newEntity();
+            $grupos = TableRegistry::get('Grupos')->newEntity();
+            $grupos->nombre = $camada->grupo->nombre;
+            $grupos->contrato = $camada->grupo->contrato;
+            $grupos->eliminado = 0;
+            $grupos->fecha_creacion = Time::now();
+            $grupos->usuario_creacion = 2;
+
+            $result = TableRegistry::get('Grupos')->save($grupos);
+            $grupos_id = $result->id;
 
             $camada->usuario_creacion = 2;
             $camada->fecha_creacion = date("d/m/Y");
             $camada->eliminado = 0;
-            $camada->grupos->eliminado = 0;
-            $camada->grupos->fecha_creacion = Time::now();
-            $camada->usuario_creacion = 2;
+            $camada->grupo = null;
+            $camada->grupos_id = $grupos_id;
 
-            //$result = $this->Camadas->save($camada);
-
-            //$result = TableRegistry::get('Grupos')->save($camada->grupos);
-            //$grupos_id = $result->id;
-
-            //$camada->grupos = $result;
-
-
-          //  unset($this->Camada->Grupo->validate['id']);
-
-            if ($this->Camada->saveAssociated($camada)) {
+            if ($this->Camadas->save($camada)) {
                 $this->Flash->success(__('La camada fue guardada'));
 
                 return $this->redirect(['action' => 'index']);
