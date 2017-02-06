@@ -2,14 +2,14 @@
 <div class="row">
     <div class="col-lg-12">
 	<h1 class="page-header">
-	    Viajes
+	    Usuarios
 	</h1>
 	<ol class="breadcrumb">
 	    <li>
 		<i class="fa fa-wrench"></i>  <a href="index.html">Administraci&oacute;n</a>
 	    </li>
 	    <li class="active">
-		<i class="fa fa-user"></i> Viajes
+		<i class="fa fa-user"></i> Usuarios
 	    </li>
 	</ol>
     </div>
@@ -18,7 +18,7 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <?= $this->Html->link(__('Nueva viaje'), ['action' => 'add'] , array('class'=>'btn btn-primary') ) ?>
+        <?= $this->Html->link(__('Nuevo Usuario'), ['action' => 'add'] , array('class'=>'btn btn-primary') ) ?>
     </div>
 </div>
 
@@ -28,7 +28,7 @@
     <div class="col-lg-12">
       <div class="panel panel-default">
 	      <div class="panel-heading">
-		 Listado de viajes
+		 Listado de Personas
 	      </div>
                
 	      <div class="panel-body">
@@ -36,23 +36,28 @@
 	              <thead>
 			<tr>
 			    <th><?= $this->Paginator->sort('id', 'ID') ?></th>
-			    <th><?= $this->Paginator->sort('destino', 'Destino') ?></th>
+			    <th><?= $this->Paginator->sort('descripcion', 'NOMBRE') ?></th>
+			    <th><?= $this->Paginator->sort('monto_pesos', 'APELLIDO') ?></th>
+			    <th><?= $this->Paginator->sort('monto_dolares', 'NRO DOCUMENTO') ?></th>
 
 			    <th class="actions"><?= __('Actions') ?></th>
 			</tr>
 		      </thead>
 		  
 		      <tbody>
-			  <?php foreach ($viajes as $viaje): ?>
+			  <?php foreach ($tarifas as $tarifa): ?>
 			  <tr>
-			      <td><?= h($viaje->destino) ?></td>
+			      <td><?= $this->Number->format($tarifa->id) ?></td>
+			      <td><?= h($tarifa->descripcion) ?></td>
+			      <td><?= $this->Number->format($tarifa->monto_pesos) ?></td>
+			      <td><?= $this->Number->format($tarifa->monto_dolares) ?></td>
 
 
 			      <td class="actions">
 			      
-				  <?= $this->Html->link(__(''), ['action' => 'view', $viaje->id] , array('class' => 'fa fa-eye') ) ?>
-				  <?= $this->Html->link(__(''), ['action' => 'edit', $viaje->id] , array('class' => 'fa fa-pencil') ) ?>
-				  <?= $this->Form->postLink(__(''), ['action' => 'delete', $viaje->id], ['class' => 'fa fa-trash-o','confirm' => __('Are you sure you want to delete # {0}?', $viaje->id)] ) ?>
+				  <?= $this->Html->link(__(''), ['action' => 'view', $tarifa->id] , array('class' => 'fa fa-eye') ) ?>
+				  <?= $this->Html->link(__(''), ['action' => 'edit', $tarifa->id] , array('class' => 'fa fa-pencil') ) ?>
+				  <?= $this->Form->postLink(__(''), ['action' => 'delete', $tarifa->id], ['class' => 'fa fa-trash-o','confirm' => __('Are you sure you want to delete # {0}?', $tarifa->id)] ) ?>
 				  
 			      </td>
 			  </tr>		  

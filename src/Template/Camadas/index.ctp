@@ -1,3 +1,113 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>Camadas</h1>
+                <ol class="breadcrumb">
+                    <li><a href="../admin/index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+                    <li class="active">Camadas</li>
+                </ol>
+            </section>
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-body">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Colegio</th>
+                                        <th>Camada</th>
+                                        <th>Vendedor</th>
+                                        <th>Estado</th>
+                                        <th>Precio actual ARS</th>
+                                        <th>Precio actual USD</th>
+                                        <th>En lista de espera</th>
+                                        <th>Regulares</th>
+                                        <th>Registrados</th>
+                                        <th>Por contrato</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>Anunciacion De Maria</td>
+                                        <td>2017</td>
+                                        <td>Sebastian Velarde</td>
+                                        <td><span class="label label-success">Firmada</span></td>
+                                        <td>0</td>
+                                        <td>2600</td>
+                                        <td>No</td>
+                                        <td>18</td>
+                                        <td>18</td>
+                                        <td>20</td>
+                                        <td>
+                                            <button type="button" class="btn btn-default"><i class="fa fa-align-center"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Balmoral</td>
+                                        <td>2017</td>
+                                        <td>Sebastian Velarde</td>
+                                        <td><span class="label label-warning">En oferta</span></td>
+                                        <td>0</td>
+                                        <td>2600</td>
+                                        <td>No</td>
+                                        <td>18</td>
+                                        <td>18</td>
+                                        <td>20</td>
+                                        <td>
+                                            <button type="button" class="btn btn-default"><i class="fa fa-align-center"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Balmoral</td>
+                                        <td>2016</td>
+                                        <td>Sebastian Velarde</td>
+                                        <td><span class="label label-danger">Perdida</span></td>
+                                        <td>0</td>
+                                        <td>2600</td>
+                                        <td>No</td>
+                                        <td>18</td>
+                                        <td>18</td>
+                                        <td>20</td>
+                                        <td>
+                                            <button type="button" class="btn btn-default"><i class="fa fa-align-center"></i></button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Colegio</th>
+                                        <th>Camada</th>
+                                        <th>Vendedor</th>
+                                        <th>Estado</th>
+                                        <th>Precio actual ARS</th>
+                                        <th>Precio actual USD</th>
+                                        <th>En lista de espera</th>
+                                        <th>Regulares</th>
+                                        <th>Registrados</th>
+                                        <th>Por contrato</th>
+                                        <th></th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </section>
+            <!-- /.content -->
+        </div>
+    </div>
+</div>
+
 <!-- Page Heading -->
 <div class="row">
     <div class="col-lg-12">
