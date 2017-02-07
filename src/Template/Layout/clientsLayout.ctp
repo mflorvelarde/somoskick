@@ -18,7 +18,7 @@
 
     <!-- Custom CSS -->
   <!--  <?php echo $this->Html->css('sb-admin-2.css'); ?>-->
-
+<?php echo $this->Html->css('custom.css'); ?>
     <!-- Morris Charts CSS -->
      <?php echo $this->Html->css('plugins/morris/morris.css'); ?>
 
@@ -51,10 +51,10 @@
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
           <header id="header" class="main-header">
-            <?= $this->element('navegation_bar') ?>
+            <?= $this->element('clients_navigation_bar') ?>
           </header>
           <aside id="sidebar" class="main-sidebar">
-            <?= $this->element('side_menu') ?>
+            <?= $this->element('clients_side_menu') ?>
           </aside>
           <div class="content-wrapper">
 
@@ -98,7 +98,6 @@
 
     <?php echo $this->Html->script('morris-data.js'); ?>
     <!--<script src="../data/morris-data.js"></script>-->
-    <?php echo $this->Html->css('custom.css'); ?>
 
     <!-- Custom Theme JavaScript -->
     <?php echo $this->Html->script('sb-admin-2.js'); ?>
@@ -126,6 +125,7 @@
     <?php echo $this->Html->script('plugins/fastclick/fastclick.js'); ?>
     <!-- AdminLTE App -->
     <?php echo $this->Html->script('dist/js/app.min.js'); ?>
+    <?php echo $this->Html->script('plugins/jQuery/jquery-2.2.3.min.js'); ?>
     <?php echo $this->Html->script('plugins/datatables/jquery.dataTables.min.js'); ?>
     <?php echo $this->Html->script('plugins/datatables/dataTables.bootstrap.min.js'); ?>
 </body>

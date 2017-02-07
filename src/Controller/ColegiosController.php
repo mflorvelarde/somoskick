@@ -11,7 +11,6 @@ namespace App\Controller;
 
 class ColegiosController extends AppController{
 
-
     /**
      * Index method
      * @return \Cake\Network\Response|null

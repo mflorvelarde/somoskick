@@ -22,8 +22,8 @@
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th><?= $this->Paginator->sort('destino', 'Destino') ?></th>
-                                <th class="actions"><?= __('Actions') ?></th>
+                                <th>Destino</th>
+                                <th></th>
                             </tr>
                         </thead>
 		                <tbody>
@@ -43,15 +43,16 @@
                                           <li><?= $this->Form->postLink('Borrar viaje', ['action' => 'delete', $viaje->id], ['confirm' => __('Confirmar borrado de viaje', $viaje->id)] ) ?></li>
                                       </ul>
                                   </div>
-
-
-
-
-
                                 </td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Destino</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
                     </table>
                     <div class="paginator">
                         <ul class="pagination">
