@@ -15,7 +15,7 @@ class TarifasTable extends Table {
     public function initialize(array $config) {
         parent::initialize($config);
 
-        $this->table('colegios');
+        $this->table('tarifas');
         $this->displayField('id');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');

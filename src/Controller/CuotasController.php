@@ -21,17 +21,43 @@ class CuotasController extends AppController{
      */
     public function index() {
 
-
+       // $cuotas = $this->paginate($this->Cuotas);;
         //$cuotas = $this->paginate($this->Cuotas);
         /*
                 $query = $this->Camadas->find('all')->where(['colegios_id' => $colegio_id]);
                 $this->set('camadas', $this->paginate($query));*/
 
 
-        $query = $this->Cuotas->find('all');
-        $query->contain(['Cuotas_aplicadas']);
-        $this->set('cuotas', $this->paginate($query));
+/*        $query = $this->Cuotas->find('all');
+        $query->contain(['Cuotas_Aplicadas']);
+        $this->set('cuotas', $this->paginate($query));*/
 
+
+        // As an option to find()
+     //   $query = $cuotas->find('all', ['contain' => ['Cuotas_Aplicadas']]);
+
+        // As a method on the query object
+/*        $query = $cuotas->find('all');
+/*        $query->contain(['Cuotas_Aplicadas']);*/
+  /*      $query = $cuotas
+            ->find()
+            ->contain([
+                'Cuotas_aplicadas'
+            ]);*/
+
+/*        $this->paginate = [
+            'contain' => ['Cuotas_aplicadas']
+        ];
+
+        $this->set('cuotas', $this->paginate($this->Cuotas));*/
+
+        //$this->set('cuotas', $this->paginate($query));
+
+
+        $cuotas = $this->paginate($this->Cuotas);
+        $this->set(compact('cuotas'));
+
+    $this->set('_serialize', ['cuotas']);
 /*
 
         $this->set(compact('$cuotas'));

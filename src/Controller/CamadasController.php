@@ -18,13 +18,18 @@ class CamadasController extends AppController{
      * @return \Cake\Network\Response|null
      */
     public function index($colegio_id = null) {
-        if ($colegio_id != null) {
-            $query = $this->Camadas->find('all')->where(['colegios_id' => $colegio_id]);
-            $this->set('camadas', $this->paginate($query));
+
+              if ($colegio_id != null) {
+                    $query = $this->Camadas->find('all')->where(['colegios_id' => $colegio_id]);
+                } else {
+                    $query = $this->Camadas->find('all');
+                }
+/*        if ($colegio_id != null) {
+            $query = $this->Camadas->find('all', ['contain' => ['Colegios'], ['Grupos']])->where(['colegios_id' => $colegio_id]);
         } else {
-            $camadas = $this->paginate($this->Camadas);
-            $this->set(compact('camadas'));
-        }
+            $query = $this->Camadas->find('all', ['contain' => ['Colegios'], ['Grupos']]);
+        }*/
+        $this->set('camadas', $this->paginate($query));
         $this->set('_serialize', ['camadas']);
     }
 
@@ -47,8 +52,11 @@ class CamadasController extends AppController{
      *
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
-    public function add() {
+    public function add($colegioId = null) {
         $camada = $this->Camadas->newEntity();
+        if ($colegioId != null) {
+            $camada->colegios_id = $colegioId;
+        }
 
         if ($this->request->is('post')) {
             $camada = $this->Camadas->patchEntity($camada, $this->request->data, [

@@ -54,10 +54,11 @@
 			      <td><?= $this->Number->format($cuota->monto_pesos) ?></td>
 			      <td><?= $this->Number->format($cuota->monto_dolares) ?></td>
 
-			        <?php foreach ($cuota.cuotas_aplicadas as $cuotas_aplicadas): ?>
-			        <td><?= $this->Number->format($cuotas_aplicadas->id) ?></td>
+			        <?php foreach ($cuota->cuotas_aplicada as $cuotas_aplicada): ?>
+			        <td><?= $this->Number->format($cuotas_aplicada->id) ?></td>
 
 
+		      <?php endforeach; ?>
 
 
 			      <td class="actions">

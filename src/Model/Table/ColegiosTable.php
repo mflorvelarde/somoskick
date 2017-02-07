@@ -19,11 +19,9 @@ class ColegiosTable extends Table {
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
 
-//Para setear relaciones
-        /*        $this->hasOne('Perfiles', [
-                    'className' => 'Perfiles',
-                    'foreignKey' => 'perfil_id'
-                ]);*/
 
+        $this->hasMany('Camadas', [
+            'className' => 'Camadas',
+        ]);
     }
 }

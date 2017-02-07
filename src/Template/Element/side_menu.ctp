@@ -1,82 +1,45 @@
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-
-                    <ul class="nav" id="side-menu">
-
-                        <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search...">
-                                <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                            </div>
-                            <!-- /input-group -->
-                        </li>
-
-                        <!-- ************************** -->
-
-                        <li>
-			     <a href="#"><i class="fa fa-wrench fa-fw"></i>Administraci&oacute;n <span class="fa arrow"></span></a>
-
-			     <ul class="nav nav-second-level">
-			     <li>
-                                <a href="<?php echo $this->Url->build(["controller" => "Users", "action" => "index"]);?>">
-				    Usuarios
-                                </a>
-			      </li>
-			      <li>
-                                <a href="#">
-				   Perfiles
-                                </a>
-			      </li>
-			      <li>
-                                <a href="#">
-				  Configuraci&oacute;n
-                                </a>
-			      </li>
-			  </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-
-
-			<!-- ************************** -->
-
-			<li>
-			     <a href="#"><i class="fa fa-user"></i> Gesti&oacute;n de Clientes <span class="fa arrow"></span></a>
-
-			     <ul class="nav nav-second-level">
-				<li>
-				    <a href="<?php echo $this->Url->build(["controller" => "Productos", "action" => "index"]);?>">
-				      <i class="fa fa-th"></i>
-					Gesti&oacute;n Productos
-				    </a>
-				</li>
-			    </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-
-			<!-- ************************** -->
-
-			<li>
-			     <a href="#"><i class="fa fa-user"></i>  Mi Autogesti&oacute;n  <span class="fa arrow"></span></a>
-
-			     <ul class="nav nav-second-level">
-				<li>
-				   <a href="<?php echo $this->Url->build(["controller" => "Users", "action" => "index"]);?>">
-				    <i class="fa fa-th-large"></i>
-				      Mis Productos
-				  </a>
-				</li>
-			    </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-
-			<!-- ************************** -->
-                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
-            </div>
-            <!-- /.navbar-static-side -->
-
+ <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu">
+        <li class="header">MENÚ PRINCIPAL</li>
+		<li>
+          <a href="pages/widgets.html">
+            <i class="fa fa-plane"></i> <span>Colegios</span>
+          </a>
+        </li>
+		<li>
+          <a href="pages/widgets.html">
+            <i class="fa fa-suitcase"></i> <span>Camadas</span>
+          </a>
+        </li>
+		<li>
+          <a href="../clients/pagos.php">
+            <i class="fa fa-th"></i> <span>Pasajeros</span>
+          </a>
+        </li>
+		<li>
+          <a href="pages/widgets.html">
+            <i class="fa fa-stethoscope"></i> <span>Notifiaciones de pago</span>
+          </a>
+        </li>
+		<li>
+          <a href="pages/widgets.html">
+            <i class="fa fa-file-o"></i> <span>Contrato</span>
+          </a>
+        </li>
+		<li>
+          <a href="pages/widgets.html">
+            <i class="fa fa-credit-card"></i> <span>Formas de pago</span>
+          </a>
+        </li>
+		<li class="header">MI CUENTA</li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>

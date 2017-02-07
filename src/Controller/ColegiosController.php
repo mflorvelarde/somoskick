@@ -93,6 +93,12 @@ class ColegiosController extends AppController{
         );
     }
 
+    public function addCamada ($id = null) {
+        return $this->redirect(
+            ['controller' => 'Camadas', 'action' => 'add', $id]
+        );
+    }
+
     /**
      * Edit method
      *
