@@ -9,6 +9,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\I18n\Time;
 
 class Notificaciones_PagosController extends AppController{
 
@@ -48,7 +49,7 @@ class Notificaciones_PagosController extends AppController{
         if ($this->request->is('post')) {
             $colegio = $this->Colegios->patchEntity($colegio, $this->request->data);
             $colegio->usuario_creacion = 2;
-            $colegio->fecha_creacion = date("d/m/Y");
+            $colegio->fecha_creacion = Time::now();
             $colegio->eliminado = 0;
             $colegio->direccion_id = 1;
 
@@ -78,7 +79,7 @@ class Notificaciones_PagosController extends AppController{
         $colegio = $this->Colegios->get($id);
         $colegio->eliminado = 1;
         $colegio->usuario_eliminado = 2;
-        $colegio->fecha_eliminado = date("d/m/Y");
+        $colegio->fecha_eliminado = Time::now();
         if ($this->Colegios->save($colegio)) {
             $this->Flash->success(__('El colegio fue eliminado'));
         } else {
@@ -101,7 +102,7 @@ class Notificaciones_PagosController extends AppController{
         if ($this->request->is(['patch', 'post', 'put'])) {
             $colegio = $this->Colegios->patchEntity($colegio, $this->request->data);
             $colegio->usuario_modificacion = 2;
-            $colegio->fecha_modificacion = date("d/m/Y");
+            $colegio->fecha_modificacion = Time::now();
 
             if ($this->Colegios->save($colegio)) {
                 $this->Flash->success(__('El colegio fue guardado'));

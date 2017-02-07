@@ -8,6 +8,7 @@
 
 namespace App\Controller;
 
+use Cake\I18n\Time;
 
 class TarifasController extends AppController {
     /**
@@ -47,7 +48,7 @@ class TarifasController extends AppController {
         if ($this->request->is('post')) {
             $tarifa = $this->Tarifas->patchEntity($tarifa, $this->request->data);
             $tarifa->usuario_creacion = 2;
-            $tarifa->fecha_creacion = date("d/m/Y");
+            $tarifa->fecha_creacion = Time::now();
             $tarifa->eliminado = 0;
 
             if ($this->Tarifas->save($tarifa)) {
@@ -76,7 +77,7 @@ class TarifasController extends AppController {
         $tarifa = $this->Tarifas->get($id);
         $tarifa->eliminado = 1;
         $tarifa->usuario_eliminado = 2;
-        $tarifa->fecha_eliminado = date("d/m/Y");
+        $tarifa->fecha_eliminado = Time::now();
         if ($this->Tarifas->save($tarifa)) {
             $this->Flash->success(__('La tarifa fue eliminada'));
         } else {
@@ -100,7 +101,7 @@ class TarifasController extends AppController {
         if ($this->request->is(['patch', 'post', 'put'])) {
             $tarifa = $this->Tarifas->patchEntity($tarifa, $this->request->data);
             $tarifa->usuario_modificacion = 2;
-            $tarifa->fecha_modificacion = date("d/m/Y");
+            $tarifa->fecha_modificacion = Time::now();
 
             if ($this->Tarifas->save($tarifa)) {
                 $this->Flash->success(__('La tarifa fue guardada'));

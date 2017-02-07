@@ -41,10 +41,10 @@ class CamadasController extends AppController{
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $camada = $this->Camadas->get($id);
+/*        $camada = $this->Camadas->get($id);
 
         $this->set('camada', $camada);
-        $this->set('_serialize', ['camada']);
+        $this->set('_serialize', ['camada']);*/
     }
 
     /**
@@ -56,6 +56,8 @@ class CamadasController extends AppController{
         $camada = $this->Camadas->newEntity();
         if ($colegioId != null) {
             $camada->colegios_id = $colegioId;
+        } else {
+            $camada->colegios_id = 1;
         }
 
         if ($this->request->is('post')) {
@@ -76,7 +78,7 @@ class CamadasController extends AppController{
             $grupos_id = $result->id;
 
             $camada->usuario_creacion = 2;
-            $camada->fecha_creacion = date("d/m/Y");
+            $camada->fecha_creacion = Time::now();
             $camada->eliminado = 0;
             $camada->grupo = null;
             $camada->grupos_id = $grupos_id;
@@ -125,6 +127,9 @@ class CamadasController extends AppController{
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null) {
+        if ($id == null) {
+            $id = 8;
+        }
         $camada = $this->Camadas->get($id, ['contain' => []]);
 
         if ($this->request->is(['patch', 'post', 'put'])) {

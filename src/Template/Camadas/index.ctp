@@ -44,7 +44,7 @@
                                 <td>18</td>
                                 <td>20</td>
                                 <td>
-                                    <? echo $this->Form->button('<i class="fa fa-align-center"></i>', array(
+                                    <?php echo $this->Form->button('<i class="fa fa-align-center"></i>', array(
                                         'type' => 'button',
                                         'class' => 'btn btn-default',
                                         'action' => 'view'

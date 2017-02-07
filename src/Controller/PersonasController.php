@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\I18n\Time;
 
 /**
  * Users Controller
@@ -39,6 +40,9 @@ class PersonasController extends AppController{
         $this->set('_serialize', ['persona']);
     }
 
+    public function login() {
+        $this->viewBuilder()->layout('blankLayout');
+    }
     /**
      * Add method
      *

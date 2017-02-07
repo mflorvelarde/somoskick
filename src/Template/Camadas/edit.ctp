@@ -33,7 +33,15 @@
                             <div class="form-group">
                                 <?php  echo $this->Form->input('contacto1',  ['required' => true, 'class' => 'form-control' ] ); ?>
                             </div>
-
+                            <div class="form-group">
+                                <label for="tarifa" class="control-label">Tarifa</label>
+                                    <div class="form-group">
+                                        <select class="form-control" id="tarifa">
+                                            <option>Tarifa 1</option>
+                                            <option>Tarfifa 2</option>
+                                        </select>
+                                    </div>
+                            </div>
                             <div class="form-group">
                                 <?php  echo $this->Form->input('contacto2',  ['required' => true, 'class' => 'form-control' ] ); ?>
                             </div>

@@ -1,3 +1,14 @@
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>Camadas<small>Nombre de la camada</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="../admin/index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="../admin/camadas.php"><i class="fa fa-dashboard"></i> Camadas</a></li>
+                <li class="active">Nombre Camada</li>
+            </ol>
+        </section>
+        <!-- Main content -->
         <section class="content">
             <div class="row">
                 <div class="col-xs-12">
@@ -37,17 +48,16 @@
                                         <div class="row">
                                             <div class="col-xs-12">
                                                 <div class="box box-widget widget-user">
-                                                    <div class="widget-user-header bg-maroon-active" style="height: 80px">
+                                                    <div class="widget-user-header bg-maroon-active" style="height: 55px">
                                                         <h3 class="widget-user-username">Nombre de la camada</h3>
-                                                        <h5 class="widget-user-desc">Colegio</h5>
                                                     </div>
                                                 </div>
                                                 <div class="box box-widget widget-user-2">
                                                     <div class="box-footer no-padding">
                                                             <ul class="nav nav-stacked">
-                                                                <li><a href="#">Colegio <span class="pull-right badge bg-blue">Colegio</span></a></li>
+                                                                <li><a href="#">Colegio <span class="pull-right badge bg-blue">Manuel belgrano</span></a></li>
                                                                 <li><a href="#">Código de grupo <span class="pull-right badge bg-blue">SVP23</span></a></li>
-                                                                <li><a href="#">Estado <span class="pull-right badge bg-blue">Firmada</span></a></li>
+                                                                <li><a href="#">Estado <span class="pull-right badge bg-green">Firmada</span></a></li>
                                                                 <li><a href="#">Fecha firma <span class="pull-right badge bg-aqua">23/01/2016</span></a></li>
                                                                 <li><a href="#">Tarifa <span class="pull-right badge bg-green">Tarifa SP 2017 23</span></a></li>
                                                                 <li><a href="#">Año de la camada <span class="pull-right badge bg-red">2017</span></a></li>
@@ -55,6 +65,11 @@
                                                             </ul>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <?= $this->Html->link(__('Editar camada'), ['action' => 'edit'] , array('class'=>'btn bg-maroon margin-bottom') ) ?>
                                             </div>
                                         </div>
                                     </div>
@@ -65,11 +80,11 @@
                                             <div class="col-xs-12">
                                                 <!-- Widget: user widget style 1 -->
                                                 <div class="box box-widget widget-user">
-                                                    <!-- Add the bg color to the header using any of the bg-* classes -->
-                                                    <div class="widget-user-header bg-maroon-active" style="height: 80px">
+                                                <div class="box box-widget widget-user">
+                                                    <div class="widget-user-header bg-maroon-active" style="height: 55px">
                                                         <h3 class="widget-user-username">Nombre de la camada</h3>
-                                                        <h5 class="widget-user-desc">Colegio</h5>
                                                     </div>
+                                                </div>
                                                     <div class="box-footer">
                                                         <div class="row">
                                                             <div class="col-sm-2 border-right">
@@ -260,6 +275,11 @@
                                     <div class="tab-pane" id="tab-acompanantes">
                                         <div class="row">
                                             <div class="col-xs-12">
+                                                <div class="box box-widget widget-user">
+                                                    <div class="widget-user-header bg-maroon-active" style="height: 55px">
+                                                        <h3 class="widget-user-username">Nombre de la camada</h3>
+                                                    </div>
+                                                </div>
                                                 <div class="box">
                                                     <div class="box-header">
                                                         <h3 class="box-title">Acompañantes</h3>
@@ -311,6 +331,11 @@
                                     <div class="tab-pane" id="tab-espera">
                                         <div class="row">
                                             <div class="col-xs-12">
+                                                <div class="box box-widget widget-user">
+                                                    <div class="widget-user-header bg-maroon-active" style="height: 55px">
+                                                        <h3 class="widget-user-username">Nombre de la camada</h3>
+                                                    </div>
+                                                </div>
                                                 <div class="box">
                                                     <div class="box-header">
                                                         <h3 class="box-title">Lista de espera</h3>
@@ -372,62 +397,34 @@
             </div>
             <!-- /.row -->
         </section>
+        <!-- /.content -->
 
-     
-	       <!-- Page Heading -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        
-                        <h1 class="page-header">
-                            Vista de Camada
-                        </h1>
-                     <ol class="breadcrumb">
-			<li>
-			    <i class="fa fa-wrench"></i>  <a href="index.html">Administraci&oacute;n</a>
-			</li>
-			<li class="active">
-			    <i class="fa fa-user"> </i> <a href="<?php echo $this->Url->build(["controller" => "Camadas", "action" => "index"]);?>"> Camadas </a>
-			</li>
-			
-			<li class="active">
-			    <i class="fa fa-eye"></i> Vista Camada ?>
-			</li>
-			
-		    </ol>
-                    </div>
-                </div>
-                <!-- /.row -->
-
-                <div class="row">
-                    <div class="col-lg-12">
-
-                            <div class="form-group">
-                                <label>Descripción: </label> <?= h($camada->descripcion) ?>
-                            </div>
-                            
-                             <div class="form-group">
-                                <label>Año: </label> <?= h($camada->año)?>
-                            </div>
-                            
-                             <div class="form-group">
-                                <label>Contacto: </label> <?= h($camada->contacto1) ?>
-                            </div>
-
-                             <div class="form-group">
-                                <label>Contacto: </label> <?= h($camada->contacto2) ?>
-                            </div>
-
-                    </div>
-                    
-                 
-                </div>
-                <!-- /.row -->
-
-            </div>
-            <!-- /.container-fluid -->
-
-        </div>
-        <!-- /#page-wrapper -->
-
-    </div>
-    <!-- /#wrapper -->
+<!-- jQuery 2.2.3 -->
+<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<!-- DataTables -->
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="../../plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+<!-- page script -->
+<script>
+    $(function () {
+        $("#example1").DataTable();
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false
+        });
+    });
+</script>

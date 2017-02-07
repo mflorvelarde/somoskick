@@ -20,8 +20,8 @@ class ColegiosTable extends Table {
         $this->addBehavior('Timestamp');
 
 
-        $this->hasMany('Camadas', [
-            'className' => 'Camadas',
-        ]);
+//        $this->hasMany('Camadas', [
+//            'className' => 'Camadas',
+//        ]);
     }
 }

@@ -9,6 +9,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\I18n\Time;
 
 class ViajesController extends AppController {
     /**
@@ -34,7 +35,7 @@ class ViajesController extends AppController {
         if ($this->request->is('post')) {
             $viaje = $this->Viajes->patchEntity($viaje, $this->request->data);
             $viaje->usuario_creacion = 2;
-            $viaje->fecha_creacion = date("d/m/Y");
+            $viaje->fecha_creacion = Time::now();
             $viaje->eliminado = 0;
 
             if ($this->Viajes->save($viaje)) {
@@ -63,7 +64,7 @@ class ViajesController extends AppController {
         $viaje = $this->Viajes->get($id);
         $viaje->eliminado = 1;
         $viaje->usuario_eliminado = 2;
-        $viaje->fecha_eliminado = date("d/m/Y");
+        $viaje->fecha_eliminado = Time::now();
         if ($this->Viajes->save($viaje)) {
             $this->Flash->success(__('El viaje fue eliminado'));
         } else {
@@ -87,7 +88,7 @@ class ViajesController extends AppController {
         if ($this->request->is(['patch', 'post', 'put'])) {
             $viaje = $this->Viajes->patchEntity($viaje, $this->request->data);
             $viaje->usuario_modificacion = 2;
-            $viaje->fecha_modificacion = date("d/m/Y");
+            $viaje->fecha_modificacion = Time::now();
 
             if ($this->Viajes->save($viaje)) {
                 $this->Flash->success(__('El viaje fue guardado'));
