@@ -32,10 +32,21 @@
                                 <td><?= h($viaje->destino) ?></td>
 
                                 <td class="actions">
+                                <div class="btn-group">
+                                      <button type="button" class="btn btn-default">Acciones</button>
+                                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                          <span class="caret"></span>
+                                          <span class="sr-only">Toggle Dropdown</span>
+                                      </button>
+                                      <ul class="dropdown-menu" role="menu">
+                                          <li><?= $this->Html->link('Editar viaje', ['action' => 'edit', $viaje->id] ) ?></li>
+                                          <li><?= $this->Form->postLink('Borrar viaje', ['action' => 'delete', $viaje->id], ['confirm' => __('Confirmar borrado de viaje', $viaje->id)] ) ?></li>
+                                      </ul>
+                                  </div>
 
-                                <?= $this->Html->link(__(''), ['action' => 'view', $viaje->id] , array('class' => 'fa fa-eye') ) ?>
-                                <?= $this->Html->link(__(''), ['action' => 'edit', $viaje->id] , array('class' => 'fa fa-pencil') ) ?>
-                                <?= $this->Form->postLink(__(''), ['action' => 'delete', $viaje->id], ['class' => 'fa fa-trash-o','confirm' => __('Are you sure you want to delete # {0}?', $viaje->id)] ) ?>
+
+
+
 
                                 </td>
                             </tr>

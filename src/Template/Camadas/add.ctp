@@ -1,55 +1,56 @@
+<section class="content-header">
+    <h1 class="page-header">Nueva camada</h1>
+     <ol class="breadcrumb">
+        <li>
+            <i class="fa fa-wrench"></i>  <a href="index.html">Administraci&oacute;n</a>
+        </li>
+        <li class="active">
+            <a href="<?php echo $this->Url->build(["controller" => "Camadas", "action" => "index"]);?>"> Camadas </a>
+        </li>
 
-     
-<div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header">Nuevo camada</h1>
-         <ol class="breadcrumb">
-            <li>
-                <i class="fa fa-wrench"></i>  <a href="index.html">Administraci&oacute;n</a>
-            </li>
-            <li class="active">
-                <i class="fa fa-user"> </i> <a href="<?php echo $this->Url->build(["controller" => "Camadas", "action" => "index"]);?>"> Camadas </a>
-            </li>
+        <li class="active">
+            <i class="fa fa-pencil"></i> Nueva camada
+        </li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <?= $this->Form->create($camada) ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <?php  echo $this->Form->input('grupo.nombre',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                            </div>
 
-            <li class="active">
-                <i class="fa fa-pencil"></i> Nueva camada
-            </li>
+                            <div class="form-group">
+                                <?php  echo $this->Form->input('grupo.contrato',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                            </div>
 
-        </ol>
+                            <div class="form-group">
+                                <?php  echo $this->Form->input('descripcion',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                            </div>
+
+                            <div class="form-group">
+                                <?php  echo $this->Form->input('año',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                            </div>
+
+                            <div class="form-group">
+                                <?php  echo $this->Form->input('contacto1',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                            </div>
+
+                            <div class="form-group">
+                                <?php  echo $this->Form->input('contacto2',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                            </div>
+                            <?= $this->Form->button(__('Guardar'), ['class'=>'btn btn-success']) ?>
+                            <?= $this->Html->link(__('Cancelar'), ['action' => 'index'] , array('class'=>'btn btn-danger') ) ?>
+                            <?= $this->Form->end() ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-
-<?= $this->Form->create($camada) ?>
-
-<div class="row">
-    <div class="col-lg-6">
-        <div class="form-group">
-            <?php  echo $this->Form->input('grupo.nombre',  ['required' => true, 'class' => 'form-control' ] ); ?>
-        </div>
-
-        <div class="form-group">
-            <?php  echo $this->Form->input('grupo.contrato',  ['required' => true, 'class' => 'form-control' ] ); ?>
-        </div>
-
-        <div class="form-group">
-            <?php  echo $this->Form->input('descripcion',  ['required' => true, 'class' => 'form-control' ] ); ?>
-        </div>
-
-        <div class="form-group">
-            <?php  echo $this->Form->input('año',  ['required' => true, 'class' => 'form-control' ] ); ?>
-        </div>
-
-        <div class="form-group">
-            <?php  echo $this->Form->input('contacto1',  ['required' => true, 'class' => 'form-control' ] ); ?>
-        </div>
-
-        <div class="form-group">
-            <?php  echo $this->Form->input('contacto2',  ['required' => true, 'class' => 'form-control' ] ); ?>
-        </div>
-    </div>
-
-    <?= $this->Form->button(__('Submit'), ['class'=>'btn btn-success']) ?>
-    <?= $this->Html->link(__('Volver'), ['action' => 'index'] , array('class'=>'btn btn-primary') ) ?>
-    <?= $this->Form->end() ?>
-</div>
-
+</section>

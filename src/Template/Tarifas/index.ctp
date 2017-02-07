@@ -1,13 +1,13 @@
 <section class="content-header">
 	<h1 class="page-header">
-	    Usuarios
+	    Tarifas
 	</h1>
 	<ol class="breadcrumb">
 	    <li>
 		<i class="fa fa-wrench"></i>  <a href="index.html">Administraci&oacute;n</a>
 	    </li>
 	    <li class="active">
-		<i class="fa fa-user"></i> Usuarios
+		<i class="fa fa-user"></i> Tarifas
 	    </li>
 	</ol>
 </section>
@@ -25,6 +25,7 @@
                         <thead>
                             <tr>
                                 <th>Descripcion</th>
+                                <th>Cantidad de cuotas</th>
                                 <th>Monto en pesos</th>
                                 <th>Monto en dolares</th>
                                 <th></th>
@@ -35,7 +36,8 @@
                               <?php foreach ($tarifas as $tarifa): ?>
                               <tr>
                                   <td><?= h($tarifa->descripcion) ?></td>
-                                  <td><?= $this->Number->format($tarifa->monto_pesos) ?></td>
+                                   <td><?= $this->Number->format($tarifa->cantidad_cuotas) ?></td>
+                                 <td><?= $this->Number->format($tarifa->monto_pesos) ?></td>
                                   <td><?= $this->Number->format($tarifa->monto_dolares) ?></td>
 
 
@@ -48,8 +50,7 @@
                                           </button>
                                           <ul class="dropdown-menu" role="menu">
                                               <li><?= $this->Html->link('Ver tarifa', ['action' => 'view', $tarifa->id]) ?></li>
-                                              <li><?= $this->Html->link('Editar tarifa', ['action' => 'edit', $tarifa->id]) ?></li>
-                                              <li><?= $this->Form->postLink('Borrar tarifa', ['action' => 'delete', $tarifa->id], ['class' => 'fa fa-trash-o','confirm' => __('Confirmar borrado de tarifa', $tarifa->id)] ) ?></li>
+                                              <li><?= $this->Form->postLink('Borrar tarifa', ['action' => 'delete', $tarifa->id], ['confirm' => __('Confirmar borrado de tarifa', $tarifa->id)] ) ?></li>
                                           </ul>
                                       </div>
                                 </td>
@@ -59,6 +60,7 @@
                                                     <tfoot>
                                                         <tr>
                                 <th>Descripcion</th>
+                                <th>Cantidad de cuotas</th>
                                 <th>Monto en pesos</th>
                                 <th>Monto en dolares</th>
                                 <th></th>
