@@ -28,6 +28,7 @@
     <?php echo $this->Html->css('dist/css/AdminLTE.min.css'); ?>
     <?php echo $this->Html->css('dist/css/skins/skin-blue.css'); ?>
     <?php echo $this->Html->css('plugins/iCheck/square/blue.css'); ?>
+    <?php echo $this->Html->css('register.css'); ?>
 
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -69,9 +70,10 @@
 
 
     <!-- Bootstrap Core JavaScript -->
+    <?php echo $this->Html->script('plugins/jQuery/jquery-2.2.3.min.js'); ?>
+    <?php echo $this->Html->script('register.js'); ?>
     <?php echo $this->Html->script('bootstrap/js/bootstrap.min.js'); ?>
     <?php echo $this->Html->script('plugins/iCheck/icheck.min.js'); ?>
-    <?php echo $this->Html->script('plugins/jQuery/jquery-2.2.3.min.js'); ?>
 
 <script>
   $(function () {
@@ -81,6 +83,7 @@
       increaseArea: '20%' // optional
     });
   });
+  </script>
 </html>
 </body>
 </html>

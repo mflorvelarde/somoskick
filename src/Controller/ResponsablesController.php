@@ -31,14 +31,14 @@ class ResponsablesController extends AppController{
             $usuario->usuario_creacion = 2;
 
             $result = TableRegistry::get('Grupos')->save($usuario);
-            $grupos_id = $result->id;
+            $grupo_id = $result->id;
 
             $responsable->usuario_creacion = 2;
             $responsable->fecha_creacion = Time::now();
             $responsable->eliminado = 0;
             $responsable->grupo = null;
-            $responsable->grupos_id = $grupos_id;
-            $responsable->colegios_id = 1;
+            $responsable->grupo_id = $grupo_id;
+            $responsable->colegio_id = 1;
 
             if ($this->Camadas->save($responsable)) {
                 $this->Flash->success(__('La camada fue guardada'));

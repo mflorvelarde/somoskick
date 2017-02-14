@@ -94,13 +94,31 @@ class PersonasController extends AppController{
      * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
-    {
+    public function edit($id = null) {
         $persona = $this->Personas->get($id, ['contain' => []]);
 
         if ($this->request->is(['patch', 'post', 'put']))
         {
             $persona = $this->Personas->patchEntity($persona, $this->request->data);
+
+            if ($this->Personas->save($persona)) {
+                $this->Flash->success(__('The user has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }
+        }
+        $this->set(compact('persona'));
+        $this->set('_serialize', ['persona']);
+    }
+
+    public function register() {
+        $this->viewBuilder()->layout('blankLayout');
+        $persona = $this->Personas->newEntity();
+        if ($this->request->is('post')) {
+            $persona = $this->Personas->patchEntity($persona, $this->request->data);
+            // $user->password = 'gwinn';
 
             if ($this->Personas->save($persona)) {
                 $this->Flash->success(__('The user has been saved.'));

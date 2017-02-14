@@ -73,6 +73,7 @@
 
     </div>
     <!-- /#wrapper -->
+    <?php echo $this->Html->script('plugins/jQuery/jquery-2.2.3.min.js'); ?>
 
     <!-- jQuery -->
     <?php echo $this->Html->script('jquery/jquery.min.js'); ?>

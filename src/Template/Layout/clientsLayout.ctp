@@ -73,6 +73,7 @@
 
     </div>
     <!-- /#wrapper -->
+    <?php echo $this->Html->script('plugins/jQuery/jquery-2.2.3.min.js'); ?>
 
     <!-- jQuery -->
     <?php echo $this->Html->script('jquery/jquery.min.js'); ?>
@@ -125,7 +126,6 @@
     <?php echo $this->Html->script('plugins/fastclick/fastclick.js'); ?>
     <!-- AdminLTE App -->
     <?php echo $this->Html->script('dist/js/app.min.js'); ?>
-    <?php echo $this->Html->script('plugins/jQuery/jquery-2.2.3.min.js'); ?>
     <?php echo $this->Html->script('plugins/datatables/jquery.dataTables.min.js'); ?>
     <?php echo $this->Html->script('plugins/datatables/dataTables.bootstrap.min.js'); ?>
 </body>

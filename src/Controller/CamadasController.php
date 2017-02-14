@@ -19,16 +19,16 @@ class CamadasController extends AppController{
      */
     public function index($colegio_id = null) {
 
-              if ($colegio_id != null) {
-                    $query = $this->Camadas->find('all')->where(['colegios_id' => $colegio_id]);
-                } else {
-                    $query = $this->Camadas->find('all');
-                }
-/*        if ($colegio_id != null) {
-            $query = $this->Camadas->find('all', ['contain' => ['Colegios'], ['Grupos']])->where(['colegios_id' => $colegio_id]);
+//              if ($colegio_id != null) {
+//                    $query = $this->Camadas->find('all')->where(['colegios_id' => $colegio_id]);
+//                } else {
+//                    $query = $this->Camadas->find('all');
+//                }
+        if ($colegio_id != null) {
+            $query = $this->Camadas->find('all', ['contain' => ['Colegios'], ['Grupos']])->where(['colegio_id' => $colegio_id]);
         } else {
             $query = $this->Camadas->find('all', ['contain' => ['Colegios'], ['Grupos']]);
-        }*/
+        }
         $this->set('camadas', $this->paginate($query));
         $this->set('_serialize', ['camadas']);
     }
@@ -55,9 +55,9 @@ class CamadasController extends AppController{
     public function add($colegioId = null) {
         $camada = $this->Camadas->newEntity();
         if ($colegioId != null) {
-            $camada->colegios_id = $colegioId;
+            $camada->colegio_id = $colegioId;
         } else {
-            $camada->colegios_id = 1;
+            $camada->colegio_id = 1;
         }
 
         if ($this->request->is('post')) {
@@ -81,7 +81,7 @@ class CamadasController extends AppController{
             $camada->fecha_creacion = Time::now();
             $camada->eliminado = 0;
             $camada->grupo = null;
-            $camada->grupos_id = $grupos_id;
+            $camada->grupo_id = $grupos_id;
 
             if ($this->Camadas->save($camada)) {
                 $this->Flash->success(__('La camada fue guardada'));
