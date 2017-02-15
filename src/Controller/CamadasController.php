@@ -41,10 +41,12 @@ class CamadasController extends AppController{
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
+        $camada = $this->Camadas->newEntity();
+        $camada->id = 8;
 /*        $camada = $this->Camadas->get($id);
-
+*/
         $this->set('camada', $camada);
-        $this->set('_serialize', ['camada']);*/
+        $this->set('_serialize', ['camada']);
     }
 
     /**

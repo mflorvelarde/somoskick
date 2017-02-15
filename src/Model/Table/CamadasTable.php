@@ -26,7 +26,8 @@ class CamadasTable extends Table {
 
         $this->hasOne('Colegios', [
             'className' => 'Colegios',
-            'foreignKey' => 'id'
+            'foreignKey' => 'id',
+            'bindingKey' => 'colegio_id'
         ]);
     }
 }

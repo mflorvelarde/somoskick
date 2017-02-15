@@ -24,7 +24,7 @@
                                             Pasajeros<span class="caret"></span>
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li role="presentation"><a role="menuitem" data-toggle="tab" tabindex="-1" href="#tab-pasajeros">Lista de pasajeros</a></li>
+                                            <li role="presentation"><a role="menuitem" data-toggle="tab" tabindex="-1"  onclick="getPasajeros('<?php echo $camada->id ?>')">Lista de pasajeros</a></li>
                                             <li role="presentation"><a role="menuitem" data-toggle="tab" tabindex="-1" href="#tab-espera">Lista de espera</a></li>
                                             <li role="presentation"><a role="menuitem" data-toggle="tab" tabindex="-1" href="#">Opcionales</a></li>
                                             <li role="presentation"><a role="menuitem" data-toggle="tab" tabindex="-1" href="#tab-acompanantes">Acompañantes</a></li>
@@ -427,4 +427,16 @@
             "autoWidth": false
         });
     });
+
+    function getPasajeros(camada_id)
+    {
+        $.ajax({
+          url: '../pasajeros/list_all/' + camada_id,
+          success: function(data)
+          {
+            alert(data);
+
+          }
+        });
+    }
 </script>
