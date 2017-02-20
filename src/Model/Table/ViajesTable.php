@@ -13,21 +13,12 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 class ViajesTable extends Table {
-    public function initialize(array $config)
-    {
+    public function initialize(array $config) {
         parent::initialize($config);
 
         $this->table('viajes');
         $this->displayField('id');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
-
-//Para setear relaciones
-        /*        $this->hasOne('Perfiles', [
-                    'className' => 'Perfiles',
-                    'foreignKey' => 'perfil_id'
-                ]);*/
-
     }
-
 }

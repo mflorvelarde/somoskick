@@ -18,16 +18,11 @@ class CamadasController extends AppController{
      * @return \Cake\Network\Response|null
      */
     public function index($colegio_id = null) {
-
-//              if ($colegio_id != null) {
-//                    $query = $this->Camadas->find('all')->where(['colegios_id' => $colegio_id]);
-//                } else {
-//                    $query = $this->Camadas->find('all');
-//                }
         if ($colegio_id != null) {
-            $query = $this->Camadas->find('all', ['contain' => ['Colegios'], ['Grupos']])->where(['colegio_id' => $colegio_id]);
+            $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios']])
+                ->where(['colegio_id' => $colegio_id]);
         } else {
-            $query = $this->Camadas->find('all', ['contain' => ['Colegios'], ['Grupos']]);
+            $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios']]);
         }
         $this->set('camadas', $this->paginate($query));
         $this->set('_serialize', ['camadas']);
@@ -41,11 +36,11 @@ class CamadasController extends AppController{
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $camada = $this->Camadas->newEntity();
-        $camada->id = 8;
-/*        $camada = $this->Camadas->get($id);
-*/
-        $this->set('camada', $camada);
+        $camada = $this->Camadas->get($id, ['contain' => ['Colegios', 'Grupos', 'Diccionarios']]);
+/*        $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios']])
+            ->where(['Camadas.id' => $id]);*/
+
+        $this->set(compact('camada'));
         $this->set('_serialize', ['camada']);
     }
 

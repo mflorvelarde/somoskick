@@ -11,7 +11,6 @@ use Cake\ORM\Table;
 
 
 class GruposTable extends Table{
-
     public function initialize(array $config) {
         parent::initialize($config);
 
@@ -19,13 +18,6 @@ class GruposTable extends Table{
         $this->displayField('id');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
-
-//Para setear relaciones
-        /*        $this->hasOne('Perfiles', [
-                    'className' => 'Perfiles',
-                    'foreignKey' => 'perfil_id'
-                ]);*/
-
     }
 
 }

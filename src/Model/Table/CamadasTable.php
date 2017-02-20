@@ -21,13 +21,20 @@ class CamadasTable extends Table {
 
         $this->hasOne('Grupos', [
                     'className' => 'Grupos',
-                    'foreignKey' => 'id'
+                    'foreignKey' => 'id',
+                    'bindingKey' => 'grupo_id'
         ]);
 
         $this->hasOne('Colegios', [
             'className' => 'Colegios',
             'foreignKey' => 'id',
             'bindingKey' => 'colegio_id'
+        ]);
+
+        $this->hasOne('Diccionarios', [
+            'className' => 'Diccionarios',
+            'foreignKey' => 'id',
+            'bindingKey' => 'diccionario_id'
         ]);
     }
 }

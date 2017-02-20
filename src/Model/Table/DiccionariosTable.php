@@ -2,19 +2,19 @@
 /**
  * Created by PhpStorm.
  * User: florenciavelarde
- * Date: 4/2/17
- * Time: 8:38 PM
+ * Date: 19/2/17
+ * Time: 9:37 AM
  */
 
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
 
-class ColegiosTable extends Table {
+class DiccionariosTable extends Table {
     public function initialize(array $config) {
         parent::initialize($config);
 
-        $this->table('colegios');
+        $this->table('diccionarios');
         $this->displayField('id');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');

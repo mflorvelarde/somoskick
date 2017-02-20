@@ -32,11 +32,12 @@
                             </tr>
                         </thead>
                         <tbody>
+                        <?php foreach ($camadas as $camada): ?>
                             <tr>
-                                <td>Anunciacion De Maria</td>
-                                <td>2017</td>
+                                <td><?= h($camada->colegio->nombre)?></td>
+                                <td><?= h($camada->año)?></td>
                                 <td>Sebastian Velarde</td>
-                                <td><span class="label label-success">Firmada</span></td>
+                                <td><span class="label label-success"><?= h($camada->diccionario->value)?></span></td>
                                 <td>0</td>
                                 <td>2600</td>
                                 <td>No</td>
@@ -44,43 +45,16 @@
                                 <td>18</td>
                                 <td>20</td>
                                 <td>
-                                    <?php echo $this->Form->button('<i class="fa fa-align-center"></i>', array(
-                                        'type' => 'button',
-                                        'class' => 'btn btn-default',
-                                        'action' => 'view'
-                                    )); ?>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ><i class="fa fa-align-center"></i></button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><?= $this->Form->postLink('Ver camadas', ['action' => 'view', $camada->id]) ?></li>
+                                            <li><?= $this->Html->link('Cambiar status', ['action' => 'edit', $camada->id] ) ?></li>
+                                        </ul>
+                                    </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>Balmoral</td>
-                                <td>2017</td>
-                                <td>Sebastian Velarde</td>
-                                <td><span class="label label-warning">En oferta</span></td>
-                                <td>0</td>
-                                <td>2600</td>
-                                <td>No</td>
-                                <td>18</td>
-                                <td>18</td>
-                                <td>20</td>
-                                <td>
-                                    <button type="button" class="btn btn-default"><i class="fa fa-align-center"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Balmoral</td>
-                                <td>2016</td>
-                                <td>Sebastian Velarde</td>
-                                <td><span class="label label-danger">Perdida</span></td>
-                                <td>0</td>
-                                <td>2600</td>
-                                <td>No</td>
-                                <td>18</td>
-                                <td>18</td>
-                                <td>20</td>
-                                <td>
-                                    <button type="button" class="btn btn-default"><i class="fa fa-align-center"></i></button>
-                                </td>
-                            </tr>
+                            <?php endforeach; ?>
                         </tbody>
                         <tfoot>
                             <tr>
@@ -103,81 +77,3 @@
         </div>
     </div>
 </section>
-
-<!-- Page Heading -->
- <div class="row">
-    <div class="col-lg-12">
-	<h1 class="page-header">
-	    Camadas
-	</h1>
-	<ol class="breadcrumb">
-	    <li>
-		<i class="fa fa-wrench"></i>  <a href="index.html">Administraci&oacute;n</a>
-	    </li>
-	    <li class="active">
-		<i class="fa fa-user"></i> Camadas
-	    </li>
-	</ol>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-12">
-        <?= $this->Html->link(__('Nueva camada'), ['action' => 'add'] , array('class'=>'btn btn-primary') ) ?>
-    </div>
-</div>
-
-<br/>
-
-<div class="row">
-    <div class="col-lg-12">
-      <div class="panel panel-default">
-	      <div class="panel-heading">
-		 Listado de camadas
-	      </div>
-               
-	      <div class="panel-body">
-	         <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
-	              <thead>
-			<tr>
-			    <th><?= $this->Paginator->sort('descripcion', 'Descripcion') ?></th>
-			    <th><?= $this->Paginator->sort('año', 'Año') ?></th>
-			    <th><?= $this->Paginator->sort('contacto1', 'Contacto') ?></th>
-			    <th><?= $this->Paginator->sort('contacto2', 'Contacto') ?></th>
-
-			    <th class="actions"><?= __('Actions') ?></th>
-			</tr>
-		      </thead>
-		  
-		      <tbody>
-			  <?php foreach ($camadas as $camada): ?>
-			  <tr>
-			      <td><?= h($camada->descripcion) ?></td>
-			      <td><?= $this->Number->format($camada->año) ?></td>
-			      <td><?= h($camada->colegio->nombre) ?></td>
-			      <td><?= h($camada->contacto2) ?></td>
-
-			      <td class="actions">
-			      
-				  <?= $this->Html->link(__(''), ['action' => 'view', $camada->id] , array('class' => 'fa fa-eye') ) ?>
-				  <?= $this->Html->link(__(''), ['action' => 'edit', $camada->id] , array('class' => 'fa fa-pencil') ) ?>
-				  <?= $this->Form->postLink(__(''), ['action' => 'delete', $camada->id], ['class' => 'fa fa-trash-o','confirm' => __('Confirmar borrado de camada', $camada->id)] ) ?>
-				  
-			      </td>
-			  </tr>		  
-		      <?php endforeach; ?>
-		    </tbody>
-                 </table>  
-                 <div class="paginator">
-		    <ul class="pagination">
-			<?= $this->Paginator->prev('< ' . __('previous')) ?>
-			<?= $this->Paginator->numbers() ?>
-			<?= $this->Paginator->next(__('next') . ' >') ?>
-		    </ul>
-		    <p><?= $this->Paginator->counter() ?></p>
-		  
-		 </div>
-	      </div>
-    </div>
-  </div>
-</div>

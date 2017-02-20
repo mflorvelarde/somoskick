@@ -19,17 +19,10 @@ class PasajerosController extends AppController {
     public function listAll($camada_id = null) {
         $this->viewBuilder()->layout('ajax');
 
-    //              if ($colegio_id != null) {
-    //                    $query = $this->Camadas->find('all')->where(['colegios_id' => $colegio_id]);
-    //                } else {
-    //                    $query = $this->Camadas->find('all');
-    //                }
-/*            if ($colegio_id != null) {
-                $query = $this->Camadas->find('all', ['contain' => ['Colegios'], ['Grupos']])->where(['colegio_id' => $colegio_id]);
-            } else {
-                $query = $this->Camadas->find('all', ['contain' => ['Colegios'], ['Grupos']]);
-            }
-            $this->set('camadas', $this->paginate($query));
-            $this->set('_serialize', ['camadas']);*/
+        $query = $this->Camadas->find('all', ['contain' => ['Personas']])
+            ->where(['camada_id' => $camada_id]);
+
+        $this->set('camadas', $this->paginate($query));
+        $this->set('_serialize', ['camadas']);
     }
 }

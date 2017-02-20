@@ -73,13 +73,13 @@
 
     </div>
     <!-- /#wrapper -->
-    <?php echo $this->Html->script('plugins/jQuery/jquery-2.2.3.min.js'); ?>
 
     <!-- jQuery -->
     <?php echo $this->Html->script('jquery/jquery.min.js'); ?>
+    <?php echo $this->Html->script('plugins/jQuery/jquery-2.2.3.min.js'); ?>
     <!--<script src="../vendor/jquery/jquery.min.js"></script>-->
     <!-- jQuery UI 1.11.4 -->
-    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <?php echo $this->Html->script('bootstrap/js/bootstrap.min.js'); ?>
@@ -90,12 +90,10 @@
     <!--<script src="../vendor/metisMenu/metisMenu.min.js"></script>-->
 
     <!-- Morris Charts JavaScript -->
-    <?php echo $this->Html->script('raphael/raphael.min.js'); ?>
-    <!--<script src="../vendor/raphael/raphael.min.js"></script>-->
+    <?php echo $this->Html->script('raphael/raphael.js'); ?>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <?php echo $this->Html->script('plugins/morris/morris.min.js'); ?>
-    <!--<script src="../vendor/morrisjs/morris.min.js"></script>-->
+    <?php echo $this->Html->script('plugins/morris/morris.js'); ?>
 
     <?php echo $this->Html->script('morris-data.js'); ?>
     <!--<script src="../data/morris-data.js"></script>-->
