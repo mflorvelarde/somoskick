@@ -68,6 +68,7 @@ class CamadasController extends AppController{
             $grupos->nombre = $camada->grupo->nombre;
             $grupos->contrato = $camada->grupo->contrato;
             $grupos->eliminado = 0;
+            $grupos->codigo_grupo = $this->generateGroupCode();
             $grupos->fecha_creacion = Time::now();
             $grupos->usuario_creacion = 2;
 
@@ -91,6 +92,16 @@ class CamadasController extends AppController{
         }
         $this->set(compact('camada'));
         $this->set('_serialize', ['camada']);
+    }
+
+    private function generateGroupCode() {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $code = '';
+        for ($i = 0; $i < 16; $i++) {
+            $code .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $code;
     }
 
     /**

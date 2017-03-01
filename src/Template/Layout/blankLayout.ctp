@@ -29,6 +29,8 @@
     <?php echo $this->Html->css('dist/css/skins/skin-blue.css'); ?>
     <?php echo $this->Html->css('plugins/iCheck/square/blue.css'); ?>
     <?php echo $this->Html->css('register.css'); ?>
+    <?php echo $this->Html->css('custom.css'); ?>
+
 
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
