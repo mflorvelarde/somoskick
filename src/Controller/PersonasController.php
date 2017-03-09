@@ -32,8 +32,7 @@ class PersonasController extends AppController{
      * @return \Cake\Network\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
-    {
+    public function view($id = null) {
         $persona = $this->Personas->get($id);
 
         $this->set('persona', $persona);
@@ -41,8 +40,18 @@ class PersonasController extends AppController{
     }
 
     public function login() {
+        if ($this->request->is('post')) {
+            $user = $this->Auth->identify();
+            if ($user) {
+                $this->Auth->setUser($user);
+                return $this->redirect(['controller'=>'Camadas','action' => 'index']);
+            }
+
+            $this->Flash->error(__('Invalid username or password, try again'));
+        }
         $this->viewBuilder()->layout('blankLayout');
     }
+
     /**
      * Add method
      *
@@ -52,6 +61,8 @@ class PersonasController extends AppController{
         $persona = $this->Personas->newEntity();
         if ($this->request->is('post')) {
             $persona = $this->Personas->patchEntity($persona, $this->request->data);
+
+            $persona->direccion_id = 1;
            // $user->password = 'gwinn';
 
             if ($this->Personas->save($persona)) {
@@ -111,5 +122,11 @@ class PersonasController extends AppController{
         }
         $this->set(compact('persona'));
         $this->set('_serialize', ['persona']);
+    }
+
+    public function irRegistrarse() {
+        return $this->redirect(
+            ['controller' => 'Pasajeros', 'action' => 'registrarse']
+        );
     }
 }

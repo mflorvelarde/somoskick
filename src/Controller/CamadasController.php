@@ -18,14 +18,22 @@ class CamadasController extends AppController{
      * @return \Cake\Network\Response|null
      */
     public function index($colegio_id = null) {
-        if ($colegio_id != null) {
-            $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios']])
-                ->where(['colegio_id' => $colegio_id]);
+        $persona = $this->Auth->user('id');
+        if ($this->isAdmin($persona)) {
+            if ($colegio_id != null) {
+                $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios']])
+                    ->where(['colegio_id' => $colegio_id]);
+            } else {
+                $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios']]);
+            }
+            $this->set('camadas', $this->paginate($query));
+            $this->set('_serialize', ['camadas']);
         } else {
-            $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios']]);
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
         }
-        $this->set('camadas', $this->paginate($query));
-        $this->set('_serialize', ['camadas']);
+
     }
 
     /**

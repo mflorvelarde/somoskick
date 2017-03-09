@@ -24,4 +24,9 @@ class Persona extends Entity {
         'id' => false
     ];
 
+    protected function _setContrasena($password) {
+        return (new DefaultPasswordHasher)->hash($password);
+    }
+
+
 }

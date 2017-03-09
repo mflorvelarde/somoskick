@@ -5,25 +5,33 @@
     <!-- /.login-logo -->
     <div class="login-box-body">
       <h4 class="login-box-msg" style="margin-top:10px">Inicia sesión para ingresar</h4>
-    <form action="../../index2.html" method="post">
+    <?= $this->Flash->render('auth') ?>
+    <?= $this->Form->create() ?>
       <div class="form-group has-feedback" style="margin-top:20px">
-        <input type="email" class="form-control" placeholder="Email">
+             <div><label style="color:#fff">Mail</label></div>
+            <?= $this->Form->input('mail', ['class'=>'form-control', 'placeholder'=>'Mail' , 'name'=>'mail', 'label' => '','type'=>'mail', 'autofocus'] ) ?>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="Contraseña">
+             <div><label style="color:#fff">Contraseña</label></div>
+            <?= $this->Form->input('contrasena', ['class'=>'form-control', 'placeholder'=>'Contraseña', 'name'=>'contrasena', 'label' => '','type'=>'password', 'value'=>'']) ?>
       </div>
       <div class="row">
         <!-- /.col -->
-        <div class="col-xs-4">
-          <button type="submit" style="margin-top:15%" class="btn bg-maroon btn-block btn-flat">Ingresar</button>
+        <div class="col-xs-12" style="margin-top:25px">
+            <?= $this->Form->button('Ingresar', ['class'=>'btn bg-maroon btn-block btn-flat'] ) ; ?>
+
         </div>
         <!-- /.col -->
       </div>
     </form>
     <div id="labels" style="margin-top:15%">
     <a href="#">Olvidé mi contraseña</a><br>
-    <a href="register.html" class="text-center">Registrarse</a>
+    <?= $this->Html->link('Registrarse', ['action' => 'irRegistrarse'] ) ?>
+
+    <a href="../pasajeros/registrarse" class="text-center">Registrarse</a>
     </div>
   </div>
   <!-- /.login-box-body -->
 </div>
+
+

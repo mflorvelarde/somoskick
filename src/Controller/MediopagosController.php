@@ -13,6 +13,11 @@ use Cake\I18n\Time;
 
 class MediopagosController extends AppController {
 
+    public function initialize() {
+        parent::initialize();
+        $this->Auth->allow('registrar');
+    }
+
     public function registrar($pasajero = null, $responsable1 = null, $responsable2 = null) {
         $this->viewBuilder()->layout('blankLayout');
         $medioPago = $this->Mediopagos->newEntity();

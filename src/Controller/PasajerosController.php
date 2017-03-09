@@ -12,6 +12,11 @@ use Cake\I18n\Time;
 
 class PasajerosController extends AppController {
 
+    public function initialize() {
+        parent::initialize();
+        $this->Auth->allow('registrarse');
+    }
+
     /**
      * Index method
      * @return \Cake\Network\Response|null
@@ -55,9 +60,5 @@ class PasajerosController extends AppController {
         $this->set('_serialize', ['pasajero']);
         $this->set(compact('codigoGrupo'));
         $this->set('_serialize', ['codigoGrupo']);
-    }
-
-    public function registrarResponsable() {
-
     }
 }

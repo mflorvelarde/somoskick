@@ -37,12 +37,27 @@ class AppController extends Controller
      *
      * @return void
      */
-    public function initialize()
-    {
+    public function initialize() {
         parent::initialize();
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
+
+
+        //TODO: CAmbiar el home
+        $this->loadComponent('Auth', [
+            'loginAction' => [ 'controller' => 'Personas', 'action' => 'login', 'plugin' => false], // or 'Members' if plugin ],
+                'loginRedirect' => [
+                'controller' => 'Camadas',
+                'action' => 'index'
+            ],
+            'logoutRedirect' => [
+                'controller' => 'Personas',
+                'action' => 'login'
+            ],
+            'authenticate' => ['Form' => ['userModel' => 'Personas','fields' => ['username' => 'mail', 'password' => 'contrasena']]]
+        ]);
+
 
         /*
          * Enable the following components for recommended CakePHP security settings.
@@ -65,5 +80,32 @@ class AppController extends Controller
         ) {
             $this->set('_serialize', true);
         }
+    }
+
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+// Allow users to register and logout.
+// You should not add the "login" action to allow list. Doing so would
+// cause problems with normal functioning of AuthComponent.
+        $this->Auth->allow(['add', 'logout']);
+    }
+
+    public function isAdmin($persona) {
+        if (strcmp($persona['perfil'],"ADMIN") === 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public function isClient($persona) {
+        if (strcmp($persona['perfil'],'CLIENTE')) {
+            return true;
+        }
+        return false;
+    }
+
+    public function logout() {
+        return $this->redirect($this->Auth->logout());
     }
 }
