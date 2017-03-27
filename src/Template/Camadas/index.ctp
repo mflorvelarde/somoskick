@@ -49,20 +49,8 @@
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ><i class="fa fa-align-center"></i></button>
                                         <ul class="dropdown-menu" role="menu">
                                             <li><?= $this->Form->postLink('Ver camadas', ['action' => 'view', $camada->id]) ?></li>
-                                            <li><?php
-                                                echo $this->Html->link(
-                                                    $this->Html->tag('i', '', array('class' => 'glyphicon glyphicon-trash')),
-                                                    '#',
-                                                    array(
-                                                       'class'=>'btn btn-danger btn-confirm',
-                                                       'data-toggle'=> 'modal',
-                                                       'data-target' => '#ConfirmDelete',
-                                                       'action' =>'buscartarifas', $camada->id,
-                                                       'escape' => false),
-                                                    false);
-                                                ?></li>
                                             <li><?= $this->Html->link('Cambiar status', ['action' => 'edit', $camada->id] ) ?></li>
-                                            <li><?= $this->Html->link('Cambiar status', ['action' => 'buscartarifas', $camada->id] ) ?></li>
+                                            <li><?= $this->Html->link('Aplicar tarifa', ['action' => 'buscartarifas', $camada->id] ) ?></li>
                                         </ul>
                                     </div>
                                 </td>

@@ -82,50 +82,52 @@ class CuotasController extends AppController{
      *
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
-    public function add($tarifaJson = null) {
-        $tarifa = json_decode($tarifaJson)->tarifa;
-        if ($tarifaJson != null) {
-            $inicioPago = $tarifa->inicio_pago;
-            $finPago = $tarifa->fin_pago;
+    public function add($tarifa_aplicada_id) {
+        $tarifasAplicadasTable = TableRegistry::get('Tarifas_Aplicadas');
+        $tarifa_aplicada = $tarifasAplicadasTable->get($tarifa_aplicada_id, ['contain' => ['Tarifas', 'Viajes']]);
+        $tarifa = $tarifa_aplicada->tarifa;
 
-            $cuotas = TableRegistry::get('Cuotas')->newEntities($this->request->data);
-            $date = date('Y-m-d', strtotime('+1 month',  strtotime($inicioPago)));
-            $meses = 0;
+        $inicioPago = $tarifa->inicio_pago;
+        $finPago = $tarifa->fin_pago;
 
-            while ($date < $finPago) {
-                $cuota = $this->Cuotas->newEntity();
-                $cuota->vencimiento = $date;
-                array_push($cuotas, $cuota);
-                $meses = $meses + 1;
-                $date = date('Y-m-d', strtotime('+1 month',  strtotime($date)));
-            }
-            if ($tarifa->monto_pesos == 0 && $tarifa->monto_dolares =! 0) {
-                foreach ($cuotas as $cuota) {
-                    $cuota->monto_dolares = $tarifa->monto_dolares / $meses;
-                }
-            } else if ($tarifa->monto_pesos != 0 && $tarifa->monto_dolares == 0) {
-                foreach ($cuotas as $cuota) {
-                    $cuota->monto_pesos = $tarifa->monto_pesos / $meses;
-                }
-            } else {
-                $dolaresEnPesosAprox = $tarifa->monto_dolares*16;
-                $porcentajePesos = ($tarifa->monto_pesos / $dolaresEnPesosAprox);
-                $porcentajeDolares = 1 - $porcentajePesos;
-                $cantidadCuotasDolares = round($porcentajeDolares * $meses / 100);
-                if ($cantidadCuotasDolares == 0) $cantidadCuotasDolares = 1;
-                $cantidadCuotasPesos = $meses - $cantidadCuotasDolares;
+        $cuotas = TableRegistry::get('Cuotas')->newEntities($this->request->data);
+        $date = date('Y-m-d', strtotime('+1 month',  strtotime($inicioPago)));
+        $meses = 0;
 
-                for ($i = 0; $i < $cantidadCuotasDolares; $i++) {
-                    $cuotas[$i]->monto_dolares = $tarifa->monto_dolares / $cantidadCuotasDolares;
-                    $cuotas[$i]->monto_pesos = 0;
-                }
-                for ($i = $cantidadCuotasDolares; $i < $meses; $i++) {
-                    $cuotas[$i]->monto_pesos = $tarifa->monto_pesos / $cantidadCuotasPesos;
-                    $cuotas[$i]->monto_dolares = 0;
-                }
-            }
-
+        while ($date < $finPago) {
+            $cuota = $this->Cuotas->newEntity();
+            $cuota->vencimiento = $date;
+            array_push($cuotas, $cuota);
+            $meses = $meses + 1;
+            $date = date('Y-m-d', strtotime('+1 month',  strtotime($date)));
         }
+        if ($tarifa->monto_pesos == 0 && $tarifa->monto_dolares =! 0) {
+            foreach ($cuotas as $cuota) {
+                $cuota->monto_dolares = $tarifa->monto_dolares / $meses;
+            }
+        } else if ($tarifa->monto_pesos != 0 && $tarifa->monto_dolares == 0) {
+            foreach ($cuotas as $cuota) {
+                $cuota->monto_pesos = $tarifa->monto_pesos / $meses;
+            }
+        } else {
+            $dolaresEnPesosAprox = $tarifa->monto_dolares*16;
+            $porcentajePesos = ($tarifa->monto_pesos / $dolaresEnPesosAprox);
+            $porcentajeDolares = 1 - $porcentajePesos;
+            $cantidadCuotasDolares = round($porcentajeDolares * $meses / 100);
+            if ($cantidadCuotasDolares == 0) $cantidadCuotasDolares = 1;
+            $cantidadCuotasPesos = $meses - $cantidadCuotasDolares;
+
+            for ($i = 0; $i < $cantidadCuotasDolares; $i++) {
+                $cuotas[$i]->monto_dolares = $tarifa->monto_dolares / $cantidadCuotasDolares;
+                $cuotas[$i]->monto_pesos = 0;
+            }
+            for ($i = $cantidadCuotasDolares; $i < $meses; $i++) {
+                $cuotas[$i]->monto_pesos = $tarifa->monto_pesos / $cantidadCuotasPesos;
+                $cuotas[$i]->monto_dolares = 0;
+            }
+        }
+
+
         if ($this->request->is('post')) {
             $cuotasTableRegistry = TableRegistry::get('Cuotas');
             $entities = $cuotasTableRegistry->newEntities($this->request->data);

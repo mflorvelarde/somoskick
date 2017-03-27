@@ -11,7 +11,8 @@ use Cake\ORM\Table;
 
 
 class CuotasTable extends Table {
-    public function initialize(array $config) {
+    public function initialize(array $config)
+    {
         parent::initialize($config);
 
         $this->table('cuotas');
@@ -19,13 +20,10 @@ class CuotasTable extends Table {
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
 
-        $this->hasOne('Tarifas_Aplicadas', [
-                    'className' => 'Tarifas_Aplicadas',
-                    'foreignKey' => 'tarifa_aplicada_id'
-        ]);
-
-        $this->hasMany('Cuotas_aplicadas', [
-            'className' => 'Cuotas_aplicadas',
+        $this->hasOne('TarifasAplicadas', [
+            'className' => 'TarifasAplicadas',
+            'foreignKey' => 'id',
+            'bindingKey' => 'tarifa_aplicada_id'
         ]);
     }
 }

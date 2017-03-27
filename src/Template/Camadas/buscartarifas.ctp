@@ -71,17 +71,11 @@
                                 <td><?= h($tarifa->fin_pago)?></td>
                                 <td><?
                                     echo $this->Html->link(
-                                        'Delete',
+                                        'Aplicar tarifa',
                                         ['controller' => 'Camadas', 'action' => 'aplicartarifa' . '/' .  $tarifa->id . '/' . $camada->id],
                                         ['class' => 'button btn btn-default']
                                     );
                                  ?>
-                                </td>
-                                <td><? echo $this->Form->button(
-                                        'Seleccionar',
-                                        array('controller'=>'Camadas','action'=>'aplicartarifa',$tarifa->d,$camada->id),
-                                        array('class' => 'btn btn-default')
-                                        ); ?>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
