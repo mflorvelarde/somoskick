@@ -18,4 +18,20 @@ class Tarifas_AplicadasController extends AppController{
     public function index() {
         $this->viewBuilder()->layout('clientsLayout');
     }
+
+    public function creartarifaaplicada($tarifa_id, $grupo_id) {
+        $tarifaAplicada = $this->TarifasAplicadas->newEntity();
+        $tarifaAplicada->tarifa_id = $tarifa_id;
+        $tarifaAplicada->grupo_id = $grupo_id;
+
+        if ($this->Colegios->save($tarifaAplicada)) {
+            $this->Flash->success(__('El colegio fue guardado'));
+
+            return $this->redirect(['action' => 'index']);
+        }
+        else {
+            $this->Flash->error(__('El colegio no pudo ser guardado. Por favor, intente nuevamente'));
+        }
+
+    }
 }

@@ -13,6 +13,9 @@ use Cake\ORM\TableRegistry;
 use Cake\I18n\Time;
 
 class ResponsablesController extends AppController{
+    public $pasajero;
+    public $responsable1;
+    public $responsable2;
 
     public function initialize() {
         parent::initialize();
@@ -31,11 +34,52 @@ class ResponsablesController extends AppController{
         }
     }
 
+    public function paso2($responsable1, $pasajero = null) {
+        $this->viewBuilder()->layout('blankLayout');
+        $familiar1 = $this->Responsables->newEntity();
+        $pasajeroEntity = json_decode($pasajero);
+        $cuitcuil1 = "";
+
+        if ($this->request->is('post')) {
+            $familiar1 = $this->Responsables->patchEntity($familiar1, $this->request->data, [
+                'associated' => [
+                    'Personas' => [
+                        'associated' => ['Direcciones']
+                    ]
+                ]
+            ]);
+
+            if ($cuitcuil1 === "Cuil") {
+                $familiar1->cuil = $familiar1->cuit;
+                $familiar1->cuit = null;
+            }
+
+            $familiar1->usuario_creacion = 2;
+            $familiar1->fecha_creacion = Time::now();
+            $familiar1->eliminado = 0;
+
+            $this->$responsable1 = $familiar1;
+            $this->$pasajero = $pasajeroEntity->pasajero;
+
+            return $this->redirect(['action' => 'paso2']);
+        }
+        $this->set(compact('familiar1'));
+        $this->set('_serialize', ['familiar1']);
+        $this->set(compact('pasajeroEntity'));
+        $this->set(compact('cuitcuil1'));
+        $this->set('_serialize', ['cuitcuil1']);
+    }
+
+    public function paso3() {
+
+    }
 
     public function registrar($pasajero = null) {
         $this->viewBuilder()->layout('blankLayout');
         $familiar1 = $this->Responsables->newEntity();
         $familiar2 = $this->Responsables->newEntity();
+        $direccion1 = TableRegistry::get('Direcciones')->newEntity();
+        $direccion2 = TableRegistry::get('Direcciones')->newEntity();
         $pasajeroEntity = json_decode($pasajero);
         $cuitcuil1 = "";
         $cuitcuil2 = "";
@@ -43,7 +87,9 @@ class ResponsablesController extends AppController{
         if ($this->request->is('post')) {
             $familiar1 = $this->Responsables->patchEntity($familiar1, $this->request->data, [
                 'associated' => [
-                    'Personas'
+                    'Personas' => [
+                        'associated' => ['Direcciones']
+                    ]
                 ]
             ]);
 
@@ -54,7 +100,9 @@ class ResponsablesController extends AppController{
 
             $familiar2 = $this->Responsables->patchEntity($familiar2, $this->request->data, [
                 'associated' => [
-                    'Personas'
+                    'Personas' => [
+                        'associated' => ['Direcciones']
+                    ]
                 ]
             ]);
 
@@ -89,38 +137,6 @@ class ResponsablesController extends AppController{
 
             $familia = array("pasajero"=>$pasajero_id,"responsable1"=>$responable1_id,"responsable2"=>$responable2_id);
 
-
-/*
-            $result = TableRegistry::get('Grupos')->save($grupos);
-            $grupos_id = $result->id;
-
-            $camada->usuario_creacion = 2;
-            $camada->fecha_creacion = Time::now();
-            $camada->eliminado = 0;
-            $camada->grupo = null;
-            $camada->grupo_id = $grupos_id;*/
-/*
-            if ($this->Camadas->save($camada)) {
-                $this->Flash->success(__('La camada fue guardada'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            else {
-                $this->Flash->error(__('La camada no pudo ser guardada. Por favor, intente nuevamente'));
-            }*/
-
-            //$basePersonas = TableRegistry::get('Pasajeros');
-            //  $personaPasajero = $pasajero->persona;
-
-            //$resultPersonaPasajero = $basePersonas->save($pasajero);
-
-            //$result = TableRegistry::get('Grupos')->save($grupos);
-            //$grupos_id = $result->id;
-
-
-
-
-
             return $this->redirect(
                 ['controller' => 'Mediopagos', 'action' => 'registrar', json_encode(compact('familia'))]
             );
@@ -131,6 +147,10 @@ class ResponsablesController extends AppController{
         $this->set('_serialize', ['cuitcuil1']);
         $this->set(compact('cuitcuil2'));
         $this->set('_serialize', ['cuitcuil2']);
+        $this->set(compact('direccion1'));
+        $this->set('_serialize', ['direccion1']);
+        $this->set(compact('direccion2'));
+        $this->set('_serialize', ['direccion2']);
         $this->set(compact('familiar1'));
         $this->set('_serialize', ['familiar1']);
         $this->set(compact('familiar2'));
@@ -156,6 +176,8 @@ class ResponsablesController extends AppController{
 
         $pasajeroEntity->persona = null;
         $pasajeroEntity->persona_id = $idPersona;
+        $pasajeroEntity->sexo = $pasajero->sexo;
+        $pasajeroEntity->pasaporte = $pasajero->pasaporte;
         $pasajeroEntity->eliminado = 0;
         $pasajeroEntity->fecha_creacion = Time::now();
 
@@ -177,7 +199,6 @@ class ResponsablesController extends AppController{
         $personaEntity->telefono = $persona->telefono;
         $personaEntity->celular = $persona->celular;
         $personaEntity->nacionalidad = $persona->nacionalidad;
-        $personaEntity->sexo = $persona->sexo;
         $personaEntity->mail = $persona->mail;
         $personaEntity->eliminado = 0;
         $personaEntity->perfil = "CLIENTE";

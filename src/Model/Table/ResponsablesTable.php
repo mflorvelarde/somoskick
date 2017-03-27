@@ -30,11 +30,5 @@ class ResponsablesTable extends Table {
             'foreignKey' => 'id',
             'bindingKey' => 'pasajero_id'
         ]);
-
-        $this->hasOne('Direcciones', [
-            'className' => 'Direcciones',
-            'foreignKey' => 'id',
-            'bindingKey' => 'direccion_id'
-        ]);
     }
 }

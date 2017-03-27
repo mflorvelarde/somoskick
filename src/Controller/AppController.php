@@ -90,7 +90,7 @@ class AppController extends Controller
 // cause problems with normal functioning of AuthComponent.
         $this->Auth->allow(['add', 'logout']);
     }
-
+/*
     public function isAdmin($persona) {
         if (strcmp($persona['perfil'],"ADMIN") === 0) {
             return true;
@@ -103,7 +103,7 @@ class AppController extends Controller
             return true;
         }
         return false;
-    }
+    }*/
 
     public function logout() {
         return $this->redirect($this->Auth->logout());

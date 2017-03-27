@@ -45,24 +45,24 @@
                             <div class="box-header with-border">
                               <h3 class="box-title">Datos del padre / Tutor</h3>
                             </div>
-                                <?= $this->Form->create([$familiar1, $familiar2, $cuitcuil1]) ?>
+                                <?= $this->Form->create([$familiar1, $cuitcuil1]) ?>
                             <div class="box-body">
                                  <div class="col-md-12" style="padding: 0px">
                                     <div class="col-md-6" style="padding-left: 0px">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('familiar1->persona.nombre',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('persona.nombre',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                          </div>
                                     </div>
                                     <div class="col-md-6" style="padding-right: 0px">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('familiar1->persona.apellido',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('persona.apellido',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                          </div>
                                     </div>
                                  </div>
                                  <div class="col-md-12" style="padding: 0px">
                                     <div class="col-md-6" style="padding-left: 0px">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('familiar1->persona.dni',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('persona.dni',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                          </div>
                                     </div>
                                     <div class="col-md-2">
@@ -82,26 +82,26 @@
                                     </div>
                                     <div class="col-md-4" style="padding: 0px">
                                          <div class="form-group" style="padding-right: 0px">
-                                            <?php  echo $this->Form->input('familiar1.cuit',  ['required' => true, 'class' => 'form-control',
+                                            <?php  echo $this->Form->input('cuit',  ['required' => true, 'class' => 'form-control',
                                                 'label' => '' ] ); ?>
                                          </div>
                                      </div>
                                  </div>
                               <div class="form-group">
-                                 <?php  echo $this->Form->input('familiar1->persona.nacionalidad',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                 <?php  echo $this->Form->input('persona.nacionalidad',  ['required' => true, 'class' => 'form-control' ] ); ?>
                               </div>
                               <div class="form-group">
-                                 <?php  echo $this->Form->input('familiar1->persona.email',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                 <?php  echo $this->Form->input('persona.mail',  ['required' => true, 'class' => 'form-control' ] ); ?>
                               </div>
                              <div class="col-md-12" style="padding: 0px">
                               <div class="col-md-6" style="padding-left: 0px">
                                 <div class="form-group">
-                                   <?php  echo $this->Form->input('familiar1->persona.telefono',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                   <?php  echo $this->Form->input('persona.telefono',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                 </div>
                               </div>
                               <div class="col-md-6" style="padding-right: 0px">
                                   <div class="form-group">
-                                     <?php  echo $this->Form->input('familiar1->persona.celular',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                     <?php  echo $this->Form->input('persona.celular',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                   </div>
                               </div>
                              </div>
@@ -111,39 +111,39 @@
                             </div>
                             <div class="box-body">
                                  <div class="form-group">
-                                    <?php  echo $this->Form->input('familiar1->persona.direccion.calle',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                    <?php  echo $this->Form->input('persona.direccion.calle',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                  </div>
                                  <div class="col-md-12" style="padding: 0px">
                                      <div class="col-md-3" style="padding-left: 0px">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('familiar1->persona.direccion.numero',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('persona.direccion.numero',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                          </div>
                                      </div>
                                      <div class="col-md-3">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('familiar1->persona.direccion.piso',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('persona.direccion.piso',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                          </div>
                                      </div>
                                      <div class="col-md-3">
                                           <div class="form-group">
-                                             <?php  echo $this->Form->input('familiar1->persona.direccion.departamento',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                             <?php  echo $this->Form->input('persona.direccion.departamento',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                           </div>
                                      </div>
                                      <div class="col-md-3" style="padding-right:0px">
                                           <div class="form-group">
-                                           <?php  echo $this->Form->input('familiar1->persona.direccion.codigo_postal',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                           <?php  echo $this->Form->input('persona.direccion.codigo_postal',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                           </div>
                                      </div>
                                  </div>
                                   <div class="col-md-12" style="padding: 0px">
                                    <div class="col-md-6" style="padding-left: 0px">
                                       <div class="form-group">
-                                       <?php  echo $this->Form->input('familiar1->persona.direccion.ciudad',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                       <?php  echo $this->Form->input('persona.direccion.ciudad',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                       </div>
                                    </div>
                                    <div class="col-md-6" style="padding-right: 0px">
                                         <div class="form-group">
-                                         <?php  echo $this->Form->input('familiar1->persona.direccion.pais',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                         <?php  echo $this->Form->input('persona.direccion.pais',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                         </div>
                                    </div>
                                   </div>
@@ -163,19 +163,19 @@
                                  <div class="col-md-12" style="padding: 0px">
                                     <div class="col-md-6" style="padding-left: 0px">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('familiar2->persona.nombre',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('familiar2.persona.nombre',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                          </div>
                                     </div>
                                     <div class="col-md-6" style="padding-right: 0px">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('familiar2->persona.apellido',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('familiar2.persona.apellido',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                          </div>
                                     </div>
                                  </div>
                                   <div class="col-md-12" style="padding: 0px">
                                      <div class="col-md-6" style="padding-left: 0px">
                                           <div class="form-group">
-                                             <?php  echo $this->Form->input('familiar2->persona.dni',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                             <?php  echo $this->Form->input('familiar2.persona.dni',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                           </div>
                                      </div>
                                      <div class="col-md-2">
@@ -201,20 +201,20 @@
                                       </div>
                                   </div>
                               <div class="form-group">
-                                 <?php  echo $this->Form->input('familiar2->persona.nacionalidad',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                 <?php  echo $this->Form->input('familiar2.persona.nacionalidad',  ['required' => true, 'class' => 'form-control' ] ); ?>
                               </div>
                               <div class="form-group">
-                                 <?php  echo $this->Form->input('familiar2->persona.email',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                 <?php  echo $this->Form->input('familiar2.persona.mail',  ['required' => true, 'class' => 'form-control' ] ); ?>
                               </div>
                              <div class="col-md-12" style="padding: 0px">
                               <div class="col-md-6" style="padding-left: 0px">
                                 <div class="form-group">
-                                   <?php  echo $this->Form->input('familiar2->persona.telefono',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                   <?php  echo $this->Form->input('familiar2.persona.telefono',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                 </div>
                               </div>
                               <div class="col-md-6" style="padding-right: 0px">
                                   <div class="form-group">
-                                     <?php  echo $this->Form->input('familiar2->persona.celular',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                     <?php  echo $this->Form->input('familiar2.persona.celular',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                   </div>
                               </div>
                              </div>
@@ -224,39 +224,39 @@
                             </div>
                             <div class="box-body">
                                  <div class="form-group">
-                                    <?php  echo $this->Form->input('familiar2->persona.direccion.calle',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                    <?php  echo $this->Form->input('familiar2.persona.direccion.calle',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                  </div>
                                  <div class="col-md-12" style="padding: 0px">
                                       <div class="col-md-3" style="padding-left: 0px">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('familiar2->persona.direccion.numero',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('familiar2.persona.direccion.numero',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                          </div>
                                       </div>
                                        <div class="col-md-3">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('familiar2->persona.direccion.piso',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('familiar2.persona.direccion.piso',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                          </div>
                                        </div>
                                        <div class="col-md-3">
                                           <div class="form-group">
-                                             <?php  echo $this->Form->input('familiar2->persona.direccion.departamento',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                             <?php  echo $this->Form->input('familiar2.persona.direccion.departamento',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                           </div>
                                        </div>
                                        <div class="col-md-3" style="padding-right:0px">
                                           <div class="form-group">
-                                           <?php  echo $this->Form->input('familiar2->persona.direccion.codigo_postal',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                           <?php  echo $this->Form->input('familiar2.persona.direccion.codigo_postal',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                           </div>
                                        </div>
                                    </div>
                                    <div class="col-md-12" style="padding: 0px">
                                     <div class="col-md-6" style="padding-left: 0px">
                                           <div class="form-group">
-                                           <?php  echo $this->Form->input('familiar2->persona.direccion.ciudad',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                           <?php  echo $this->Form->input('familiar2.persona.direccion.ciudad',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                           </div>
                                     </div>
                                     <div class="col-md-6" style="padding-right: 0px">
                                             <div class="form-group">
-                                             <?php  echo $this->Form->input('familiar2->persona.direccion.pais',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                             <?php  echo $this->Form->input('familiar2.persona.direccion.pais',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                             </div>
                                     </div>
                                    </div>

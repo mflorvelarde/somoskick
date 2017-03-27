@@ -1,12 +1,12 @@
 <section class="content-header">
 	<h1 class="page-header">
-	    Cuotas
+	    Tarifas
 	</h1>
 	<ol class="breadcrumb">
 	    <li>
 		<i class="fa fa-wrench"></i>  <a href="index.html">Administraci&oacute;n</a>
 	    </li>
-	    <li class="active">Cuotas</li>
+	    <li class="active">Tarifas</li>
 	</ol>
 </section>
 <section class="content">
@@ -51,39 +51,18 @@
                                 </div>
                                 <!-- /.row -->
                             </div>
-                    <table id="example1" class="table table-bordered table-striped">
-                        <?php foreach ($cuotas as $cuota): ?>
-                        <tbody>
-                        <?= $this->Form->create($cuota) ?>
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <div class="input text required">
-                                            <?php  echo $this->Form->input('vencimiento',  ['required' => true, 'class' => 'form-control' ] ); ?>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group">
-                                        <div class="input text required">
-                                            <?php  echo $this->Form->input('monto_pesos',  ['required' => true, 'class' => 'form-control' ] ); ?>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group">
-                                        <div class="input text required">
-                                            <?php  echo $this->Form->input('monto_dolares',  ['required' => true, 'class' => 'form-control' ] ); ?>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                    <?= $this->Html->link(__('Volver'), ['action' => 'index'] , array('class'=>'btn btn-danger', 'style' => 'margin-top:1em') ) ?>
-                    <?= $this->Form->button(__('Guardar'), ['class'=>'btn btn-success', 'style' => 'margin-top:1em']) ?>
-                    <?= $this->Form->end() ?>
+                        </div>
+                        <div class="col-xs-12">
+                            <?php foreach ($grupos as $grupo): ?>
+                                 <?   echo $this->Form->input(h($grupo->nombre), array('type' => 'checkbox')); ?>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="col-xs-12">
+                            <?= $this->Html->link(__('Volver'), ['action' => 'index'] , array('class'=>'btn btn-danger', 'style' => 'margin-top:1em') ) ?>
+                            <?= $this->Form->button(__('Aplicar'), ['class'=>'btn btn-success', 'style' => 'margin-top:1em']) ?>
+                            <?= $this->Form->end() ?>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

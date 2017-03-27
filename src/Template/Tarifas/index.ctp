@@ -50,6 +50,7 @@
                                           </button>
                                           <ul class="dropdown-menu" role="menu">
                                               <li><?= $this->Html->link('Ver tarifa', ['action' => 'view', $tarifa->id]) ?></li>
+                                              <li><?= $this->Html->link('Aplicar a grupos', ['action' => 'aplicarGrupos', $tarifa->id]) ?></li>
                                               <li><?= $this->Form->postLink('Borrar tarifa', ['action' => 'delete', $tarifa->id], ['confirm' => __('Confirmar borrado de tarifa', $tarifa->id)] ) ?></li>
                                           </ul>
                                       </div>

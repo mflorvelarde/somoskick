@@ -18,22 +18,17 @@ class CamadasController extends AppController{
      * @return \Cake\Network\Response|null
      */
     public function index($colegio_id = null) {
-        $persona = $this->Auth->user('id');
-        if ($this->isAdmin($persona)) {
-            if ($colegio_id != null) {
-                $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios']])
-                    ->where(['colegio_id' => $colegio_id]);
-            } else {
-                $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios']]);
-            }
-            $this->set('camadas', $this->paginate($query));
-            $this->set('_serialize', ['camadas']);
+    //    $persona = $this->Auth->user('id');
+      //  if ($this->isAdmin($persona)) {
+        if ($colegio_id != null) {
+            $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios']])
+                ->where(['colegio_id' => $colegio_id]);
         } else {
-            return $this->redirect(
-                ['controller' => 'Error', 'action' => 'notAuthorized']
-            );
+            $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios']]);
         }
 
+        $this->set('camadas', $this->paginate($query));
+        $this->set('_serialize', ['camadas']);
     }
 
     /**
@@ -133,6 +128,38 @@ class CamadasController extends AppController{
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function buscartarifas($camada_id) {
+        $camada = $this->Camadas->get($camada_id, ['contain' => ['Colegios', 'Grupos', 'Diccionarios']]);
+
+        $tarifas = TableRegistry::get('Tarifas')->find('all');
+
+        $this->set(compact('camada'));
+        $this->set('_serialize', ['camada']);
+        $this->set(compact('tarifas'));
+        $this->set('_serialize', ['tarifas']);
+    }
+
+    public function aplicartarifa($tarifa_id, $camada_id) {
+        $camada = $this->Camadas->get($camada_id, ['contain' => ['Colegios', 'Grupos', 'Diccionarios']]);
+
+        $tarifasAplicadasTable = TableRegistry::get('TarifasAplicadas');
+        $tarifaAplicada = $tarifasAplicadasTable->newEntity();
+        $tarifaAplicada->tarifa_id = $tarifa_id;
+        $tarifaAplicada->usuario_creacion = 2;
+        $tarifaAplicada->fecha_creacion = Time::now();
+        $tarifaAplicada->eliminado = 0;
+
+        $result = $tarifasAplicadasTable->save($tarifaAplicada);
+        $tarifaAplicada_id = $result->id;
+
+        $camada->grupo->tarifa_aplicada_id = $tarifaAplicada_id;
+        TableRegistry::get('Grupos')->save($camada->grupo);
+
+        return $this->redirect(
+            ['controller' => 'Cuotas', 'action' => 'add', $tarifaAplicada_id]
+        );
     }
 
     /**

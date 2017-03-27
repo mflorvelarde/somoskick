@@ -29,8 +29,7 @@ class TarifasController extends AppController {
      * @return \Cake\Network\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
-    {
+    public function view($id = null) {
         $tarifa = $this->Tarifas->get($id);
 
         $this->set('tarifa', $tarifa);
@@ -42,8 +41,7 @@ class TarifasController extends AppController {
      *
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
-    public function add()
-    {
+    public function add() {
         $tarifa = $this->Tarifas->newEntity();
         if ($this->request->is('post')) {
             $tarifa = $this->Tarifas->patchEntity($tarifa, $this->request->data);
@@ -53,7 +51,6 @@ class TarifasController extends AppController {
 
             if ($this->Tarifas->save($tarifa)) {
                 $this->Flash->success(__('La tarifa fue guardada'));
-
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__('La tarifa no pudo ser guardada. Por favor, intente nuevamente'));
@@ -61,6 +58,12 @@ class TarifasController extends AppController {
         }
         $this->set(compact('tarifa'));
         $this->set('_serialize', ['tarifa']);
+    }
+
+    public function aplicarGrupos($tarifa_id) {
+        return $this->redirect(
+            ['controller' => 'Grupos', 'action' => 'aplicartarifa', $tarifa_id]
+        );
     }
 
     /**

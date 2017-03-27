@@ -49,7 +49,20 @@
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ><i class="fa fa-align-center"></i></button>
                                         <ul class="dropdown-menu" role="menu">
                                             <li><?= $this->Form->postLink('Ver camadas', ['action' => 'view', $camada->id]) ?></li>
+                                            <li><?php
+                                                echo $this->Html->link(
+                                                    $this->Html->tag('i', '', array('class' => 'glyphicon glyphicon-trash')),
+                                                    '#',
+                                                    array(
+                                                       'class'=>'btn btn-danger btn-confirm',
+                                                       'data-toggle'=> 'modal',
+                                                       'data-target' => '#ConfirmDelete',
+                                                       'action' =>'buscartarifas', $camada->id,
+                                                       'escape' => false),
+                                                    false);
+                                                ?></li>
                                             <li><?= $this->Html->link('Cambiar status', ['action' => 'edit', $camada->id] ) ?></li>
+                                            <li><?= $this->Html->link('Cambiar status', ['action' => 'buscartarifas', $camada->id] ) ?></li>
                                         </ul>
                                     </div>
                                 </td>
@@ -77,3 +90,40 @@
         </div>
     </div>
 </section>
+
+
+ <!-- Modal -->
+    <div class="modal fade" id="ConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Seleccionar tarifa</h4>
+                </div>
+                <div class="modal-body">
+                            <? echo $this->Form->input(
+                                   'tarifa',
+                                   [
+                                       'type' => 'select',
+                                       'multiple' => false,
+                                       'options' => $tarifas,
+                                       'empty' => true
+                                   ]
+                               ); ?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <a  class="btn btn-danger danger">Confirm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+      $(".btn-confirm").on("click", function () {
+         var action = $(this).attr('data-action');
+         $("form").attr('action',action);
+    });
+    });
+    </script>
