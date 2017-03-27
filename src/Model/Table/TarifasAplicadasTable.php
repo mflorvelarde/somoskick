@@ -10,7 +10,7 @@ namespace App\Model\Table;
 
 use Cake\ORM\Table;
 
-class Tarifas_AplicadasTable extends Table {
+class TarifasAplicadasTable extends Table {
     public function initialize(array $config) {
         parent::initialize($config);
 

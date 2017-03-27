@@ -10,7 +10,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 
-class Tarifas_Aplicada extends Entity {
+class TarifasAplicada extends Entity {
     protected $_accessible = [
         '*' => true,
         'id' => false
