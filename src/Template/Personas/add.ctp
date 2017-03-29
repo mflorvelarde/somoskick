@@ -26,37 +26,31 @@
 		<?= $this->Form->create($persona) ?>
 		
                 <div class="row">
-                    <div class="col-lg-6">
-			     <div class="form-group">
-				 <?php  echo $this->Form->input('nombre',  ['required' => true, 'class' => 'form-control' ] ); ?>
-                             </div>
-			    
-			    <div class="form-group">
-                                <?php  echo $this->Form->input('apellido',  ['required' => true, 'class' => 'form-control' ] ); ?>
-                            </div>
-                            
-                            <div class="form-group">
-                                <?php  echo $this->Form->input('dni',  ['required' => true, 'class' => 'form-control' ] ); ?>
-                            </div>
-
-                            <div class="form-group">
-                                <?php  echo $this->Form->input('contrasena',  ['required' => true, 'class' => 'form-control' ] ); ?>
-                                </div>
-
-                            <div class="form-group">
-                                <?php  echo $this->Form->input('mail',  ['required' => true, 'class' => 'form-control' ] ); ?>
-                            </div>
-                            <div class="form-group">
-                                <?php  echo $this->Form->input('perfil',  ['required' => true, 'class' => 'form-control' ] ); ?>
-                            </div>
-
+                    <div class="col-sm-12">
+                         <div class="form-group">
+                            <?php  echo $this->Form->input('nombre',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                         </div>
+                        <div class="form-group">
+                            <?php  echo $this->Form->input('apellido',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                        </div>
+                        <div class="form-group">
+                            <?php  echo $this->Form->input('mail',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                        </div>                            
+                        <div class="form-group">
+                            <?php  echo $this->Form->input('dni',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                        </div>
+                        <div class="form-group">
+                            <?php  echo $this->Form->input('telefono',  ['required' => false, 'class' => 'form-control' ] ); ?>
+                        </div>
+                        <div class="form-group">
+                            <?php  echo $this->Form->input('celular',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                        </div>
+                        <div class="form-group">
+                            <?php  echo $this->Form->input('perfil',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                        </div>
                     </div>
-
-
-                <!-- /.row -->
-		
-		<?= $this->Form->button(__('Submit'), ['class'=>'btn btn-success']) ?>
-		<?= $this->Html->link(__('Volver'), ['action' => 'index'] , array('class'=>'btn btn-primary') ) ?>
+                <?= $this->Form->button(__('Submit'), ['class'=>'btn btn-success']) ?>
+                <?= $this->Html->link(__('Volver'), ['action' => 'index'] , array('class'=>'btn btn-primary') ) ?>
                 <?= $this->Form->end() ?>
             </div>
             <!-- /.container-fluid -->
