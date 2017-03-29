@@ -45,8 +45,24 @@
                         <div class="form-group">
                             <?php  echo $this->Form->input('celular',  ['required' => true, 'class' => 'form-control' ] ); ?>
                         </div>
-                        <div class="form-group">
-                            <?php  echo $this->Form->input('perfil',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                        <div class="col-md-12" style="padding: 0px">
+                            <div class="col-md-2">
+                                 <div class="form-group">
+                                    <div><label>Perfil</label></div>
+                                    <?php  echo $this->Form->select('perfil',
+                                    [
+                                        'MASTER' => 'MASTER',
+                                        'ADMIN' => 'ADMIN',
+                                        'VENTAS' => 'VENTAS',
+                                        'ATENCION' => 'ATENCION'
+                                    ],
+                                    [
+                                        'required' => true,
+                                        'id' => 'perfil',
+                                        'style' => 'width: 80%',
+                                    ] ); ?>
+                                 </div>
+                            </div>
                         </div>
                     </div>
                 <?= $this->Form->button(__('Submit'), ['class'=>'btn btn-success']) ?>
