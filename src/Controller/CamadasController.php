@@ -76,7 +76,7 @@ class CamadasController extends AppController{
         }
         $camadas = $this->paginate($query);
         $resultPasajeros = $queryPasajeros->toList();
-        $diccionarios = TableRegistry::get('Diccionarios')->find('all')->where(['param1' => "PASAJEROS_DE_GRUPOS"]);
+        $diccionarios = $this->getDiccionariosPasajerosDeGrupo();
 
         $regular_id = -1;
         $activo_id = -1;
@@ -132,12 +132,15 @@ class CamadasController extends AppController{
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $camada = $this->Camadas->get($id, ['contain' => ['Colegios', 'Grupos', 'Diccionarios']]);
-/*        $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios']])
-            ->where(['Camadas.id' => $id]);*/
+        $camada = $this->Camadas->get($id, ['contain' => ['Colegios', 'Grupos' => ['Tarifas_Aplicadas' => ['Tarifas']],
+            'Diccionarios', 'Personas']]);
 
         $this->set(compact('camada'));
         $this->set('_serialize', ['camada']);
+    }
+
+    private function getDiccionariosPasajerosDeGrupo() {
+        return TableRegistry::get('Diccionarios')->find('all')->where(['param1' => "PASAJEROS_DE_GRUPOS"]);
     }
 
     /**
@@ -268,7 +271,7 @@ class CamadasController extends AppController{
     }
 
     public function aplicartarifa($tarifa_id, $camada_id) {
-        $camada = $this->Camadas->get($camada_id, ['contain' => ['Colegios', 'Grupos', 'Diccionarios']]);
+        $camada = $this->Camadas->get($camada_id, ['contain' => ['Colegios', 'Grupos', 'Diccionarios', 'Personas']]);
 
         $tarifasAplicadasTable = TableRegistry::get('TarifasAplicadas');
         $tarifaAplicada = $tarifasAplicadasTable->newEntity();
