@@ -18,6 +18,13 @@ class GruposTable extends Table{
         $this->displayField('id');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
+
+        $this->hasOne('Tarifas_Aplicadas', [
+            'className' => 'TarifasAplicadas',
+            'foreignKey' => 'id',
+            'bindingKey' => 'tarifa_aplicada_id'
+        ]);
+
     }
 
 }
