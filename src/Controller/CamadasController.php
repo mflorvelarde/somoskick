@@ -20,14 +20,107 @@ class CamadasController extends AppController{
     public function index($colegio_id = null) {
     //    $persona = $this->Auth->user('id');
       //  if ($this->isAdmin($persona)) {
+
+        $pasajerosdegrupos = TableRegistry::get('Pasajerosdegrupos');
+
         if ($colegio_id != null) {
-            $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios']])
-                ->where(['colegio_id' => $colegio_id]);
+            $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios', 'Personas']])
+                ->where(['colegio_id' => $colegio_id, 'camadas.eliminado' => 0]);
+
+            $queryPasajeros = $pasajerosdegrupos->find()
+                ->hydrate(false)
+                ->join([
+                    'pasajeros' => [
+                        'table' => 'pasajeros',
+                        'type' => 'INNER',
+                        'conditions' => 'pasajeros.id = pasajerosdegrupos.id_pasajero',
+                    ],
+                    'grupos' => [
+                        'table' => 'grupos',
+                        'type' => 'INNER',
+                        'conditions' => 'grupos.id = pasajerosdegrupos.id_grupo',
+                    ],
+                    'camadas' => [
+                        'table' => 'camadas',
+                        'type' => 'INNER',
+                        'conditions' => 'grupos.id = camadas.grupo_id',
+                    ]
+                ])
+                ->where(['camadas.colegio_id' => $colegio_id])
+            ;
+
         } else {
-            $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios']]);
+            $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios', 'Personas']])
+                ->where(['camadas.eliminado' => 0]);
+
+            $queryPasajeros = $pasajerosdegrupos->find()
+                ->hydrate(false)
+                ->join([
+                    'pasajeros' => [
+                        'table' => 'pasajeros',
+                        'type' => 'INNER',
+                        'conditions' => 'pasajeros.id = pasajerosdegrupos.id_pasajero',
+                    ],
+                    'grupos' => [
+                        'table' => 'grupos',
+                        'type' => 'INNER',
+                        'conditions' => 'grupos.id = pasajerosdegrupos.id_grupo',
+                    ],
+                    'camadas' => [
+                        'table' => 'camadas',
+                        'type' => 'INNER',
+                        'conditions' => 'grupos.id = camadas.grupo_id',
+                    ]
+                ])
+            ;
+        }
+        $camadas = $this->paginate($query);
+        $resultPasajeros = $queryPasajeros->toList();
+        $diccionarios = TableRegistry::get('Diccionarios')->find('all')->where(['param1' => "PASAJEROS_DE_GRUPOS"]);
+
+        $regular_id = -1;
+        $activo_id = -1;
+        foreach ($diccionarios as $diccionario) {
+            if ($diccionario->param2 === "SITUACION" && $diccionario->param3 === "REGULAR") $regular_id = $diccionario->id;
+            if ($diccionario->param2 === "CUENTA" && $diccionario->param3 === "ACTIVO") $activo_id = $diccionario->id;
+
         }
 
-        $this->set('camadas', $this->paginate($query));
+        foreach ($camadas as $camadaEntity) {
+            $regulares = 0;
+            $activos = 0;
+            if (!is_null($resultPasajeros) && $resultPasajeros != array()) {
+                foreach ($resultPasajeros as $pasajero) {
+                    if (!is_null($pasajero) && $pasajero != array()) {
+/*                        if ($pasajero->id_grupo == $camadaEntity->id_grupo) {*/
+/*                            if ($pasajero->actividad_cuenta == $activo_id) $activos = $activos + 1;
+                            if ($pasajero->regularidad == $regular_id) $regulares = $regulares + 1;
+                            $resultPasajeros = array_diff($resultPasajeros, array($pasajero));*/
+     //                   }
+                    }
+
+                }
+            }
+            $camadaEntity->regulares = $regulares;
+            $camadaEntity->registrados = $regulares;
+
+            if (is_null($camadaEntity->persona)) {
+                $personaVacia = TableRegistry::get('Personas')->newEntity();
+                $personaVacia->nombre = "";
+                $camadaEntity->persona = $personaVacia;
+            }
+            if (is_null($camadaEntity->grupo->pasajeros_estimados)) {
+                $camadaEntity->grupo->pasajeros_estimados = "";
+            }
+        }
+
+
+
+        $this->set('diccionarios', $diccionarios);
+        $this->set('_serialize', ['diccionarios']);
+        $this->set('resultPasajeros', $resultPasajeros);
+        $this->set('_serialize', ['resultPasajeros']);
+        $this->set('camadas', $camadas);
         $this->set('_serialize', ['camadas']);
     }
 
@@ -53,12 +146,30 @@ class CamadasController extends AppController{
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
     public function add($colegioId = null) {
+        $colegios_options = array();
         $camada = $this->Camadas->newEntity();
+        $colegiosTable = TableRegistry::get('Colegios');
+
         if ($colegioId != null) {
+            $colegios_options = $colegiosTable->find('list', array(
+                'conditions' => array('id' => $colegioId),
+                'valueField' => array('nombre')
+            ));
             $camada->colegio_id = $colegioId;
         } else {
-            $camada->colegio_id = 1;
+            $colegios_options = $colegiosTable->find('list', ['valueField' => 'nombre']);
         }
+
+        $vendedores = TableRegistry::get('Personas')->find('list', array(
+            'conditions' => array('perfil != ' => 'CLIENTE'),
+            'order'=> array('nombre'),
+            'valueField' => array('nombre')
+        ));
+
+        $estados =  TableRegistry::get('Diccionarios')->find('list', array(
+            'conditions' => array('param1' => 'CAMADAS', 'param2' => 'STATUS'),
+            'valueField' => array('value')
+        ));
 
         if ($this->request->is('post')) {
             $camada = $this->Camadas->patchEntity($camada, $this->request->data, [
@@ -93,6 +204,12 @@ class CamadasController extends AppController{
                 $this->Flash->error(__('La camada no pudo ser guardada. Por favor, intente nuevamente'));
             }
         }
+        $this->set(compact('estados'));
+        $this->set('_serialize', ['estados']);
+        $this->set(compact('vendedores'));
+        $this->set('_serialize', ['vendedores']);
+        $this->set(compact('colegios_options'));
+        $this->set('_serialize', ['colegios_options']);
         $this->set(compact('camada'));
         $this->set('_serialize', ['camada']);
     }
@@ -132,13 +249,22 @@ class CamadasController extends AppController{
 
     public function buscartarifas($camada_id) {
         $camada = $this->Camadas->get($camada_id, ['contain' => ['Colegios', 'Grupos', 'Diccionarios']]);
-
         $tarifas = TableRegistry::get('Tarifas')->find('all');
 
+        $this->set(compact('fecha_inicio'));
+        $this->set('_serialize', ['fecha_inicio']);
         $this->set(compact('camada'));
         $this->set('_serialize', ['camada']);
         $this->set(compact('tarifas'));
         $this->set('_serialize', ['tarifas']);
+    }
+
+    public function seleccionarfecha($tarifa_id, $camada_id) {
+        $this->viewBuilder()->layout('ajax');
+
+        $fecha_inicio = null;
+        $this->set(compact('fecha_inicio'));
+        $this->set('_serialize', ['fecha_inicio']);
     }
 
     public function aplicartarifa($tarifa_id, $camada_id) {

@@ -76,6 +76,21 @@
                                         ['class' => 'button btn btn-default']
                                     );
                                  ?>
+
+                                                                <?php
+                                                                                 echo $this->Html->link(
+                                                                                     $this->Html->tag('i', '', array('class' => 'glyphicon glyphicon-trash')),
+                                                                                     '#',
+                                   array(
+                                                       'class'=>'btn btn-danger seleccionar-tarifa',
+                                                       'data-toggle'=> 'modal',
+                                                       'data-target' => '#ConfirmDelete',
+                                                       'escape' => false),
+                                                false);
+                                                                                 ?>
+
+                                 <a  class="btn btn-danger danger" onclick="seleccionarFecha('<?php echo $tarifa->id?>','<?php echo $camada->id ?>')">Confirm</a>
+
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -96,3 +111,28 @@
         </div>
     </div>
 </section>
+
+
+
+ <!-- Modal -->
+    <div class="modal fade" id="ConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div id="seleccionar-fecha" class="modal-content">
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+      function seleccionarFecha(tarifa_id, camada_id) {
+            alert("metodo");
+          $.ajax({
+            url: '../../camadas/seleccionarfecha/' + tarifa_id + '/' + camada_id,
+            success: function(data) {
+              $("#seleccionar-fecha").html(data);
+            }
+          });
+        }
+    </script>

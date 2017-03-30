@@ -87,12 +87,21 @@ class CuotasController extends AppController{
         $tarifa_aplicada = $tarifasAplicadasTable->get($tarifa_aplicada_id, ['contain' => ['Tarifas', 'Viajes']]);
         $tarifa = $tarifa_aplicada->tarifa;
 
-        $inicioPago = $tarifa->inicio_pago;
+        $inicioPago = $tarifa_aplicada->inicio_pago;
         $finPago = $tarifa->fin_pago;
 
         $cuotas = TableRegistry::get('Cuotas')->newEntities($this->request->data);
         $date = date('Y-m-d', strtotime('+1 month',  strtotime($inicioPago)));
         $meses = 0;
+
+        $this->set(compact('tarifa_aplicada'));
+        $this->set('_serialize', ['tarifa_aplicada']);
+        $this->set(compact('inicioPago'));
+        $this->set('_serialize', ['inicioPago']);
+        $this->set(compact('date'));
+        $this->set('_serialize', ['date']);
+        $this->set(compact('finPago'));
+        $this->set('_serialize', ['finPago']);
 
         while ($date < $finPago) {
             $cuota = $this->Cuotas->newEntity();
@@ -101,11 +110,13 @@ class CuotasController extends AppController{
             $meses = $meses + 1;
             $date = date('Y-m-d', strtotime('+1 month',  strtotime($date)));
         }
-        if ($tarifa->monto_pesos == 0 && $tarifa->monto_dolares =! 0) {
+
+
+        if ( ( is_null($tarifa->monto_pesos) || $tarifa->monto_pesos == 0) && $tarifa->monto_dolares =! 0) {
             foreach ($cuotas as $cuota) {
                 $cuota->monto_dolares = $tarifa->monto_dolares / $meses;
             }
-        } else if ($tarifa->monto_pesos != 0 && $tarifa->monto_dolares == 0) {
+        } else if ( $tarifa->monto_pesos != 0 && ( is_null($tarifa->monto_dolares) || $tarifa->monto_dolares == 0)) {
             foreach ($cuotas as $cuota) {
                 $cuota->monto_pesos = $tarifa->monto_pesos / $meses;
             }
@@ -117,6 +128,19 @@ class CuotasController extends AppController{
             if ($cantidadCuotasDolares == 0) $cantidadCuotasDolares = 1;
             $cantidadCuotasPesos = $meses - $cantidadCuotasDolares;
 
+            $index = 0;
+            foreach ($cuotas as $cuota) {
+                if ($index < $cantidadCuotasDolares) {
+                    $cuota->monto_dolares = $tarifa->monto_dolares / $cantidadCuotasDolares;
+                    $cuota->monto_pesos = 0;
+                } else {
+                    $cuota->monto_pesos = $tarifa->monto_pesos / $cantidadCuotasPesos;
+                    $cuota->monto_dolares = 0;
+                }
+                $index = $index + 1;
+            }
+
+/*
             for ($i = 0; $i < $cantidadCuotasDolares; $i++) {
                 $cuotas[$i]->monto_dolares = $tarifa->monto_dolares / $cantidadCuotasDolares;
                 $cuotas[$i]->monto_pesos = 0;
@@ -124,7 +148,7 @@ class CuotasController extends AppController{
             for ($i = $cantidadCuotasDolares; $i < $meses; $i++) {
                 $cuotas[$i]->monto_pesos = $tarifa->monto_pesos / $cantidadCuotasPesos;
                 $cuotas[$i]->monto_dolares = 0;
-            }
+            }*/
         }
 
 
@@ -177,8 +201,8 @@ class CuotasController extends AppController{
         $this->set('_serialize', ['tarifa']);
         $this->set(compact('cuotas'));
         $this->set('_serialize', ['cuotas']);
-        $this->set(compact('diff'));
-        $this->set('_serialize', ['diff']);
+/*        $this->set(compact('diff'));
+        $this->set('_serialize', ['diff']);*/
     }
 
     /**
