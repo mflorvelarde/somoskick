@@ -1,3 +1,10 @@
+<script type="text/javascript">
+
+jQuery( document ).ready(function()
+{
+   jQuery('#destionas-table').dynatable();
+});
+</script>
 <section class="content-header">
     <h1 class="page-header">
         Viajes
@@ -19,7 +26,7 @@
                             <?= $this->Html->link(__('Nuevo viaje'), ['action' => 'add'] , array('class'=>'btn bg-maroon margin-bottom') ) ?>
                         </div>
                     </div>
-                    <table id="example1" class="table table-bordered table-striped">
+                    <table id="destionas-table" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Destino</th>
@@ -54,14 +61,6 @@
                             </tr>
                         </tfoot>
                     </table>
-                    <div class="paginator">
-                        <ul class="pagination">
-                        <?= $this->Paginator->prev('< ' . __('previous')) ?>
-                        <?= $this->Paginator->numbers() ?>
-                        <?= $this->Paginator->next(__('next') . ' >') ?>
-                        </ul>
-                        <p><?= $this->Paginator->counter() ?></p>
-		            </div>
 	            </div>
             </div>
         </div>

@@ -6,39 +6,43 @@
       <ul class="sidebar-menu">
         <li class="header">MENÚ PRINCIPAL</li>
 		<li>
-          <a href="pages/widgets.html">
-            <i class="fa fa-plane"></i> <span>Colegios</span>
+          <a href="<?php echo $this->Url->build(["controller" => "Colegios", "action" => "index"]);?>">
+            <i class="fa fa-building-o"></i> <span>Colegios</span>
           </a>
         </li>
 		<li>
           <a href="<?php echo $this->Url->build(["controller" => "Camadas", "action" => "index"]);?>">
-            <i class="fa fa-suitcase"></i> <span>Camadas</span>
+            <i class="fa fa-graduation-cap"></i> <span>Camadas</span>
           </a>
         </li>
 		<li>
-          <a href="../clients/pagos.php">
-            <i class="fa fa-th"></i> <span>Pasajeros</span>
+          <a href="<?php echo $this->Url->build(["controller" => "Pasajeros", "action" => "index"]);?>">
+            <i class="fa fa-users"></i> <span>Pasajeros</span>
           </a>
         </li>
 		<li>
-          <a href="pages/widgets.html">
-            <i class="fa fa-stethoscope"></i> <span>Notifiaciones de pago</span>
+          <a href="<?php echo $this->Url->build(["controller" => "NotificacionesPago", "action" => "index"]);?>">
+            <i class="fa fa-credit-card"></i> <span>Notifiaciones de pago</span>
+          </a>
+        </li>
+        <li>
+          <a href="<?php echo $this->Url->build(["controller" => "Tarifas", "action" => "index"]);?>">
+            <i class="fa fa-stethoscope"></i> <span>Tarifas</span>
           </a>
         </li>
 		<li>
-          <a href="pages/widgets.html">
-            <i class="fa fa-file-o"></i> <span>Contrato</span>
+          <a href="<?php echo $this->Url->build(["controller" => "Viajes", "action" => "index"]);?>">
+            <i class="fa fa-plane"></i> <span>Destinos</span>
           </a>
         </li>
 		<li>
-          <a href="pages/widgets.html">
-            <i class="fa fa-credit-card"></i> <span>Formas de pago</span>
+          <a href="<?php echo $this->Url->build(["controller" => "Dolares", "action" => "index"]);?>">
+            <i class="fa fa-money"></i> <span>Cotización dolar</span>
           </a>
         </li>
 		<li class="header">MI CUENTA</li>
-        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Ver perfil</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Salir</span></a></li>
       </ul>
     </section>
     <!-- /.sidebar -->

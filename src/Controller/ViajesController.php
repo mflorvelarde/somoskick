@@ -17,7 +17,8 @@ class ViajesController extends AppController {
      * @return \Cake\Network\Response|null
      */
     public function index() {
-        $viajes = $this->paginate($this->Viajes);
+        $query = $this->Viajes->find('all')->where(['eliminado' => 0]);
+        $viajes = $this->paginate($query);
 
         $this->set(compact('viajes'));
         $this->set('_serialize', ['viajes']);
@@ -34,7 +35,7 @@ class ViajesController extends AppController {
 
         if ($this->request->is('post')) {
             $viaje = $this->Viajes->patchEntity($viaje, $this->request->data);
-            $viaje->usuario_creacion = 2;
+            $viaje->usuario_creacion = $this->Auth->user('id');
             $viaje->fecha_creacion = Time::now();
             $viaje->eliminado = 0;
 
@@ -47,6 +48,7 @@ class ViajesController extends AppController {
                 $this->Flash->error(__('El viaje no pudo ser guardado. Por favor, intente nuevamente'));
             }
         }
+
         $this->set(compact('viaje'));
         $this->set('_serialize', ['viaje']);
     }
@@ -63,7 +65,7 @@ class ViajesController extends AppController {
 
         $viaje = $this->Viajes->get($id);
         $viaje->eliminado = 1;
-        $viaje->usuario_eliminado = 2;
+        $viaje->usuario_eliminado = $this->Auth->user('id');
         $viaje->fecha_eliminado = Time::now();
         if ($this->Viajes->save($viaje)) {
             $this->Flash->success(__('El viaje fue eliminado'));
@@ -87,7 +89,7 @@ class ViajesController extends AppController {
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $viaje = $this->Viajes->patchEntity($viaje, $this->request->data);
-            $viaje->usuario_modificacion = 2;
+            $viaje->usuario_modificacion = $this->Auth->user('id');
             $viaje->fecha_modificacion = Time::now();
 
             if ($this->Viajes->save($viaje)) {
