@@ -42,5 +42,23 @@ class CamadasTable extends Table {
             'foreignKey' => 'id',
             'bindingKey' => 'diccionario_id'
         ]);
+
+        $this->hasOne('Personas', [
+            'className' => 'Personas',
+            'foreignKey' => 'id',
+            'bindingKey' => 'usuario_creacion'
+        ]);
+
+        $this->hasOne('Personas', [
+            'className' => 'Personas',
+            'foreignKey' => 'id',
+            'bindingKey' => 'usuario_modificacion'
+        ]);
+
+        $this->hasOne('Personas', [
+            'className' => 'Personas',
+            'foreignKey' => 'id',
+            'bindingKey' => 'usuario_eliminado'
+        ]);
     }
 }

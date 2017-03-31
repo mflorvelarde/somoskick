@@ -20,44 +20,62 @@
                 <div class="box-body">
                     <?= $this->Form->create($camada) ?>
                     <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <?php  echo $this->Form->input('grupo.nombre',  ['required' => true, 'class' => 'form-control' ] ); ?>
-                            </div>
-                            <div class="form-group">
-                                <?php  echo $this->Form->input('fecha_firma',  ['required' => false, 'class' => 'form-control' ] ); ?>
-                            </div>
-                            <div class="form-group">
-                                <?php  echo $this->Form->input('grupo.contrato',  ['required' => false, 'class' => 'form-control' ] ); ?>
-                            </div>
+                        <div class="col-sm-12">
+                              <div class="col-sm-12" style="padding: 0px">
+                                  <div class="col-sm-4" style="padding-left: 0px">
+                                        <div class="form-group">
+                                            <?php  echo $this->Form->input('grupo.nombre',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                        </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <?php  echo $this->Form->input('año',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                        </div>
+                                  </div>
+                                  <div class="col-sm-4" style="padding-right: 0px">
+                                        <div class="form-group">
+                                            <?php  echo $this->Form->input('grupo.pasajeros_estimados',  ['required' => false, 'class' => 'form-control' ] ); ?>
+                                        </div>
+                                  </div>
+                              </div>
 
                             <div class="form-group">
                                 <?php  echo $this->Form->input('descripcion',  ['required' => false, 'class' => 'form-control' ] ); ?>
                             </div>
-                            <div class="form-group">
-                                <?php echo $this->Form->input('colegio_id', ['options' => $colegios_options]); ?>
-                            </div>
-                            <div class="form-group">
-                                <?php  echo $this->Form->input('año',  ['required' => true, 'class' => 'form-control' ] ); ?>
-                            </div>
-                            <div class="form-group">
-                                <?php echo $this->Form->input('vendedor_id', ['options' => $vendedores]); ?>
-                            </div>
-                            <div class="form-group">
-                                <?php echo $this->Form->input('diccionario_id', ['options' => $estados, 'label' => 'Estado']); ?>
-                            </div>
-                            <div class="form-group">
-                                <?php  echo $this->Form->input('contacto1',  ['required' => false, 'class' => 'form-control', 'label' => 'Contacto'] ); ?>
-                            </div>
 
-                            <div class="form-group">
-                                <?php  echo $this->Form->input('contacto2',  ['required' => false,
-                                'class' => 'form-control', 'label' => 'Contacto' ] ); ?>
-                            </div>
-                            <div class="form-group">
-                                <?php  echo $this->Form->input('pasajeros_estimados',  ['required' => false, 'class' => 'form-control' ] ); ?>
-                            </div>
 
+                              <div class="col-sm-12" style="padding: 0px">
+                                  <div class="col-sm-4" style="padding-left: 0px">
+                                        <div class="form-group">
+                                            <?php echo $this->Form->input('colegio_id', ['options' => $colegios_options]); ?>
+                                        </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <?php echo $this->Form->input('vendedor_id', ['options' => $vendedores]); ?>
+                                        </div>
+                                  </div>
+                                  <div class="col-sm-4" style="padding-right: 0px">
+                                        <div class="form-group">
+                                            <?php echo $this->Form->input('diccionario_id', ['options' => $estados, 'label' => 'Estado']); ?>
+                                        </div>
+                                  </div>
+                              </div>
+
+                                  <div class="col-md-12" style="padding: 0px">
+                                      <div class="col-md-6" style="padding-left: 0px">
+                                            <div class="form-group">
+                                                <?php  echo $this->Form->input('contacto1',  ['required' => false, 'class' => 'form-control', 'label' => 'Contacto'] ); ?>
+                                            </div>
+                                      </div>
+                                      <div class="col-md-6" style="padding-right: 0px">
+                                            <div class="form-group">
+                                                <?php  echo $this->Form->input('contacto2',  ['required' => false,
+                                                'class' => 'form-control', 'label' => 'Contacto' ] ); ?>
+                                            </div>
+
+                                      </div>
+                                  </div>
                             <?= $this->Form->button(__('Guardar'), ['class'=>'btn btn-success']) ?>
                             <?= $this->Html->link(__('Cancelar'), ['action' => 'index'] , array('class'=>'btn btn-danger') ) ?>
                             <?= $this->Form->end() ?>

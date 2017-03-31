@@ -26,13 +26,14 @@ $( document ).ready(function(){
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                             <tr>
+                                <th>Camadas</th>
                                 <th>Colegio</th>
-                                <th>Camada</th>
+                                <th>Año</th>
                                 <th>Vendedor</th>
                                 <th>Estado</th>
-                                <th>En lista de espera</th>
+<!--                                <th>En lista de espera</th>
                                 <th>Regulares</th>
-                                <th>Registrados</th>
+                                <th>Registrados</th> -->
                                 <th>Por contrato</th>
                                 <th></th>
                             </tr>
@@ -40,13 +41,14 @@ $( document ).ready(function(){
                         <tbody>
                         <?php foreach ($camadas as $camada): ?>
                             <tr>
+                                <td><?= h($camada->grupo->nombre)?></td>
                                 <td><?= h($camada->colegio->nombre)?></td>
                                 <td><?= h($camada->año)?></td>
                                 <td><?= h($camada->persona->nombre)?></td>
                                 <td><span class="label label-success"><?= h($camada->diccionario->value)?></span></td>
-                                <td>No</td>
+<!--                                 <td>No</td>
                                 <td>18</td>
-                                <td>18</td>
+                                <td>18</td> -->
                                 <td><?= h($camada->grupo->pasajeros_estimados)?></td>
                                 <td>
                                     <div class="btn-group">
@@ -63,13 +65,14 @@ $( document ).ready(function(){
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th>Colegio</th>
                                 <th>Camada</th>
+                                <th>Colegio</th>
+                                <th>Año</th>
                                 <th>Vendedor</th>
                                 <th>Estado</th>
-                                <th>En lista de espera</th>
+   <!--                             <th>En lista de espera</th>
                                 <th>Regulares</th>
-                                <th>Registrados</th>
+                                <th>Registrados</th> -->
                                 <th>Por contrato</th>
                                 <th></th>
                             </tr>

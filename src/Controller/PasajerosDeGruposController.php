@@ -14,6 +14,41 @@ use Cake\ORM\TableRegistry;
 
 class PasajerosDeGruposController extends AppController {
 
+    public function index($grupo_id = null) {
+        if ($grupo_id == null) {
+            $pasajerosGrupos = $this->Pasajerosdegrupos->find('all', ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'],'Grupos']])
+                ->where(['pasajerosdegrupos.eliminado' => 0]);
+        } else {
+            $pasajerosGrupos = $this->Pasajerosdegrupos->find('all', ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'],'Grupos']])
+                ->where(['id_grupo' => $grupo_id, 'pasajerosdegrupos.eliminado' => 0]);
+        }
+
+        $diccionarios = $this->getDiccionariosPasajerosDeGrupo();
+
+        $regular_id = -1;
+        $activo_id = -1;
+        foreach ($diccionarios as $diccionario) {
+            if ($diccionario->param2 === "SITUACION" && $diccionario->param3 === "REGULAR") $regular_id = $diccionario->id;
+            if ($diccionario->param2 === "CUENTA" && $diccionario->param3 === "ACTIVO") $activo_id = $diccionario->id;
+
+        }
+
+        foreach ($pasajerosGrupos as $pasajerosGrupo) {
+            if ($pasajerosGrupo->regularidad = $regular_id) $pasajerosGrupo->regular = "Regular";
+            else $pasajerosGrupo->regular = "Irregular";
+
+            if ($pasajerosGrupo->actividad_cuenta = $activo_id) $pasajerosGrupo->cuenta = "Activo";
+            else $pasajerosGrupo->cuenta = "Inactivo";
+        }
+        $this->set('regular_id', $regular_id);
+        $this->set('activo_id', $activo_id);
+        $this->set('pasajerosGrupos', $pasajerosGrupos);
+    }
+
+    private function getDiccionariosPasajerosDeGrupo() {
+        return TableRegistry::get('Diccionarios')->find('all')->where(['param1' => "PASAJEROS_DE_GRUPOS"]);
+    }
+
     /**
      * Index method
      * @return \Cake\Network\Response|null

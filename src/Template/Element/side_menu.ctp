@@ -16,7 +16,7 @@
           </a>
         </li>
 		<li>
-          <a href="<?php echo $this->Url->build(["controller" => "Pasajeros", "action" => "index"]);?>">
+          <a href="<?php echo $this->Url->build(["controller" => "Pasajerosdegrupos", "action" => "index"]);?>">
             <i class="fa fa-users"></i> <span>Pasajeros</span>
           </a>
         </li>
@@ -27,7 +27,7 @@
         </li>
         <li>
           <a href="<?php echo $this->Url->build(["controller" => "Tarifas", "action" => "index"]);?>">
-            <i class="fa fa-stethoscope"></i> <span>Tarifas</span>
+            <i class="fa fa-bookmark-o"></i> <span>Tarifas</span>
           </a>
         </li>
 		<li>

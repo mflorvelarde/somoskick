@@ -13,10 +13,6 @@ use Cake\I18n\Time;
 
 class CamadasController extends AppController{
 
-    /**
-     * Index method
-     * @return \Cake\Network\Response|null
-     */
     public function index($colegio_id = null) {
     //    $persona = $this->Auth->user('id');
       //  if ($this->isAdmin($persona)) {
@@ -89,18 +85,18 @@ class CamadasController extends AppController{
         foreach ($camadas as $camadaEntity) {
             $regulares = 0;
             $activos = 0;
-            if (!is_null($resultPasajeros) && $resultPasajeros != array()) {
+/*            if (!is_null($resultPasajeros) && $resultPasajeros != array()) {
                 foreach ($resultPasajeros as $pasajero) {
                     if (!is_null($pasajero) && $pasajero != array()) {
-/*                        if ($pasajero->id_grupo == $camadaEntity->id_grupo) {*/
-/*                            if ($pasajero->actividad_cuenta == $activo_id) $activos = $activos + 1;
+                       if ($pasajero->id_grupo == $camadaEntity->id_grupo) {
+                            if ($pasajero->actividad_cuenta == $activo_id) $activos = $activos + 1;
                             if ($pasajero->regularidad == $regular_id) $regulares = $regulares + 1;
-                            $resultPasajeros = array_diff($resultPasajeros, array($pasajero));*/
-     //                   }
+                            $resultPasajeros = array_diff($resultPasajeros, array($pasajero));
+                        }
                     }
 
                 }
-            }
+            }*/
             $camadaEntity->regulares = $regulares;
             $camadaEntity->registrados = $regulares;
 
@@ -124,16 +120,17 @@ class CamadasController extends AppController{
         $this->set('_serialize', ['camadas']);
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function view($id = null) {
         $camada = $this->Camadas->get($id, ['contain' => ['Colegios', 'Grupos' => ['Tarifas_Aplicadas' => ['Tarifas']],
             'Diccionarios', 'Personas']]);
+
+        if (is_null($camada->grupo->tarifas__aplicada) || $camada->grupo->tarifas__aplicada != array()) {
+            $tarifa = TableRegistry::get('Tarifas')->newEntity();
+            $tarifa->descripcion = "";
+            $tarifas__aplicada = TableRegistry::get('TarifasAplicadas')->newEntity();
+            $tarifas__aplicada->tarifa = $tarifa;
+            $camada->grupo->tarifas__aplicada = $tarifas__aplicada;
+        }
 
         $this->set(compact('camada'));
         $this->set('_serialize', ['camada']);
@@ -143,11 +140,6 @@ class CamadasController extends AppController{
         return TableRegistry::get('Diccionarios')->find('all')->where(['param1' => "PASAJEROS_DE_GRUPOS"]);
     }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
-     */
     public function add($colegioId = null) {
         $colegios_options = array();
         $camada = $this->Camadas->newEntity();
@@ -184,15 +176,16 @@ class CamadasController extends AppController{
             $grupos = TableRegistry::get('Grupos')->newEntity();
             $grupos->nombre = $camada->grupo->nombre;
             $grupos->contrato = $camada->grupo->contrato;
+            $grupos->pasajeros_estimados = $camada->grupo->pasajeros_estimados;
             $grupos->eliminado = 0;
             $grupos->codigo_grupo = $this->generateGroupCode();
             $grupos->fecha_creacion = Time::now();
-            $grupos->usuario_creacion = 2;
+            $grupos->usuario_creacion = $this->Auth->user('id');;
 
             $result = TableRegistry::get('Grupos')->save($grupos);
             $grupos_id = $result->id;
 
-            $camada->usuario_creacion = 2;
+            $camada->usuario_creacion = $this->Auth->user('id');;
             $camada->fecha_creacion = Time::now();
             $camada->eliminado = 0;
             $camada->grupo = null;
@@ -227,19 +220,12 @@ class CamadasController extends AppController{
         return $code;
     }
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function delete($id = null) {
         $this->request->allowMethod(['post', 'delete']);
 
         $camada = $this->Camadas->get($id);
         $camada->eliminado = 1;
-        $camada->usuario_eliminado = 2;
+        $camada->usuario_eliminado = $this->Auth->user('id');;
         $camada->fecha_eliminado = date("d/m/Y");
         if ($this->Camadas->save($camada)) {
             $this->Flash->success(__('La camada fue eliminada'));
@@ -291,22 +277,15 @@ class CamadasController extends AppController{
         );
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function edit($id = null) {
         if ($id == null) {
             $id = 8;
         }
-        $camada = $this->Camadas->get($id, ['contain' => []]);
+        $camada = $this->Camadas->get($id, ['contain' => ['Grupos']]);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $camada = $this->Camadas->patchEntity($camada, $this->request->data);
-            $camada->usuario_modificacion = 2;
+            $camada->usuario_modificacion = $this->Auth->user('id');;
             $camada->fecha_modificacion = date("d/m/Y");
 
             if ($this->Camadas->save($camada)) {
