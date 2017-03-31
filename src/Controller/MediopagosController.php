@@ -18,22 +18,23 @@ class MediopagosController extends AppController {
         $this->Auth->allow('registrar');
     }
 
-    public function registrar($pasajero = null, $responsable1 = null, $responsable2 = null) {
+    public function registrar($pasajero_id) {
         $this->viewBuilder()->layout('blankLayout');
         $medioPago = $this->Mediopagos->newEntity();
         $cuitcuil = "";
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $medioPago = $this->MedioPagos->patchEntity($pasajero, $this->request->data, [
+            $medioPago = $this->Mediopagos->patchEntity($medioPago, $this->request->data, [
                 'associated' => ['Pasajeros', 'Direcciones']]);
 
-            $medioPago->usuario_creacion = 2;
+            $direccion_id = $this->persistirDireccion($medioPago->direccione, $pasajero_id);
+
+            $medioPago->usuario_creacion = $this->Auth->user('id');
             $medioPago->fecha_creacion = Time::now();
             $medioPago->eliminado = 0;
-
-
-
-
+            $medioPago->pasajero_id = $pasajero_id;
+            $medioPago->direccion_id = $direccion_id;
+            $this->Mediopagos->save($medioPago);
 
         }
 
@@ -41,6 +42,18 @@ class MediopagosController extends AppController {
         $this->set('_serialize', ['medioPago']);
         $this->set(compact('cuitcuil'));
         $this->set('_serialize', ['cuitcuil']);
+    }
+
+    private function persistirDireccion($direccion, $pasajero_id) {
+        $baseDireccion = TableRegistry::get('Direcciones');
+
+        $direccion->fecha_creacion = Time::now();
+        $direccion->usuario_creacion = $pasajero_id;
+        $direccion->eliminado = 0;
+
+        $resultDireccion = $baseDireccion->save($direccion);
+
+        return $resultDireccion->id;
     }
 
 }

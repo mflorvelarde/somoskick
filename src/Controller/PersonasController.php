@@ -10,8 +10,13 @@ use Cake\I18n\Time;
  * @property \App\Model\Table\UsersTable $Users
  */
 class PersonasController extends AppController{
-    
-    
+
+
+    public function initialize() {
+        parent::initialize();
+        $this->Auth->allow('registrarok');
+    }
+
     /**
      * Index method
      * @return \Cake\Network\Response|null
@@ -51,6 +56,13 @@ class PersonasController extends AppController{
         $this->viewBuilder()->layout('blankLayout');
     }
 
+
+    public function registrarok() {
+        $this->viewBuilder()->layout('blankLayout');
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $this->redirect(['action' => 'login']);
+        }
+    }
     /**
      * Add method
      *

@@ -120,39 +120,39 @@
                             </div>
                             <div class="box-body">
                                  <div class="form-group">
-                                    <?php  echo $this->Form->input('persona.direccion.calle',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                    <?php  echo $this->Form->input('persona.direccione.calle',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                  </div>
                                   <div class="col-md-12" style="padding: 0px">
                                       <div class="col-md-3" style="padding-left: 0px">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('persona.direccion.numero',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('persona.direccione.numero',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                          </div>
                                       </div>
                                       <div class="col-md-3">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('persona.direccion.piso',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('persona.direccione.piso',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                          </div>
                                       </div>
                                       <div class="col-md-3">
                                           <div class="form-group">
-                                             <?php  echo $this->Form->input('persona.direccion.departamento',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                             <?php  echo $this->Form->input('persona.direccione.departamento',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                           </div>
                                       </div>
                                       <div class="col-md-3" style="padding-right:0px">
                                           <div class="form-group">
-                                           <?php  echo $this->Form->input('persona.direccion.codigo_postal',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                           <?php  echo $this->Form->input('persona.direccione.codigo_postal',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                           </div>
                                       </div>
                                   </div>
                                   <div class="col-md-12" style="padding: 0px">
                                       <div class="col-md-6" style="padding-left: 0px">
                                           <div class="form-group">
-                                           <?php  echo $this->Form->input('persona.direccion.ciudad',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                           <?php  echo $this->Form->input('persona.direccione.ciudad',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                           </div>
                                       </div>
                                       <div class="col-md-6" style="padding-right: 0px">
                                             <div class="form-group">
-                                             <?php  echo $this->Form->input('persona.direccion.pais',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                             <?php  echo $this->Form->input('persona.direccione.pais',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                             </div>
                                       </div>
                                   </div>

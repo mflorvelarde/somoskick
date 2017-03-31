@@ -19,7 +19,7 @@ class ResponsablesController extends AppController{
 
     public function initialize() {
         parent::initialize();
-        $this->Auth->allow('registrar');
+        $this->Auth->allow(['registrar', 'paso2', 'paso3']);
     }
 
     public function add() {
@@ -34,10 +34,13 @@ class ResponsablesController extends AppController{
         }
     }
 
-    public function paso2($responsable1, $pasajero = null) {
+    public function paso2($pasajeroGrupo_id) {
+        $pasajeroGrupo = TableRegistry::get('Pasajerosdegrupos')->get($pasajeroGrupo_id,
+            ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'],'Grupos']]);
+
+
         $this->viewBuilder()->layout('blankLayout');
         $familiar1 = $this->Responsables->newEntity();
-        $pasajeroEntity = json_decode($pasajero);
         $cuitcuil1 = "";
 
         if ($this->request->is('post')) {
@@ -54,24 +57,63 @@ class ResponsablesController extends AppController{
                 $familiar1->cuit = null;
             }
 
-            $familiar1->usuario_creacion = 2;
+            $persona_id = $this->persistirPersona($familiar1->persona);
+
+            $familiar1->usuario_creacion = $pasajeroGrupo->pasajero->persona->id;
             $familiar1->fecha_creacion = Time::now();
             $familiar1->eliminado = 0;
+            $familiar1->persona_id = $persona_id;
+            $familiar1->pasajero_id = $pasajeroGrupo->pasajero->id;
+            $familiar_id = $this->persistirResponsable($familiar1);
 
-            $this->$responsable1 = $familiar1;
-            $this->$pasajero = $pasajeroEntity->pasajero;
-
-            return $this->redirect(['action' => 'paso2']);
+            return $this->redirect(['action' => 'paso3', $pasajeroGrupo_id]);
         }
         $this->set(compact('familiar1'));
         $this->set('_serialize', ['familiar1']);
-        $this->set(compact('pasajeroEntity'));
         $this->set(compact('cuitcuil1'));
         $this->set('_serialize', ['cuitcuil1']);
     }
 
-    public function paso3() {
+    public function paso3($pasajeroGrupo_id) {
+        $pasajeroGrupo = TableRegistry::get('Pasajerosdegrupos')->get($pasajeroGrupo_id,
+            ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'],'Grupos']]);
 
+
+        $this->viewBuilder()->layout('blankLayout');
+        $familiar1 = $this->Responsables->newEntity();
+        $cuitcuil1 = "";
+
+        if ($this->request->is('post')) {
+            $familiar1 = $this->Responsables->patchEntity($familiar1, $this->request->data, [
+                'associated' => [
+                    'Personas' => [
+                        'associated' => ['Direcciones']
+                    ]
+                ]
+            ]);
+
+            if ($cuitcuil1 === "Cuil") {
+                $familiar1->cuil = $familiar1->cuit;
+                $familiar1->cuit = null;
+            }
+
+            $persona_id = $this->persistirPersona($familiar1->persona);
+
+            $familiar1->usuario_creacion = $pasajeroGrupo->pasajero->persona->id;
+            $familiar1->fecha_creacion = Time::now();
+            $familiar1->eliminado = 0;
+            $familiar1->persona_id = $persona_id;
+            $familiar1->pasajero_id = $pasajeroGrupo->pasajero->id;
+            $familiar_id = $this->persistirResponsable($familiar1);
+
+            return $this->redirect(
+                ['controller' => 'Mediopagos', 'action' => 'registrar', $pasajeroGrupo->pasajero->id]
+            );
+        }
+        $this->set(compact('familiar1'));
+        $this->set('_serialize', ['familiar1']);
+        $this->set(compact('cuitcuil1'));
+        $this->set('_serialize', ['cuitcuil1']);
     }
 
     public function registrar($pasajero = null) {
@@ -158,76 +200,39 @@ class ResponsablesController extends AppController{
     }
 
     private function persistirResponsable($responsable) {
-        $idPersona = $this->persistirPersona($responsable->persona);
-
-        $responsable->persona = null;
-        $responsable->persona_id = $idPersona;
-
         $resultResponsable = $this->Responsables->save($responsable);
-
         return $resultResponsable->id;
     }
 
-    private function persistirPasajero($pasajero) {
-        $basePasajeros = TableRegistry::get('Pasajeros');
-        $pasajeroEntity = $basePasajeros->newEntity();
-
-        $idPersona = $this->persistirPersona($pasajero->persona);
-
-        $pasajeroEntity->persona = null;
-        $pasajeroEntity->persona_id = $idPersona;
-        $pasajeroEntity->sexo = $pasajero->sexo;
-        $pasajeroEntity->pasaporte = $pasajero->pasaporte;
-        $pasajeroEntity->eliminado = 0;
-        $pasajeroEntity->fecha_creacion = Time::now();
-
-        $resultPasajero = $basePasajeros->save($pasajeroEntity);
-
-        return $resultPasajero->id;
-    }
-
-    private function persistirPersona($persona) {
-        $direccion_id = $this->persistirDireccion($persona->direccion);
-        $basePersonas = TableRegistry::get('Personas');
-        $personaEntity = $basePersonas->newEntity();
-
-        $personaEntity->direccion_id = $direccion_id;
-        $personaEntity->direccion = null;
-        $personaEntity->nombre = $persona->nombre;
-        $personaEntity->apellido = $persona->apellido;
-        $personaEntity->dni = $persona->dni;
-        $personaEntity->telefono = $persona->telefono;
-        $personaEntity->celular = $persona->celular;
-        $personaEntity->nacionalidad = $persona->nacionalidad;
-        $personaEntity->mail = $persona->mail;
-        $personaEntity->eliminado = 0;
-        $personaEntity->perfil = "CLIENTE";
-        $personaEntity->fecha_creacion = Time::now();
-        $personaEntity->contrasena = $persona->dni . Time::now()->toDateTimeString();
-
-        $resultPersona = $basePersonas->save($personaEntity);
-
-        return $resultPersona->id;
+    public function step2($pasajeroGrupo) {
+        $this->set(compact('pasajeroGrupo'));
+        $this->set('_serialize', ['pasajeroGrupo']);
     }
 
     private function persistirDireccion($direccion) {
         $baseDireccion = TableRegistry::get('Direcciones');
-        $direccionEntity = $baseDireccion->newEntity();
 
-        $direccionEntity->calle = $direccion->calle;
-        $direccionEntity->numero = $direccion->numero;
-        $direccionEntity->piso = $direccion->piso;
-        $direccionEntity->departamento = $direccion->departamento;
-        $direccionEntity->codigo_postal = $direccion->codigo_postal;
-        $direccionEntity->ciudad = $direccion->ciudad;
-        $direccionEntity->pais = $direccion->pais;
-        $direccionEntity->fecha_creacion = Time::now();
-        $direccionEntity->usuario_creacion = 2;
-        $direccionEntity->eliminado = 0;
+        $direccion->fecha_creacion = Time::now();
+        $direccion->usuario_creacion = 2;
+        $direccion->eliminado = 0;
 
-        $resultDireccion = $baseDireccion->save($direccionEntity);
+        $resultDireccion = $baseDireccion->save($direccion);
 
         return $resultDireccion->id;
+    }
+
+    private function persistirPersona($persona) {
+        $direcion_id = $this->persistirDireccion($persona->direccione);
+        $basePersonas = TableRegistry::get('Personas');
+
+        $persona->eliminado = 0;
+        $persona->perfil = "CLIENTE";
+        $persona->fecha_creacion = Time::now();
+        $persona->contrasena = $persona->dni . Time::now()->toDateTimeString();
+        $persona->direccion_id = $direcion_id;
+
+        $resultPersona = $basePersonas->save($persona);
+        return $resultPersona->id;
     }
 
 }

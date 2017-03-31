@@ -105,39 +105,39 @@
                             <div class="box-body">
 
                                  <div class="form-group">
-                                    <?php  echo $this->Form->input('medioPago->direccion.calle',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                    <?php  echo $this->Form->input('direccione.calle',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                  </div>
                                  <div class="col-md-12" style="padding: 0px">
                                       <div class="col-md-3" style="padding-left: 0px">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('medioPago->direccion.numero',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('direccione.numero',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                          </div>
                                       </div>
                                        <div class="col-md-3">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('medioPago->direccion.piso',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('direccione.piso',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                          </div>
                                        </div>
                                        <div class="col-md-3">
                                           <div class="form-group">
-                                             <?php  echo $this->Form->input('medioPago->direccion.departamento',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                             <?php  echo $this->Form->input('direccione.departamento',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                           </div>
                                        </div>
                                        <div class="col-md-3" style="padding-right:0px">
                                           <div class="form-group">
-                                           <?php  echo $this->Form->input('medioPago->direccion.codigo_postal',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                           <?php  echo $this->Form->input('direccione.codigo_postal',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                           </div>
                                        </div>
                                    </div>
                                    <div class="col-md-12" style="padding: 0px">
                                     <div class="col-md-6" style="padding-left: 0px">
                                           <div class="form-group">
-                                           <?php  echo $this->Form->input('medioPago->direccion.ciudad',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                           <?php  echo $this->Form->input('direccione.ciudad',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                           </div>
                                     </div>
                                     <div class="col-md-6" style="padding-right: 0px">
                                             <div class="form-group">
-                                             <?php  echo $this->Form->input('medioPago->direccion.pais',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                             <?php  echo $this->Form->input('direccione.pais',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                             </div>
                                     </div>
                                    </div>

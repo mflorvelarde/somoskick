@@ -14,14 +14,14 @@
                             </a>
                         </li>
 
-                        <li role="presentation" class="active">
+                        <li role="presentation" class="disabled">
                             <a href="#step2" data-toggle="tab" aria-controls="step2" role="tab" title="Step 2">
                             <span class="round-tab">
                                 <i class="glyphicon glyphicon-pencil"></i>
                             </span>
                             </a>
                         </li>
-                        <li role="presentation" class="disabled">
+                        <li role="presentation" cclass="active">
                             <a href="#step3" data-toggle="tab" aria-controls="step3" role="tab" title="Step 3">
                             <span class="round-tab">
                                 <i class="glyphicon glyphicon-picture"></i>
@@ -40,10 +40,12 @@
                 </div>
 
                 <div class="tab-content">
-                    <div class="tab-pane active" role="tabpanel" id="step2">
-                        <div class="box box-warning">
+                    <div class="tab-pane " role="tabpanel" id="step2">
+                    </div>
+                    <div class="tab-pane active" role="tabpanel" id="step3">
+                   <div class="box box-warning">
                             <div class="box-header with-border">
-                              <h3 class="box-title">Datos del padre / Tutor</h3>
+                              <h3 class="box-title">Datos de la madre / Tutora</h3>
                             </div>
                                 <?= $this->Form->create([$familiar1, $cuitcuil1]) ?>
                             <div class="box-body">
@@ -152,10 +154,6 @@
                             </div>
                         </div>
                         <div class="clearfix"></div>
-
-                    </div>
-                    <div class="tab-pane" role="tabpanel" id="step3">
-
                     </div>
                     <div class="tab-pane" role="tabpanel" id="step4">
 

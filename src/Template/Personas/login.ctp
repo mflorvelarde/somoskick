@@ -5,7 +5,6 @@
     <!-- /.login-logo -->
     <div class="login-box-body">
       <h4 class="login-box-msg" style="margin-top:10px">Inicia sesión para ingresar</h4>
-    <?= $this->Flash->render('auth') ?>
     <?= $this->Form->create() ?>
       <div class="form-group has-feedback" style="margin-top:20px">
              <div><label style="color:#fff">Mail</label></div>
