@@ -18,5 +18,29 @@ class ColegiosTable extends Table {
         $this->displayField('id');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
+
+        $this->hasOne('Personas', [
+            'className' => 'Personas',
+            'foreignKey' => 'id',
+            'bindingKey' => 'usuario_creacion'
+        ]);
+
+        $this->hasOne('Personas', [
+            'className' => 'Personas',
+            'foreignKey' => 'id',
+            'bindingKey' => 'usuario_modificacion'
+        ]);
+
+        $this->hasOne('Personas', [
+            'className' => 'Personas',
+            'foreignKey' => 'id',
+            'bindingKey' => 'usuario_eliminado'
+        ]);
+
+        $this->hasOne('Direcciones', [
+            'className' => 'Direcciones',
+            'foreignKey' => 'id',
+            'bindingKey' => 'direccion_id'
+        ]);
     }
 }

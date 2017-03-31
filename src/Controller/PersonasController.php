@@ -16,8 +16,7 @@ class PersonasController extends AppController{
      * Index method
      * @return \Cake\Network\Response|null
      */
-    public function index()
-    {
+    public function index() {
         $personas = $this->paginate($this->Personas);
 
         $this->set(compact('personas'));

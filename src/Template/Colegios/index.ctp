@@ -1,3 +1,9 @@
+<script type="text/javascript">
+    $( document ).ready(function(){
+       $('#colegios-table').dynatable();
+    });
+</script>
+
 <section class="content-header">
 	<h1 class="page-header">
 	    Colegios
@@ -21,7 +27,7 @@
                             <?= $this->Html->link(__('Nuevo colegio'), ['action' => 'add'] , array('class'=>'btn bg-maroon margin-bottom') ) ?>
                         </div>
                     </div>
-                    <table id="example1" class="table table-bordered table-striped">
+                    <table id="colegios-table" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Nombre</th>
@@ -53,6 +59,7 @@
                                         <li><?= $this->Form->postLink('Ver camadas', ['action' => 'viewCamadas', $colegio->id]) ?></li>
                                         <li><?= $this->Form->postLink('Agregar camadas', ['action' => 'addCamada', $colegio->id]) ?></li>
                                         <li class="divider"></li>
+                                        <li><?= $this->Html->link('Ver colegio', ['action' => 'view', $colegio->id] ) ?></li>
                                         <li><?= $this->Html->link('Editar colegio', ['action' => 'edit', $colegio->id] ) ?></li>
                                         <li><?= $this->Form->postLink('Eliminar colegio', ['action' => 'delete', $colegio->id], ['confirm' => __('Confirmar borrado de colegio', $colegio->id)] ) ?></li>
 
@@ -74,14 +81,6 @@
                             </tr>
                         </tfoot>
                     </table>
-                    <div class="paginator">
-                        <ul class="pagination">
-                        <?= $this->Paginator->prev('< ' . __('previous')) ?>
-                        <?= $this->Paginator->numbers() ?>
-                        <?= $this->Paginator->next(__('next') . ' >') ?>
-                        </ul>
-                        <p><?= $this->Paginator->counter() ?></p>
-                    </div>
                 </div>
             </div>
         </div>

@@ -17,8 +17,7 @@ class ViajesController extends AppController {
      * @return \Cake\Network\Response|null
      */
     public function index() {
-        $query = $this->Viajes->find('all')->where(['eliminado' => 0]);
-        $viajes = $this->paginate($query);
+        $viajes = $this->Viajes->find('all')->where(['eliminado' => 0]);
 
         $this->set(compact('viajes'));
         $this->set('_serialize', ['viajes']);

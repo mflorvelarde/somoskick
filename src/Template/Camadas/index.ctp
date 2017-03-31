@@ -1,9 +1,8 @@
 
 <script type="text/javascript">
 
-jQuery( document ).ready(function()
-{
-   jQuery('#example1').dynatable();
+$( document ).ready(function(){
+   $('#example1').dynatable();
 });
 </script>
 

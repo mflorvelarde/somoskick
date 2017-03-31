@@ -8,29 +8,19 @@
 
 namespace App\Controller;
 use Cake\I18n\Time;
+use Cake\ORM\TableRegistry;
 
 class ColegiosController extends AppController{
 
-    /**
-     * Index method
-     * @return \Cake\Network\Response|null
-     */
     public function index() {
-        $colegios = $this->paginate($this->Colegios);
+        $colegios = $this->Colegios->find('all')->where(['eliminado' => 0]);
 
         $this->set(compact('colegios'));
         $this->set('_serialize', ['colegios']);
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function view($id = null) {
-        $colegio = $this->Colegios->get($id);
+        $colegio = $this->Colegios->get($id, ['contain' => ['Direcciones']]);
 
         $this->set('colegio', $colegio);
         $this->set('_serialize', ['colegio']);
@@ -44,11 +34,17 @@ class ColegiosController extends AppController{
     public function add() {
         $colegio = $this->Colegios->newEntity();
         if ($this->request->is('post')) {
-            $colegio = $this->Colegios->patchEntity($colegio, $this->request->data);
-            $colegio->usuario_creacion = 2;
+
+            $colegio = $this->Colegios->patchEntity($colegio, $this->request->data, [
+                'associated' => [
+                    'Direcciones'
+                ]
+            ]);
+
+            $colegio->usuario_creacion = $this->Auth->user('id');;
             $colegio->fecha_creacion = Time::now();
             $colegio->eliminado = 0;
-            $colegio->direccion_id = 1;
+            $colegio->direccion_id = $this->guardarDireccion($colegio->direccione);
 
             if ($this->Colegios->save($colegio)) {
                 $this->Flash->success(__('El colegio fue guardado'));
@@ -63,6 +59,11 @@ class ColegiosController extends AppController{
         $this->set('_serialize', ['colegio']);
     }
 
+    public function guardarDireccion($direccion) {
+        $result = TableRegistry::get('Direcciones')->save($direccion);
+        return $result->id;
+    }
+
     /**
      * Delete method
      *
@@ -75,7 +76,7 @@ class ColegiosController extends AppController{
 
         $colegio = $this->Colegios->get($id);
         $colegio->eliminado = 1;
-        $colegio->usuario_eliminado = 2;
+        $colegio->usuario_eliminado = $this->Auth->user('id');;
         $colegio->fecha_eliminado = Time::now();
         if ($this->Colegios->save($colegio)) {
             $this->Flash->success(__('El colegio fue eliminado'));
@@ -98,20 +99,20 @@ class ColegiosController extends AppController{
         );
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function edit($id = null) {
-        $colegio = $this->Colegios->get($id, ['contain' => []]);
+        $colegio = $this->Colegios->get($id, ['contain' => ['Direcciones']]);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $colegio = $this->Colegios->patchEntity($colegio, $this->request->data);
-            $colegio->usuario_modificacion = 2;
+            $colegio = $this->Colegios->patchEntity($colegio, $this->request->data, [
+                'associated' => [
+                    'Direcciones'
+                ]
+            ]);
+
+            $colegio->usuario_modificacion = $this->Auth->user('id');
             $colegio->fecha_modificacion = Time::now();
+            $colegio->direccion_id = $this->guardarDireccion($colegio->direccione);
+
 
             if ($this->Colegios->save($colegio)) {
                 $this->Flash->success(__('El colegio fue guardado'));
