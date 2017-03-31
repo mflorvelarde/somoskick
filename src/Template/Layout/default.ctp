@@ -12,9 +12,22 @@
 
     <!-- Bootstrap Core CSS -->
     <?php echo $this->Html->css('bootstrap/css/bootstrap.min.css'); ?>
+    <?php echo $this->Html->css('jquery.dynatable.css'); ?>
 
     <!-- MetisMenu CSS -->
     <?php echo $this->Html->css('metisMenu/metisMenu.min.css'); ?>
+
+    <!-- jQuery -->
+    <?php echo $this->Html->script('jquery/jquery.min.js'); ?>
+    <?php echo $this->Html->script('plugins/jQuery/jquery-2.2.3.min.js'); ?>
+    <!--<script src="../vendor/jquery/jquery.min.js"></script>-->
+    <!-- jQuery UI 1.11.4 -->
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+
+    <!-- Bootstrap Core JavaScript -->
+    <?php echo $this->Html->script('bootstrap/js/bootstrap.min.js'); ?>
+    <!--<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>-->
 
     <!-- Custom CSS -->
   <!--  <?php echo $this->Html->css('sb-admin-2.css'); ?>-->
@@ -74,30 +87,12 @@
     </div>
     <!-- /#wrapper -->
 
-    <!-- jQuery -->
-    <?php echo $this->Html->script('jquery/jquery.min.js'); ?>
-    <?php echo $this->Html->script('plugins/jQuery/jquery-2.2.3.min.js'); ?>
-    <!--<script src="../vendor/jquery/jquery.min.js"></script>-->
-    <!-- jQuery UI 1.11.4 -->
-    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <?php echo $this->Html->script('bootstrap/js/bootstrap.min.js'); ?>
-    <!--<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>-->
-
     <!-- Metis Menu Plugin JavaScript -->
     <?php echo $this->Html->script('metisMenu/metisMenu.min.js'); ?>
     <!--<script src="../vendor/metisMenu/metisMenu.min.js"></script>-->
 
     <!-- Morris Charts JavaScript -->
     <?php echo $this->Html->script('raphael/raphael.js'); ?>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <?php echo $this->Html->script('plugins/morris/morris.js'); ?>
-
-    <?php echo $this->Html->script('morris-data.js'); ?>
-    <!--<script src="../data/morris-data.js"></script>-->
-    <?php echo $this->Html->css('custom.css'); ?>
 
     <!-- Custom Theme JavaScript -->
     <?php echo $this->Html->script('sb-admin-2.js'); ?>
@@ -123,6 +118,8 @@
     <?php echo $this->Html->script('plugins/slimScroll/jquery.slimscroll.min.js'); ?>
     <!-- FastClick -->
     <?php echo $this->Html->script('plugins/fastclick/fastclick.js'); ?>
+    <?php echo $this->Html->script('jquery.dynatable.js'); ?>
+
     <!-- AdminLTE App -->
     <?php echo $this->Html->script('dist/js/app.min.js'); ?>
     <?php echo $this->Html->script('plugins/datatables/jquery.dataTables.min.js'); ?>

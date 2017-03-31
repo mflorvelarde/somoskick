@@ -1,3 +1,12 @@
+
+<script type="text/javascript">
+
+jQuery( document ).ready(function()
+{
+   jQuery('#example1').dynatable();
+});
+</script>
+
 <section class="content-header">
     <h1>Camadas</h1>
     <ol class="breadcrumb">

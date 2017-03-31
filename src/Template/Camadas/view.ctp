@@ -4,7 +4,7 @@
             <h1>Camadas<small><?= h($camada->grupo->nombre)?></small></h1>
             <ol class="breadcrumb">
                 <li><a href="../admin/index.php"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="../admin/camadas.php"><i class="fa fa-dashboard"></i> Camadas</a></li>
+                <li><a href="../../camadas/index"><i class="fa fa-dashboard"></i> Camadas</a></li>
                 <li class="active"><?= h($camada->grupo->nombre)?></li>
             </ol>
         </section>

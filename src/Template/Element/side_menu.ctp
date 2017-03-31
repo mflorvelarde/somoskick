@@ -11,7 +11,7 @@
           </a>
         </li>
 		<li>
-          <a href="pages/widgets.html">
+          <a href="<?php echo $this->Url->build(["controller" => "Camadas", "action" => "index"]);?>">
             <i class="fa fa-suitcase"></i> <span>Camadas</span>
           </a>
         </li>
