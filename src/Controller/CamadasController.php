@@ -21,7 +21,7 @@ class CamadasController extends AppController{
 
         if ($colegio_id != null) {
             $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios', 'Personas']])
-                ->where(['colegio_id' => $colegio_id, 'camadas.eliminado' => 0]);
+                ->where(['colegio_id' => $colegio_id, 'camada_eliminado' => 0]);
 
             $queryPasajeros = $pasajerosdegrupos->find()
                 ->hydrate(false)
@@ -29,17 +29,17 @@ class CamadasController extends AppController{
                     'pasajeros' => [
                         'table' => 'pasajeros',
                         'type' => 'INNER',
-                        'conditions' => 'pasajeros.id = pasajerosdegrupos.id_pasajero',
+                        'conditions' => 'pasajeros.id = id_pasajero',
                     ],
                     'grupos' => [
                         'table' => 'grupos',
                         'type' => 'INNER',
-                        'conditions' => 'grupos.id = pasajerosdegrupos.id_grupo',
+                        'conditions' => 'grupos.id = id_grupo',
                     ],
                     'camadas' => [
                         'table' => 'camadas',
                         'type' => 'INNER',
-                        'conditions' => 'grupos.id = camadas.grupo_id',
+                        'conditions' => 'grupos.id = grupo_id',
                     ]
                 ])
                 ->where(['camadas.colegio_id' => $colegio_id])
@@ -47,7 +47,7 @@ class CamadasController extends AppController{
 
         } else {
             $query = $this->Camadas->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios', 'Personas']])
-                ->where(['camadas.eliminado' => 0]);
+                ->where(['camada_eliminado' => 0]);
 
             $queryPasajeros = $pasajerosdegrupos->find()
                 ->hydrate(false)
@@ -55,17 +55,17 @@ class CamadasController extends AppController{
                     'pasajeros' => [
                         'table' => 'pasajeros',
                         'type' => 'INNER',
-                        'conditions' => 'pasajeros.id = pasajerosdegrupos.id_pasajero',
+                        'conditions' => 'pasajeros.id = id_pasajero',
                     ],
                     'grupos' => [
                         'table' => 'grupos',
                         'type' => 'INNER',
-                        'conditions' => 'grupos.id = pasajerosdegrupos.id_grupo',
+                        'conditions' => 'grupos.id = id_grupo',
                     ],
                     'camadas' => [
                         'table' => 'camadas',
                         'type' => 'INNER',
-                        'conditions' => 'grupos.id = camadas.grupo_id',
+                        'conditions' => 'grupos.id = grupo_id',
                     ]
                 ])
             ;
@@ -177,7 +177,7 @@ class CamadasController extends AppController{
             $grupos->nombre = $camada->grupo->nombre;
             $grupos->contrato = $camada->grupo->contrato;
             $grupos->pasajeros_estimados = $camada->grupo->pasajeros_estimados;
-            $grupos->eliminado = 0;
+            $grupos->grupo_eliminado = 0;
             $grupos->codigo_grupo = $this->generateGroupCode();
             $grupos->fecha_creacion = Time::now();
             $grupos->usuario_creacion = $this->Auth->user('id');;
@@ -187,7 +187,7 @@ class CamadasController extends AppController{
 
             $camada->usuario_creacion = $this->Auth->user('id');;
             $camada->fecha_creacion = Time::now();
-            $camada->eliminado = 0;
+            $camada->camada_eliminado = 0;
             $camada->grupo = null;
             $camada->grupo_id = $grupos_id;
 
@@ -224,7 +224,7 @@ class CamadasController extends AppController{
         $this->request->allowMethod(['post', 'delete']);
 
         $camada = $this->Camadas->get($id);
-        $camada->eliminado = 1;
+        $camada->camada_eliminado = 1;
         $camada->usuario_eliminado = $this->Auth->user('id');;
         $camada->fecha_eliminado = date("d/m/Y");
         if ($this->Camadas->save($camada)) {
@@ -264,7 +264,7 @@ class CamadasController extends AppController{
         $tarifaAplicada->tarifa_id = $tarifa_id;
         $tarifaAplicada->usuario_creacion = 2;
         $tarifaAplicada->fecha_creacion = Time::now();
-        $tarifaAplicada->eliminado = 0;
+        $tarifaAplicada->tarifa_aplicada_eliminado = 0;
 
         $result = $tarifasAplicadasTable->save($tarifaAplicada);
         $tarifaAplicada_id = $result->id;

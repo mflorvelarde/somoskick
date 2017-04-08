@@ -13,7 +13,7 @@ use Cake\ORM\TableRegistry;
 class ColegiosController extends AppController{
 
     public function index() {
-        $colegios = $this->Colegios->find('all')->where(['eliminado' => 0]);
+        $colegios = $this->Colegios->find('all')->where(['colegio_eliminado' => 0]);
 
         $this->set(compact('colegios'));
         $this->set('_serialize', ['colegios']);
@@ -43,7 +43,7 @@ class ColegiosController extends AppController{
 
             $colegio->usuario_creacion = $this->Auth->user('id');;
             $colegio->fecha_creacion = Time::now();
-            $colegio->eliminado = 0;
+            $colegio->colegio_eliminado = 0;
             $colegio->direccion_id = $this->guardarDireccion($colegio->direccione);
 
             if ($this->Colegios->save($colegio)) {
@@ -75,7 +75,7 @@ class ColegiosController extends AppController{
         $this->request->allowMethod(['post', 'delete']);
 
         $colegio = $this->Colegios->get($id);
-        $colegio->eliminado = 1;
+        $colegio->colegio_eliminado = 1;
         $colegio->usuario_eliminado = $this->Auth->user('id');;
         $colegio->fecha_eliminado = Time::now();
         if ($this->Colegios->save($colegio)) {

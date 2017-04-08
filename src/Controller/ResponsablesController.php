@@ -61,7 +61,7 @@ class ResponsablesController extends AppController{
 
             $familiar1->usuario_creacion = $pasajeroGrupo->pasajero->persona->id;
             $familiar1->fecha_creacion = Time::now();
-            $familiar1->eliminado = 0;
+            $familiar1->responsable_eliminado = 0;
             $familiar1->persona_id = $persona_id;
             $familiar1->pasajero_id = $pasajeroGrupo->pasajero->id;
             $familiar_id = $this->persistirResponsable($familiar1);
@@ -101,7 +101,7 @@ class ResponsablesController extends AppController{
 
             $familiar1->usuario_creacion = $pasajeroGrupo->pasajero->persona->id;
             $familiar1->fecha_creacion = Time::now();
-            $familiar1->eliminado = 0;
+            $familiar1->responsable_eliminado = 0;
             $familiar1->persona_id = $persona_id;
             $familiar1->pasajero_id = $pasajeroGrupo->pasajero->id;
             $familiar_id = $this->persistirResponsable($familiar1);
@@ -160,12 +160,12 @@ class ResponsablesController extends AppController{
 
             $familiar1->usuario_creacion = 2;
             $familiar1->fecha_creacion = Time::now();
-            $familiar1->eliminado = 0;
+            $familiar1->responsable_eliminado = 0;
 
 
             $familiar2->usuario_creacion = 2;
             $familiar2->fecha_creacion = Time::now();
-            $familiar2->eliminado = 0;
+            $familiar2->responsable_eliminado = 0;
 
             $pasajero_id = $this->persistirPasajero($pasajeroEntity->pasajero);
 
@@ -214,7 +214,7 @@ class ResponsablesController extends AppController{
 
         $direccion->fecha_creacion = Time::now();
         $direccion->usuario_creacion = 2;
-        $direccion->eliminado = 0;
+        $direccion->direccion_eliminado = 0;
 
         $resultDireccion = $baseDireccion->save($direccion);
 
@@ -225,7 +225,7 @@ class ResponsablesController extends AppController{
         $direcion_id = $this->persistirDireccion($persona->direccione);
         $basePersonas = TableRegistry::get('Personas');
 
-        $persona->eliminado = 0;
+        $persona->persona_eliminado = 0;
         $persona->perfil = "CLIENTE";
         $persona->fecha_creacion = Time::now();
         $persona->contrasena = $persona->dni . Time::now()->toDateTimeString();

@@ -48,10 +48,10 @@ class Notificaciones_PagosController extends AppController{
         $colegio = $this->Colegios->newEntity();
         if ($this->request->is('post')) {
             $colegio = $this->Colegios->patchEntity($colegio, $this->request->data);
-            $colegio->usuario_creacion = 2;
+            $colegio->usuario_creacion = $this->Auth->user('id');;
             $colegio->fecha_creacion = Time::now();
-            $colegio->eliminado = 0;
-            $colegio->direccion_id = 1;
+            $colegio->colegio_eliminado = 0;
+       //     $colegio->direccion_id = 1;
 
             if ($this->Colegios->save($colegio)) {
                 $this->Flash->success(__('El colegio fue guardado'));
@@ -77,7 +77,7 @@ class Notificaciones_PagosController extends AppController{
         $this->request->allowMethod(['post', 'delete']);
 
         $colegio = $this->Colegios->get($id);
-        $colegio->eliminado = 1;
+        $colegio->colegio_eliminado = 1;
         $colegio->usuario_eliminado = 2;
         $colegio->fecha_eliminado = Time::now();
         if ($this->Colegios->save($colegio)) {

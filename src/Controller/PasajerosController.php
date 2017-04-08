@@ -68,7 +68,7 @@ class PasajerosController extends AppController {
                 $pasajeroGrupo->lista_espera = 0;
                 $pasajeroGrupo->actividad_cuenta = $this->getInactivo()->id;
                 $pasajeroGrupo->regularidad = $this->getRegular()->id;
-                $pasajeroGrupo->eliminado = 0;
+                $pasajeroGrupo->pasajerodegrupo_eliminado = 0;
                 $pasajeroGrupo->fecha_creacion = Time::now();
                 $pasajeroGrupo->usuario_creacion = $this->Auth->user('id');
 
@@ -99,7 +99,7 @@ class PasajerosController extends AppController {
 
         $direccion->fecha_creacion = Time::now();
         $direccion->usuario_creacion = 2;
-        $direccion->eliminado = 0;
+        $direccion->direccion_eliminado = 0;
 
         $resultDireccion = $baseDireccion->save($direccion);
 
@@ -110,7 +110,7 @@ class PasajerosController extends AppController {
         $direcion_id = $this->persistirDireccion($persona->direccione);
         $basePersonas = TableRegistry::get('Personas');
 
-        $persona->eliminado = 0;
+        $persona->persona_eliminado = 0;
         $persona->perfil = "CLIENTE";
         $persona->fecha_creacion = Time::now();
         $persona->contrasena = $persona->dni . Time::now()->toDateTimeString();

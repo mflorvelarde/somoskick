@@ -23,6 +23,7 @@ class Tarifas_AplicadasController extends AppController{
         $tarifaAplicada = $this->TarifasAplicadas->newEntity();
         $tarifaAplicada->tarifa_id = $tarifa_id;
         $tarifaAplicada->grupo_id = $grupo_id;
+        $tarifaAplicada->tarifa_aplicada_eliminado = 0;
 
         if ($this->Colegios->save($tarifaAplicada)) {
             $this->Flash->success(__('El colegio fue guardado'));

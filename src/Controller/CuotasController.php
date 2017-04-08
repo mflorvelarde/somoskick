@@ -216,7 +216,7 @@ class CuotasController extends AppController{
         $this->request->allowMethod(['post', 'delete']);
 
         $colegio = $this->Colegios->get($id);
-        $colegio->eliminado = 1;
+        $colegio->colegio_eliminado = 1;
         $colegio->usuario_eliminado = 2;
         $colegio->fecha_eliminado = Time::now();
         if ($this->Colegios->save($colegio)) {

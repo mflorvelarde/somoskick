@@ -58,7 +58,7 @@ class Cuotas_AplicadasController extends AppController{
             $colegio = $this->Colegios->patchEntity($colegio, $this->request->data);
             $colegio->usuario_creacion = 2;
             $colegio->fecha_creacion = Time::now();
-            $colegio->eliminado = 0;
+            $colegio->colegio_eliminado = 0;
             $colegio->direccion_id = 1;
 
             if ($this->Colegios->save($colegio)) {
@@ -85,7 +85,7 @@ class Cuotas_AplicadasController extends AppController{
         $this->request->allowMethod(['post', 'delete']);
 
         $colegio = $this->Colegios->get($id);
-        $colegio->eliminado = 1;
+        $colegio->colegio_eliminado = 1;
         $colegio->usuario_eliminado = 2;
         $colegio->fecha_eliminado = Time::now();
         if ($this->Colegios->save($colegio)) {

@@ -17,10 +17,10 @@ class PasajerosDeGruposController extends AppController {
     public function index($grupo_id = null) {
         if ($grupo_id == null) {
             $pasajerosGrupos = $this->Pasajerosdegrupos->find('all', ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'],'Grupos']])
-                ->where(['pasajerosdegrupos.eliminado' => 0]);
+                ->where(['pasajerosdegrupos_eliminado' => 0]);
         } else {
             $pasajerosGrupos = $this->Pasajerosdegrupos->find('all', ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'],'Grupos']])
-                ->where(['id_grupo' => $grupo_id, 'pasajerosdegrupos.eliminado' => 0]);
+                ->where(['id_grupo' => $grupo_id, 'pasajerosdegrupos_eliminado' => 0]);
         }
 
         $diccionarios = $this->getDiccionariosPasajerosDeGrupo();

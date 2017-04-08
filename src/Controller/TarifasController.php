@@ -47,7 +47,7 @@ class TarifasController extends AppController {
             $tarifa = $this->Tarifas->patchEntity($tarifa, $this->request->data);
             $tarifa->usuario_creacion = 2;
             $tarifa->fecha_creacion = Time::now();
-            $tarifa->eliminado = 0;
+            $tarifa->tarifa_eliminado = 0;
 
             if ($this->Tarifas->save($tarifa)) {
                 $this->Flash->success(__('La tarifa fue guardada'));
@@ -78,7 +78,7 @@ class TarifasController extends AppController {
         $this->request->allowMethod(['post', 'delete']);
 
         $tarifa = $this->Tarifas->get($id);
-        $tarifa->eliminado = 1;
+        $tarifa->tarifa_eliminado = 1;
         $tarifa->usuario_eliminado = 2;
         $tarifa->fecha_eliminado = Time::now();
         if ($this->Tarifas->save($tarifa)) {

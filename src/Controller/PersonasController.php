@@ -73,7 +73,7 @@ class PersonasController extends AppController{
         if ($this->request->is('post')) {
             $persona = $this->Personas->patchEntity($persona, $this->request->data);
 
-            $persona->direccion_id = 1;
+            $persona->contrasena = "velarde";
            // $user->password = 'gwinn';
 
             if ($this->Personas->save($persona)) {

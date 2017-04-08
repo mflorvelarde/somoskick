@@ -17,7 +17,7 @@ class ViajesController extends AppController {
      * @return \Cake\Network\Response|null
      */
     public function index() {
-        $viajes = $this->Viajes->find('all')->where(['eliminado' => 0]);
+        $viajes = $this->Viajes->find('all')->where(['viaje_eliminado' => 0]);
 
         $this->set(compact('viajes'));
         $this->set('_serialize', ['viajes']);
@@ -36,7 +36,7 @@ class ViajesController extends AppController {
             $viaje = $this->Viajes->patchEntity($viaje, $this->request->data);
             $viaje->usuario_creacion = $this->Auth->user('id');
             $viaje->fecha_creacion = Time::now();
-            $viaje->eliminado = 0;
+            $viaje->viaje_eliminado = 0;
 
             if ($this->Viajes->save($viaje)) {
                 $this->Flash->success(__('El viaje fue guardado'));
@@ -63,7 +63,7 @@ class ViajesController extends AppController {
         $this->request->allowMethod(['post', 'delete']);
 
         $viaje = $this->Viajes->get($id);
-        $viaje->eliminado = 1;
+        $viaje->viaje_eliminado = 1;
         $viaje->usuario_eliminado = $this->Auth->user('id');
         $viaje->fecha_eliminado = Time::now();
         if ($this->Viajes->save($viaje)) {

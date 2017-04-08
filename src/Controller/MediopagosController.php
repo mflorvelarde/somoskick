@@ -31,7 +31,7 @@ class MediopagosController extends AppController {
 
             $medioPago->usuario_creacion = $this->Auth->user('id');
             $medioPago->fecha_creacion = Time::now();
-            $medioPago->eliminado = 0;
+            $medioPago->mediopago_eliminado = 0;
             $medioPago->pasajero_id = $pasajero_id;
             $medioPago->direccion_id = $direccion_id;
             $this->Mediopagos->save($medioPago);
@@ -49,7 +49,7 @@ class MediopagosController extends AppController {
 
         $direccion->fecha_creacion = Time::now();
         $direccion->usuario_creacion = $pasajero_id;
-        $direccion->eliminado = 0;
+        $direccion->direccion_eliminado = 0;
 
         $resultDireccion = $baseDireccion->save($direccion);
 
