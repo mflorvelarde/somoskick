@@ -25,24 +25,26 @@ class GruposController  extends AppController{
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->data;
             $json = json_encode($data);
+            $entity = json_decode($json);
 
             $tarifasAplicadasTable = TableRegistry::get('TarifasAplicadas');
             $tarifaAplicada = $tarifasAplicadasTable->newEntity();
-            $tarifaAplicada->tarifa_id;
+            $tarifaAplicada->tarifa_id = $tarifa_id;
             $tarifaAplicada->tarifa_aplicada_eliminado = 0;
+            $tarifaAplicada->fecha_primer_pago = Time::create($entity->primeracuota->year,
+                $entity->primeracuota->month, $entity->primeracuota->day);
             $tarifaAplicada->fecha_creacion = Time::now();
             $tarifaAplicada->usuario_creacion = $this->Auth->user('id');;
 
             $result = $tarifasAplicadasTable->save($tarifaAplicada);
             $tarifaAplicadaID = $result->id;
 
-            $entity = json_decode($json);
-
             $this->agregarTarifaAplicadaAgrupos($entity->Grupos , $tarifaAplicadaID);
             $this->agregarTarifaAplicadaApasajerosdDeGrupos($entity->Grupos , $tarifaAplicadaID);
 
             return $this->redirect(
-                ['controller' => 'Tarifas_aplicadas', 'action' => 'aplicartarifaagrupos', $json]
+           //     ['controller' => 'Tarifas_aplicadas', 'action' => 'aplicartarifaagrupos', $json]
+                ['controller' => 'Cuotas', 'action' => 'add', $tarifaAplicadaID]
             );
         }
 

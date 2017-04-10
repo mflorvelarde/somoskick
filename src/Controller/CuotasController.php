@@ -84,10 +84,12 @@ class CuotasController extends AppController{
      */
     public function add($tarifa_aplicada_id) {
         $tarifasAplicadasTable = TableRegistry::get('TarifasAplicadas');
-        $tarifa_aplicada = $tarifasAplicadasTable->get($tarifa_aplicada_id, ['contain' => ['Tarifas', 'Viajes']]);
+        $tarifa_aplicada = $tarifasAplicadasTable->get($tarifa_aplicada_id, ['contain' => ['Tarifas']]);
         $tarifa = $tarifa_aplicada->tarifa;
+//        $grupos = TableRegistry::get('Grupos')->find('all', ['contain' => ['Colegios', 'Grupos', 'Diccionarios', 'Personas']])
+//            ->where(['colegio_id' => $colegio_id, 'camada_eliminado' => 0]);
 
-        $inicioPago = $tarifa_aplicada->inicio_pago;
+        $inicioPago = $tarifa_aplicada->fecha_primer_pago;
         $finPago = $tarifa->fin_pago;
 
         $cuotas = TableRegistry::get('Cuotas')->newEntities($this->request->data);
