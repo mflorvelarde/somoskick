@@ -74,7 +74,6 @@ class PersonasController extends AppController{
             $persona = $this->Personas->patchEntity($persona, $this->request->data);
 
             $persona->contrasena = "velarde";
-           // $user->password = 'gwinn';
 
             if ($this->Personas->save($persona)) {
                 $this->Flash->success(__('The user has been saved.'));

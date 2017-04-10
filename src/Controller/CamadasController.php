@@ -121,7 +121,7 @@ class CamadasController extends AppController{
     }
 
     public function view($id = null) {
-        $camada = $this->Camadas->get($id, ['contain' => ['Colegios', 'Grupos' => ['Tarifas_Aplicadas' => ['Tarifas']],
+        $camada = $this->Camadas->get($id, ['contain' => ['Colegios', 'Grupos' => ['TarifasAplicadas' => ['Tarifas']],
             'Diccionarios', 'Personas']]);
 
         if (is_null($camada->grupo->tarifas__aplicada) || $camada->grupo->tarifas__aplicada != array()) {

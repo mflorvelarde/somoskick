@@ -9,7 +9,7 @@
 namespace App\Controller;
 
 
-class Tarifas_AplicadasController extends AppController{
+class TarifasAplicadasController extends AppController{
 
     /**
      * Index method
@@ -17,6 +17,21 @@ class Tarifas_AplicadasController extends AppController{
      */
     public function index() {
         $this->viewBuilder()->layout('clientsLayout');
+    }
+
+    public function aplicartarifaagrupos($data_json) {
+        $data = json_decode($data_json);
+        $grupos = $data->Grupos;
+        $primeracuota = $data->primeracuota;
+
+
+
+        $this->set('grupos', $grupos);
+        $this->set('_serialize', ['grupos']);
+        $this->set('primeracuota', $primeracuota);
+        $this->set('_serialize', ['primeracuota']);
+        $this->set('data', $data);
+        $this->set('_serialize', ['data']);
     }
 
     public function creartarifaaplicada($tarifa_id, $grupo_id) {

@@ -83,7 +83,7 @@ class CuotasController extends AppController{
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
     public function add($tarifa_aplicada_id) {
-        $tarifasAplicadasTable = TableRegistry::get('Tarifas_Aplicadas');
+        $tarifasAplicadasTable = TableRegistry::get('TarifasAplicadas');
         $tarifa_aplicada = $tarifasAplicadasTable->get($tarifa_aplicada_id, ['contain' => ['Tarifas', 'Viajes']]);
         $tarifa = $tarifa_aplicada->tarifa;
 
