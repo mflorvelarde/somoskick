@@ -19,7 +19,7 @@ class NotificacionesPagosController extends AppController{
      * @return \Cake\Network\Response|null
      */
     public function index() {
-//        $notificacionesPagos = $this->paginate($this->Notificaciones_Pagos);
+//        $notificacionesPagos = $this->paginate($this->NotificacionesPagos);
 //
 //        $this->set(compact('notificacionesPagos'));
 //        $this->set('_serialize', ['notificacionesPagos']);
@@ -44,26 +44,26 @@ class NotificacionesPagosController extends AppController{
      *
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
-    public function add() {
-        $colegio = $this->Colegios->newEntity();
+    public function add($cuotaAplicadaID) {
+        $this->viewBuilder()->layout('ajax');
+        $notificacion = $this->NotificacionesPagos->newEntity();
         if ($this->request->is('post')) {
-            $colegio = $this->Colegios->patchEntity($colegio, $this->request->data);
-            $colegio->usuario_creacion = $this->Auth->user('id');;
-            $colegio->fecha_creacion = Time::now();
-            $colegio->colegio_eliminado = 0;
-       //     $colegio->direccion_id = 1;
-
-            if ($this->Colegios->save($colegio)) {
-                $this->Flash->success(__('El colegio fue guardado'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            else {
-                $this->Flash->error(__('El colegio no pudo ser guardado. Por favor, intente nuevamente'));
-            }
+//            $colegio = $this->Colegios->patchEntity($colegio, $this->request->data);
+//            $colegio->usuario_creacion = $this->Auth->user('id');;
+//            $colegio->fecha_creacion = Time::now();
+//            $colegio->colegio_eliminado = 0;
+//
+//            if ($this->Colegios->save($colegio)) {
+//                $this->Flash->success(__('El colegio fue guardado'));
+//
+//                return $this->redirect(['action' => 'index']);
+//            }
+//            else {
+//                $this->Flash->error(__('El colegio no pudo ser guardado. Por favor, intente nuevamente'));
+//            }
         }
-        $this->set(compact('colegio'));
-        $this->set('_serialize', ['colegio']);
+        $this->set(compact('notificacion'));
+        $this->set('_serialize', ['notificacion']);
     }
 
     /**

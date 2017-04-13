@@ -19,11 +19,20 @@ class CuotasAplicadasController extends AppController{
      * @return \Cake\Network\Response|null
      */
     public function index() {
+        $this->viewBuilder()->layout('clientsLayout');
+
+
         $idPasajeroGrupo = 5;
-        $idsCuotas = array(1,2,3,4,5);
+        $idsCuotas = array();
         $query = $this->CuotasAplicadas->find('all', ['contain' => ['Cuotas', 'pasajeros_de_grupos']])
             ->where(['pasajero_grupo_id' => $idPasajeroGrupo, 'cuota_aplicada_eliminado' => 0]);
         $cuotas =  $this->paginate($query);
+        foreach ($cuotas as $cuota) {
+            $cuota->boton = "<button type=\"button\" class=\"btn btn-block btn-default btn-xs cargar-notif\"
+                        onclick=\"openNotifForm($cuota->id)\" style=\"width:120px\">Cargar notificación</button>";
+
+            array_push($idsCuotas, $cuota->id);
+        }
 
         $notificacionesTable = TableRegistry::get('NotificacionesPagos');
         $notificacionesQuery = $notificacionesTable->find('all', array(
@@ -33,6 +42,28 @@ class CuotasAplicadasController extends AppController{
             )
         ));
         $notificaciones = $this->paginate($notificacionesQuery);
+
+        foreach ($notificaciones as $noticacion) {
+            foreach ($cuotas as $cuota) {
+                $notificacionesParaCuota = array();
+                $tieneNotificaciones = false;
+                if ($noticacion->cuota_aplicada_id == $cuota->id) {
+                    array_push($notificacionesParaCuota, $noticacion);
+                    $tieneNotificaciones = true;
+                }
+                $cuota->notificaciones = $notificacionesParaCuota;
+                if ($tieneNotificaciones) {
+                    $cuota->boton = "<button type=\"button\" class=\"btn btn-block btn-default btn-xs\" onclick=\"showNotif($cuota->id)\" style=\"width:120px\">Ver notificación</button>";
+                }
+            }
+        }
+
+//        foreach ($cuotas as $cuota) {
+//            foreach ($notificaciones)
+//            $cuota->boton = "<button type=\"button\" class=\"btn btn-block btn-default btn-xs\" onclick=\"showNotif($cuota->id)\" style=\"width:120px\">Ver notificación</button>";
+//
+//        }
+
 
         $this->set(compact('cuotas'));
         $this->set('_serialize', ['cuotas']);
