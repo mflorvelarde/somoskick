@@ -8,10 +8,10 @@
 
 namespace App\Controller;
 
+use Cake\ORM\TableRegistry;
 use Cake\I18n\Time;
 
-
-class Cuotas_AplicadasController extends AppController{
+class CuotasAplicadasController extends AppController{
 
 
     /**
@@ -19,18 +19,23 @@ class Cuotas_AplicadasController extends AppController{
      * @return \Cake\Network\Response|null
      */
     public function index() {
-        $cuotasAplicadas = $this->paginate($this->Cuotas_aplicadas);
+        $idPasajeroGrupo = 5;
+
+        $query = $this->CuotasAplicadas->find('all', ['contain' => ['Cuotas', 'pasajeros_de_grupos']])
+            ->where(['pasajero_grupo_id' => $idPasajeroGrupo, 'cuota_aplicada_eliminado' => 0]);
+
+        $notificacionesTable = TableRegistry::get('NotificacionesPagos');
+        $notificacionesList = $notificacionesTable->find('all', ['contain' => ['CuotasAplicadas']])
+            ->where(['cuota_aplicada_id' => $idPasajeroGrupo, 'notificacion_pago_eliminado IN' => 0]);
 
 
-//        $query = $articles->find('all', ['contain' => ['Authors', 'Comments']]);
-//
-//
-//        $query = $articles->find();
-//        $query->contain(['Authors', 'Comments'], true);
 
+        $cuotas =  $this->paginate($query);
 
-        $this->set(compact('cuotasAplicadas'));
-        $this->set('_serialize', ['cuotasAplicadas']);
+        $this->set(compact('cuotas'));
+        $this->set('_serialize', ['cuotas']);
+        $this->set(compact('notificacionesList'));
+        $this->set('_serialize', ['notificacionesList']);
     }
 
     /**

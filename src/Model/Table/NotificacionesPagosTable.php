@@ -3,25 +3,24 @@
  * Created by PhpStorm.
  * User: florenciavelarde
  * Date: 6/2/17
- * Time: 4:32 AM
+ * Time: 4:39 AM
  */
 
 namespace App\Model\Table;
 use Cake\ORM\Table;
 
-
-class Cuotas_AplicadasTable extends Table {
+class NotificacionesPagosTable extends Table {
     public function initialize(array $config) {
         parent::initialize($config);
 
-        $this->table('cuotas');
+        $this->table('notificaciones_pagos');
         $this->displayField('id');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
 
-        $this->hasOne('Cuotas', [
-            'className' => 'Cuotas',
-            'foreignKey' => 'cuota_id'
+        $this->hasOne('CuotasAplicadas', [
+            'className' => 'CuotasAplicadas',
+            'foreignKey' => 'cuota_aplicada_id'
         ]);
     }
 }

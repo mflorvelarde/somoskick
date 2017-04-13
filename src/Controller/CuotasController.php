@@ -28,16 +28,16 @@ class CuotasController extends AppController{
 
 
 /*        $query = $this->Cuotas->find('all');
-        $query->contain(['Cuotas_Aplicadas']);
+        $query->contain(['CuotasAplicadas']);
         $this->set('cuotas', $this->paginate($query));*/
 
 
         // As an option to find()
-     //   $query = $cuotas->find('all', ['contain' => ['Cuotas_Aplicadas']]);
+     //   $query = $cuotas->find('all', ['contain' => ['CuotasAplicadas']]);
 
         // As a method on the query object
 /*        $query = $cuotas->find('all');
-/*        $query->contain(['Cuotas_Aplicadas']);*/
+/*        $query->contain(['CuotasAplicadas']);*/
   /*      $query = $cuotas
             ->find()
             ->contain([

@@ -11,7 +11,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\I18n\Time;
 
-class Notificaciones_PagosController extends AppController{
+class NotificacionesPagosController extends AppController{
 
 
     /**
@@ -19,10 +19,10 @@ class Notificaciones_PagosController extends AppController{
      * @return \Cake\Network\Response|null
      */
     public function index() {
-        $notificacionesPagos = $this->paginate($this->Notificaciones_Pagos);
-
-        $this->set(compact('notificacionesPagos'));
-        $this->set('_serialize', ['notificacionesPagos']);
+//        $notificacionesPagos = $this->paginate($this->Notificaciones_Pagos);
+//
+//        $this->set(compact('notificacionesPagos'));
+//        $this->set('_serialize', ['notificacionesPagos']);
     }
 
     /**
