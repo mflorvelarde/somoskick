@@ -72,6 +72,7 @@ class GruposController  extends AppController{
         $this->Grupos->saveMany($queryResults);
     }
 
+    //TODO: Agregar el eliminado = o
     private function agregarTarifaAplicadaApasajerosdDeGrupos($grupoIDs, $tarifaAplicadaID) {
         $pasajerosDeGruposTable = TableRegistry::get('Pasajerosdegrupos');
         $pasajerosDeGrupos = $pasajerosDeGruposTable->find('all', array(

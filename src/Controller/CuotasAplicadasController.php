@@ -20,22 +20,24 @@ class CuotasAplicadasController extends AppController{
      */
     public function index() {
         $idPasajeroGrupo = 5;
-
+        $idsCuotas = array(1,2,3,4,5);
         $query = $this->CuotasAplicadas->find('all', ['contain' => ['Cuotas', 'pasajeros_de_grupos']])
             ->where(['pasajero_grupo_id' => $idPasajeroGrupo, 'cuota_aplicada_eliminado' => 0]);
+        $cuotas =  $this->paginate($query);
 
         $notificacionesTable = TableRegistry::get('NotificacionesPagos');
-        $notificacionesList = $notificacionesTable->find('all', ['contain' => ['CuotasAplicadas']])
-            ->where(['cuota_aplicada_id' => $idPasajeroGrupo, 'notificacion_pago_eliminado IN' => 0]);
-
-
-
-        $cuotas =  $this->paginate($query);
+        $notificacionesQuery = $notificacionesTable->find('all', array(
+            'conditions' => array(
+                'notificacion_pago_eliminado' => 0,
+                'cuota_aplicada_id IN' =>  $idsCuotas
+            )
+        ));
+        $notificaciones = $this->paginate($notificacionesQuery);
 
         $this->set(compact('cuotas'));
         $this->set('_serialize', ['cuotas']);
-        $this->set(compact('notificacionesList'));
-        $this->set('_serialize', ['notificacionesList']);
+        $this->set(compact('notificaciones'));
+        $this->set('_serialize', ['notificaciones']);
     }
 
     /**
