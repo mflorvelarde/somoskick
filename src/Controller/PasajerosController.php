@@ -36,11 +36,15 @@ class PasajerosController extends AppController {
     public function registrarse() {
         $this->viewBuilder()->layout('blankLayout');
         $pasajero = $this->Pasajeros->newEntity();
+        $pasajero->codigo_grupo = "";
         $codigoGrupo = "";
 
         if ($this->request->is(['patch', 'post', 'put'])) {
+            $requestData = $this->request->data;
+            $data = $requestData["codigoGrupo"];
+
             $gruposTable = TableRegistry::get('Grupos');
-            $query = $gruposTable->find('all')->where(['codigo_grupo' => $codigoGrupo, 'eliminado' => 0]);
+            $query = $gruposTable->find('all')->where(['codigo_grupo' => $data, 'grupo_eliminado' => 0]);
             $grupo = $query->first();
 
             if (!is_null($grupo)) {
@@ -54,7 +58,7 @@ class PasajerosController extends AppController {
 
                 $persona_id = $this->persistirPersona($pasajero->persona);
                 $pasajero->fecha_creacion = Time::now();
-                $pasajero->eliminado = 0;
+                $pasajero->pasajero_eliminado = 0;
                 $pasajero->persona_id = $persona_id;
 
                 $result = $this->Pasajeros->save($pasajero);
@@ -81,11 +85,7 @@ class PasajerosController extends AppController {
             } else {
                 $this->Flash->error(__('Código de grupo inválido. Por favor, intente nuevamente'));
             }
-
-
-
         }
-
 
         $this->set(compact('pasajero'));
         $this->set('_serialize', ['pasajero']);
