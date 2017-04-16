@@ -41,11 +41,35 @@ class NotificacionesPagosController extends AppController{
         $this->set('_serialize', ['notificacionesPagos']);
     }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
-     */
+    public function viewnotifications($cuotaAplicadaID) {
+        $userID = $this->Auth->user('id');
+        if ($this->isClient($userID)) {
+            $this->viewBuilder()->layout('ajax');
+            $notificacionesQuery = $this->NotificacionesPagos->find('all', ['contain' => ['Diccionarios']])
+                ->where(['notificacion_pago_eliminado' => 0,
+                    'cuota_aplicada_id' => $cuotaAplicadaID
+                ]);
+            $notificaciones = $this->paginate($notificacionesQuery);
+
+            foreach ($notificaciones as $notificacion) {
+                if ($notificacion->monto_pesos != 0 && !is_null($notificacion->monto_pesos)) {
+                    $notificacion->moneda = "ARS";
+                    $notificacion->monto = $notificacion->monto_pesos;
+                } else {
+                    $notificacion->moneda = "US$";
+                    $notificacion->monto = $notificacion->monto_dolares;
+                }
+            }
+
+            $this->set('notificaciones', $notificaciones);
+            $this->set('_serialize', ['notificaciones']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
     public function add($cuotaAplicadaID) {
         $userID = $this->Auth->user('id');
         if ($this->isClient($userID)) {
