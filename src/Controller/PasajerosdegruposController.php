@@ -15,34 +15,41 @@ use Cake\ORM\TableRegistry;
 class PasajerosDeGruposController extends AppController {
 
     public function index($grupo_id = null) {
-        if ($grupo_id == null) {
-            $pasajerosGrupos = $this->Pasajerosdegrupos->find('all', ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'],'Grupos']])
-                ->where(['pasajerosdegrupos_eliminado' => 0]);
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            if ($grupo_id == null) {
+                $pasajerosGrupos = $this->Pasajerosdegrupos->find('all', ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'], 'Grupos']])
+                    ->where(['pasajerosdegrupos_eliminado' => 0]);
+            } else {
+                $pasajerosGrupos = $this->Pasajerosdegrupos->find('all', ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'], 'Grupos']])
+                    ->where(['id_grupo' => $grupo_id, 'pasajerosdegrupos_eliminado' => 0]);
+            }
+
+            $diccionarios = $this->getDiccionariosPasajerosDeGrupo();
+
+            $regular_id = -1;
+            $activo_id = -1;
+            foreach ($diccionarios as $diccionario) {
+                if ($diccionario->param2 === "SITUACION" && $diccionario->param3 === "REGULAR") $regular_id = $diccionario->id;
+                if ($diccionario->param2 === "CUENTA" && $diccionario->param3 === "ACTIVO") $activo_id = $diccionario->id;
+
+            }
+
+            foreach ($pasajerosGrupos as $pasajerosGrupo) {
+                if ($pasajerosGrupo->regularidad = $regular_id) $pasajerosGrupo->regular = "Regular";
+                else $pasajerosGrupo->regular = "Irregular";
+
+                if ($pasajerosGrupo->actividad_cuenta = $activo_id) $pasajerosGrupo->cuenta = "Activo";
+                else $pasajerosGrupo->cuenta = "Inactivo";
+            }
+            $this->set('regular_id', $regular_id);
+            $this->set('activo_id', $activo_id);
+            $this->set('pasajerosGrupos', $pasajerosGrupos);
         } else {
-            $pasajerosGrupos = $this->Pasajerosdegrupos->find('all', ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'],'Grupos']])
-                ->where(['id_grupo' => $grupo_id, 'pasajerosdegrupos_eliminado' => 0]);
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
         }
-
-        $diccionarios = $this->getDiccionariosPasajerosDeGrupo();
-
-        $regular_id = -1;
-        $activo_id = -1;
-        foreach ($diccionarios as $diccionario) {
-            if ($diccionario->param2 === "SITUACION" && $diccionario->param3 === "REGULAR") $regular_id = $diccionario->id;
-            if ($diccionario->param2 === "CUENTA" && $diccionario->param3 === "ACTIVO") $activo_id = $diccionario->id;
-
-        }
-
-        foreach ($pasajerosGrupos as $pasajerosGrupo) {
-            if ($pasajerosGrupo->regularidad = $regular_id) $pasajerosGrupo->regular = "Regular";
-            else $pasajerosGrupo->regular = "Irregular";
-
-            if ($pasajerosGrupo->actividad_cuenta = $activo_id) $pasajerosGrupo->cuenta = "Activo";
-            else $pasajerosGrupo->cuenta = "Inactivo";
-        }
-        $this->set('regular_id', $regular_id);
-        $this->set('activo_id', $activo_id);
-        $this->set('pasajerosGrupos', $pasajerosGrupos);
     }
 
     private function getDiccionariosPasajerosDeGrupo() {
@@ -54,49 +61,55 @@ class PasajerosDeGruposController extends AppController {
      * @return \Cake\Network\Response|null
      */
     public function pasajerosDeGrupo($grupo_id = null) {
-        $this->viewBuilder()->layout('ajax');
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $this->viewBuilder()->layout('ajax');
 
-        $query = $this->Pasajerosdegrupos->find('all', ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'],'Grupos']])
-            ->where(['id_grupo' => $grupo_id]);
+            $query = $this->Pasajerosdegrupos->find('all', ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'], 'Grupos']])
+                ->where(['id_grupo' => $grupo_id]);
 
-        $pasajerosdegrupos = $this->paginate($query);
-        $this->set('pasajerosdegrupos', $pasajerosdegrupos);
-        $this->set('_serialize', ['pasajerosdegrupos']);
+            $pasajerosdegrupos = $this->paginate($query);
+            $this->set('pasajerosdegrupos', $pasajerosdegrupos);
+            $this->set('_serialize', ['pasajerosdegrupos']);
 
-//        $nombre_grupo = $pasajerosdegrupos->first()->grupo->nombre;
-        $registrados = $pasajerosdegrupos->count();
-//        $pasajerosEstimados = $pasajerosdegrupos->first()->grupo->pasajeros_estimados;
-        $hombres = 0;
-        $mujeres = 0;
-        $totalPesos = 1000;
-        $totalDolares = 1000;
-        $pagoPesos = 150;
-        $pagoDolares = 100;
-        $acompanantes = array();
-        $regulares = array();
-        $listaEspera = array();
+            //        $nombre_grupo = $pasajerosdegrupos->first()->grupo->nombre;
+            $registrados = $pasajerosdegrupos->count();
+            //        $pasajerosEstimados = $pasajerosdegrupos->first()->grupo->pasajeros_estimados;
+            $hombres = 0;
+            $mujeres = 0;
+            $totalPesos = 1000;
+            $totalDolares = 1000;
+            $pagoPesos = 150;
+            $pagoDolares = 100;
+            $acompanantes = array();
+            $regulares = array();
+            $listaEspera = array();
 
 
-        foreach ($pasajerosdegrupos as $pasajero) {
-            if (strcmp($pasajero->persona,"F")) $mujeres = $mujeres + 1;
-            else $hombres = $hombres + 1;
+            foreach ($pasajerosdegrupos as $pasajero) {
+                if (strcmp($pasajero->persona, "F")) $mujeres = $mujeres + 1;
+                else $hombres = $hombres + 1;
 
-            if ($pasajero->acompanante) array_push($acompanantes, $pasajero);
-            else array_push($regulares, $pasajero);
+                if ($pasajero->acompanante) array_push($acompanantes, $pasajero);
+                else array_push($regulares, $pasajero);
+            }
+
+            $this->set('hombres', $hombres);
+            $this->set('mujeres', $mujeres);
+            $this->set('registrados', $registrados);
+            //        $this->set('nombre_grupo', $nombre_grupo);
+            //        $this->set('pasajerosEstimados', $pasajerosEstimados);
+            $this->set('acompanantes', $acompanantes);
+            $this->set('regulares', $regulares);
+            $this->set('listaEspera', $listaEspera);
+            $this->set('totalPesos', $totalPesos);
+            $this->set('totalDolares', $totalDolares);
+            $this->set('pagoPesos', $pagoPesos);
+            $this->set('pagoDolares', $pagoDolares);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
         }
-
-        $this->set('hombres', $hombres);
-        $this->set('mujeres', $mujeres);
-        $this->set('registrados', $registrados);
-//        $this->set('nombre_grupo', $nombre_grupo);
-//        $this->set('pasajerosEstimados', $pasajerosEstimados);
-        $this->set('acompanantes', $acompanantes);
-        $this->set('regulares', $regulares);
-        $this->set('listaEspera', $listaEspera);
-        $this->set('totalPesos', $totalPesos);
-        $this->set('totalDolares', $totalDolares);
-        $this->set('pagoPesos', $pagoPesos);
-        $this->set('pagoDolares', $pagoDolares);
-
     }
 }

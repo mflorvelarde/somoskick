@@ -1,7 +1,7 @@
 
 <section class="content-header">
   <h1>
-    500 Error Page
+    403 Error Page
   </h1>
 </section>
 

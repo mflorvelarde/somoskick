@@ -17,10 +17,17 @@ class ViajesController extends AppController {
      * @return \Cake\Network\Response|null
      */
     public function index() {
-        $viajes = $this->Viajes->find('all')->where(['viaje_eliminado' => 0]);
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $viajes = $this->Viajes->find('all')->where(['viaje_eliminado' => 0]);
 
-        $this->set(compact('viajes'));
-        $this->set('_serialize', ['viajes']);
+            $this->set(compact('viajes'));
+            $this->set('_serialize', ['viajes']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
     }
 
 
@@ -30,26 +37,32 @@ class ViajesController extends AppController {
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
     public function add() {
-        $viaje = $this->Viajes->newEntity();
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $viaje = $this->Viajes->newEntity();
 
-        if ($this->request->is('post')) {
-            $viaje = $this->Viajes->patchEntity($viaje, $this->request->data);
-            $viaje->usuario_creacion = $this->Auth->user('id');
-            $viaje->fecha_creacion = Time::now();
-            $viaje->viaje_eliminado = 0;
+            if ($this->request->is('post')) {
+                $viaje = $this->Viajes->patchEntity($viaje, $this->request->data);
+                $viaje->usuario_creacion = $this->Auth->user('id');
+                $viaje->fecha_creacion = Time::now();
+                $viaje->viaje_eliminado = 0;
 
-            if ($this->Viajes->save($viaje)) {
-                $this->Flash->success(__('El viaje fue guardado'));
+                if ($this->Viajes->save($viaje)) {
+                    $this->Flash->success(__('El viaje fue guardado'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('El viaje no pudo ser guardado. Por favor, intente nuevamente'));
+                }
             }
-            else {
-                $this->Flash->error(__('El viaje no pudo ser guardado. Por favor, intente nuevamente'));
-            }
+
+            $this->set(compact('viaje'));
+            $this->set('_serialize', ['viaje']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
         }
-
-        $this->set(compact('viaje'));
-        $this->set('_serialize', ['viaje']);
     }
 
     /**
@@ -60,19 +73,26 @@ class ViajesController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null) {
-        $this->request->allowMethod(['post', 'delete']);
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $this->request->allowMethod(['post', 'delete']);
 
-        $viaje = $this->Viajes->get($id);
-        $viaje->viaje_eliminado = 1;
-        $viaje->usuario_eliminado = $this->Auth->user('id');
-        $viaje->fecha_eliminado = Time::now();
-        if ($this->Viajes->save($viaje)) {
-            $this->Flash->success(__('El viaje fue eliminado'));
+            $viaje = $this->Viajes->get($id);
+            $viaje->viaje_eliminado = 1;
+            $viaje->usuario_eliminado = $this->Auth->user('id');
+            $viaje->fecha_eliminado = Time::now();
+            if ($this->Viajes->save($viaje)) {
+                $this->Flash->success(__('El viaje fue eliminado'));
+            } else {
+                $this->Flash->error(__('El viaje no pudo ser eliminado. Por favor, intente nuevamente'));
+            }
+
+            return $this->redirect(['action' => 'index']);
         } else {
-            $this->Flash->error(__('El viaje no pudo ser eliminado. Por favor, intente nuevamente'));
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
         }
-
-        return $this->redirect(['action' => 'index']);
     }
 
     /**
@@ -82,25 +102,31 @@ class ViajesController extends AppController {
      * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
-    {
-        $viaje = $this->Viajes->get($id, ['contain' => []]);
+    public function edit($id = null) {
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $viaje = $this->Viajes->get($id, ['contain' => []]);
 
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $viaje = $this->Viajes->patchEntity($viaje, $this->request->data);
-            $viaje->usuario_modificacion = $this->Auth->user('id');
-            $viaje->fecha_modificacion = Time::now();
+            if ($this->request->is(['patch', 'post', 'put'])) {
+                $viaje = $this->Viajes->patchEntity($viaje, $this->request->data);
+                $viaje->usuario_modificacion = $this->Auth->user('id');
+                $viaje->fecha_modificacion = Time::now();
 
-            if ($this->Viajes->save($viaje)) {
-                $this->Flash->success(__('El viaje fue guardado'));
+                if ($this->Viajes->save($viaje)) {
+                    $this->Flash->success(__('El viaje fue guardado'));
 
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('El viaje no pudo ser guardado. Por favor, intente nuevamente'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('El viaje no pudo ser guardado. Por favor, intente nuevamente'));
+                }
             }
+            $this->set(compact('viaje'));
+            $this->set('_serialize', ['viaje']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
         }
-        $this->set(compact('viaje'));
-        $this->set('_serialize', ['viaje']);
     }
 
 }

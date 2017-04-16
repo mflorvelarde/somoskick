@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 
 /**
  * Application Controller
@@ -90,20 +91,36 @@ class AppController extends Controller
 // cause problems with normal functioning of AuthComponent.
         $this->Auth->allow(['add', 'logout']);
     }
-/*
-    public function isAdmin($persona) {
-        if (strcmp($persona['perfil'],"ADMIN") === 0) {
+
+    public function isAdmin($id) {
+        $personasTable = TableRegistry::get('Personas');
+        $currentUser = $personasTable->get($id);
+
+        if ($currentUser->perfil === "ADMIN") {
             return true;
         }
         return false;
     }
 
-    public function isClient($persona) {
-        if (strcmp($persona['perfil'],'CLIENTE')) {
+    public function isClient($id) {
+        $personasTable = TableRegistry::get('Personas');
+        $currentUser = $personasTable->get($id);
+
+        if ($currentUser->perfil === "CLIENTE") {
             return true;
         }
         return false;
-    }*/
+    }
+
+    public function isNotClient($id) {
+        $personasTable = TableRegistry::get('Personas');
+        $currentUser = $personasTable->get($id);
+
+        if ($currentUser->perfil !== "CLIENTE") {
+            return true;
+        }
+        return false;
+    }
 
     public function logout() {
         return $this->redirect($this->Auth->logout());

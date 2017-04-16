@@ -47,112 +47,102 @@ class NotificacionesPagosController extends AppController{
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
     public function add($cuotaAplicadaID) {
-        $this->viewBuilder()->layout('ajax');
-        $notificacion = $this->NotificacionesPagos->newEntity();
-        $this->request->data['cuota_aplicada_id'] = $cuotaAplicadaID;
-//        $notificacion->cuota_aplicada_id = $cuotaAplicadaID;
-        if ($this->request->is('post')) {
-            $requestData = $this->request->data;
+        $userID = $this->Auth->user('id');
+        if ($this->isClient($userID)) {
+            $this->viewBuilder()->layout('ajax');
+            $notificacion = $this->NotificacionesPagos->newEntity();
+            $this->request->data['cuota_aplicada_id'] = $cuotaAplicadaID;
+    //        $notificacion->cuota_aplicada_id = $cuotaAplicadaID;
+            if ($this->request->is('post')) {
+                $requestData = $this->request->data;
 
-            if (strcmp($requestData["moneda"], "dolares")) $notificacion->monto_dolares = $requestData["monto_pesos"];
-            else $notificacion->monto_pesos = $requestData["monto_pesos"];
+                if (strcmp($requestData["moneda"], "dolares")) $notificacion->monto_dolares = $requestData["monto_pesos"];
+                else $notificacion->monto_pesos = $requestData["monto_pesos"];
 
-            $fechaPago = $requestData["fecha_pago"];
-            $notificacion->fecha_pago = Time::create($fechaPago["year"], $fechaPago["month"], $fechaPago["day"]);
-            $notificacion->cuota_aplicada_id = $cuotaAplicadaID;
+                $fechaPago = $requestData["fecha_pago"];
+                $notificacion->fecha_pago = Time::create($fechaPago["year"], $fechaPago["month"], $fechaPago["day"]);
+                $notificacion->cuota_aplicada_id = $cuotaAplicadaID;
 
-            if (strcmp($requestData["paymentType"], "deposito")) {
-                $notificacion->medio_pago = "deposito";
-                $notificacion->medio_deposito = $requestData["tipoDeposito"];
-                $notificacion->banco = $requestData["banco"];
-                $notificacion->sucursal = $requestData["sucursal"];
-            } else if (strcmp($requestData["paymentType"], "transferencia")) {
-                $notificacion->medio_pago = "transferencia";
-                $notificacion->cuit_cuil = $requestData["cuit"];
-                $notificacion->banco = $requestData["bancoDestino"];
-            }
-
-            $diccionarios = $this->getDiccionariosStatus();
-            $status = 0;
-            foreach ($diccionarios as $diccionario) {
-                if ($diccionario->param3 === "PENDIENTE") {
-                    $status = $diccionario->id;
-                    break;
+                if (strcmp($requestData["paymentType"], "deposito")) {
+                    $notificacion->medio_pago = "deposito";
+                    $notificacion->medio_deposito = $requestData["tipoDeposito"];
+                    $notificacion->banco = $requestData["banco"];
+                    $notificacion->sucursal = $requestData["sucursal"];
+                } else if (strcmp($requestData["paymentType"], "transferencia")) {
+                    $notificacion->medio_pago = "transferencia";
+                    $notificacion->cuit_cuil = $requestData["cuit"];
+                    $notificacion->banco = $requestData["bancoDestino"];
                 }
+
+                $diccionarios = $this->getDiccionariosStatus();
+                $status = 0;
+                foreach ($diccionarios as $diccionario) {
+                    if ($diccionario->param3 === "PENDIENTE") {
+                        $status = $diccionario->id;
+                        break;
+                    }
+                }
+
+                $notificacion->status = $status;
+                $notificacion->notificacion_pago_eliminado = 0;
+                $notificacion->fecha_creacion = Time::now();
+                $notificacion->usuario_creacion = $this->Auth->user('id');
+
+                $this->NotificacionesPagos->save($notificacion);
+
+
+                /*            $file = $requestData["submittedfile"];
+
+                            $path = $file["tmp_name"] . "/" . $file["name"];
+                            $fichero_subido = $path . basename($_FILES[$file["tmp_name"]][$file["name"]]);
+                            $type = pathinfo($path, PATHINFO_EXTENSION);
+                            $data = file_get_contents($path);
+                            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);*/
+
+    //            $resultado = "";
+    //            if (move_uploaded_file($_FILES[$file["tmp_name"]][$file["name"]], $fichero_subido)) {
+    //                $resultado = "El fichero es válido y se subió con éxito.\n";
+    //            } else {
+    //                $resultado = "¡Posible ataque de subida de ficheros!\n";
+    //            }
+
+
+                //  $notificacion->comprobante = $base64;
+    //            $colegio = $this->Colegios->patchEntity($colegio, $this->request->data);
+    //            $colegio->usuario_creacion = $this->Auth->user('id');;
+    //            $colegio->fecha_creacion = Time::now();
+    //            $colegio->colegio_eliminado = 0;
+    //
+    //            if ($this->Colegios->save($colegio)) {
+    //                $this->Flash->success(__('El colegio fue guardado'));
+    //
+    //                return $this->redirect(['action' => 'index']);
+    //            }
+    //            else {
+    //                $this->Flash->error(__('El colegio no pudo ser guardado. Por favor, intente nuevamente'));
+    //            }
+
+                return $this->irCuotas();
             }
-
-            $notificacion->status = $status;
-            $notificacion->notificacion_pago_eliminado = 0;
-            $notificacion->fecha_creacion = Time::now();
-            $notificacion->usuario_creacion = $this->Auth->user('id');
-
-            $this->NotificacionesPagos->save($notificacion);
-
+            $this->set(compact('resultado'));
+            $this->set('_serialize', ['resultado']);
+            $this->set(compact('fichero_subido'));
+            $this->set('_serialize', ['fichero_subido']);
+            $this->set(compact('requestData'));
+            $this->set('_serialize', ['requestData']);
+            $this->set(compact('notificacion'));
+            $this->set('_serialize', ['notificacion']);
+        } else {
             return $this->redirect(
-                ['controller' => 'CuotasAplicadas', 'action' => 'index']
+                ['controller' => 'Error', 'action' => 'notAuthorized']
             );
-/*            $file = $requestData["submittedfile"];
-
-            $path = $file["tmp_name"] . "/" . $file["name"];
-            $fichero_subido = $path . basename($_FILES[$file["tmp_name"]][$file["name"]]);
-            $type = pathinfo($path, PATHINFO_EXTENSION);
-            $data = file_get_contents($path);
-            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);*/
-
-//            $resultado = "";
-//            if (move_uploaded_file($_FILES[$file["tmp_name"]][$file["name"]], $fichero_subido)) {
-//                $resultado = "El fichero es válido y se subió con éxito.\n";
-//            } else {
-//                $resultado = "¡Posible ataque de subida de ficheros!\n";
-//            }
-
-
-          //  $notificacion->comprobante = $base64;
-//            $colegio = $this->Colegios->patchEntity($colegio, $this->request->data);
-//            $colegio->usuario_creacion = $this->Auth->user('id');;
-//            $colegio->fecha_creacion = Time::now();
-//            $colegio->colegio_eliminado = 0;
-//
-//            if ($this->Colegios->save($colegio)) {
-//                $this->Flash->success(__('El colegio fue guardado'));
-//
-//                return $this->redirect(['action' => 'index']);
-//            }
-//            else {
-//                $this->Flash->error(__('El colegio no pudo ser guardado. Por favor, intente nuevamente'));
-//            }
         }
-        $this->set(compact('resultado'));
-        $this->set('_serialize', ['resultado']);
-        $this->set(compact('fichero_subido'));
-        $this->set('_serialize', ['fichero_subido']);
-        $this->set(compact('requestData'));
-        $this->set('_serialize', ['requestData']);
-        $this->set(compact('notificacion'));
-        $this->set('_serialize', ['notificacion']);
     }
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null) {
-        $this->request->allowMethod(['post', 'delete']);
-
-        $colegio = $this->Colegios->get($id);
-        $colegio->colegio_eliminado = 1;
-        $colegio->usuario_eliminado = 2;
-        $colegio->fecha_eliminado = Time::now();
-        if ($this->Colegios->save($colegio)) {
-            $this->Flash->success(__('El colegio fue eliminado'));
-        } else {
-            $this->Flash->error(__('El colegio no pudo ser eliminado. Por favor, intente nuevamente'));
-        }
-
-        return $this->redirect(['action' => 'index']);
+    public function irCuotas() {
+        return $this->redirect(
+        ['controller' => 'CuotasAplicadas', 'action' => 'index']
+        );
     }
 
     private function getDiccionariosStatus() {

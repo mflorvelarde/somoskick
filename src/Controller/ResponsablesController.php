@@ -22,18 +22,6 @@ class ResponsablesController extends AppController{
         $this->Auth->allow(['registrar', 'paso2', 'paso3']);
     }
 
-    public function add() {
-        $responsable = $this->Responsables->newEntity();
-
-        if ($this->request->is('post')) {
-            $responsable = $this->Responsables->patchEntity($responsable, $this->request->data, [
-                'associated' => [
-                    'Personas'
-                ]
-            ]);
-        }
-    }
-
     public function paso2($pasajeroGrupo_id) {
         $pasajeroGrupo = TableRegistry::get('Pasajerosdegrupos')->get($pasajeroGrupo_id,
             ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'],'Grupos']]);
@@ -202,11 +190,6 @@ class ResponsablesController extends AppController{
     private function persistirResponsable($responsable) {
         $resultResponsable = $this->Responsables->save($responsable);
         return $resultResponsable->id;
-    }
-
-    public function step2($pasajeroGrupo) {
-        $this->set(compact('pasajeroGrupo'));
-        $this->set('_serialize', ['pasajeroGrupo']);
     }
 
     private function persistirDireccion($direccion) {

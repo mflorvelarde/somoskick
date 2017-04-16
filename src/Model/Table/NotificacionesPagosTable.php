@@ -22,5 +22,11 @@ class NotificacionesPagosTable extends Table {
             'className' => 'CuotasAplicadas',
             'foreignKey' => 'cuota_aplicada_id'
         ]);
+
+        $this->hasOne('Diccionarios', [
+            'className' => 'Diccionarios',
+            'foreignKey' => 'id',
+            'bindingKey' => 'status'
+        ]);
     }
 }

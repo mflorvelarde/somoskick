@@ -13,17 +13,31 @@ use Cake\ORM\TableRegistry;
 class ColegiosController extends AppController{
 
     public function index() {
-        $colegios = $this->Colegios->find('all')->where(['colegio_eliminado' => 0]);
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $colegios = $this->Colegios->find('all')->where(['colegio_eliminado' => 0]);
 
-        $this->set(compact('colegios'));
-        $this->set('_serialize', ['colegios']);
+            $this->set(compact('colegios'));
+            $this->set('_serialize', ['colegios']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
     }
 
     public function view($id = null) {
-        $colegio = $this->Colegios->get($id, ['contain' => ['Direcciones']]);
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $colegio = $this->Colegios->get($id, ['contain' => ['Direcciones']]);
 
-        $this->set('colegio', $colegio);
-        $this->set('_serialize', ['colegio']);
+            $this->set('colegio', $colegio);
+            $this->set('_serialize', ['colegio']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
     }
 
     /**
@@ -32,31 +46,37 @@ class ColegiosController extends AppController{
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
     public function add() {
-        $colegio = $this->Colegios->newEntity();
-        if ($this->request->is('post')) {
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $colegio = $this->Colegios->newEntity();
+            if ($this->request->is('post')) {
 
-            $colegio = $this->Colegios->patchEntity($colegio, $this->request->data, [
-                'associated' => [
-                    'Direcciones'
-                ]
-            ]);
+                $colegio = $this->Colegios->patchEntity($colegio, $this->request->data, [
+                    'associated' => [
+                        'Direcciones'
+                    ]
+                ]);
 
-            $colegio->usuario_creacion = $this->Auth->user('id');;
-            $colegio->fecha_creacion = Time::now();
-            $colegio->colegio_eliminado = 0;
-            $colegio->direccion_id = $this->guardarDireccion($colegio->direccione);
+                $colegio->usuario_creacion = $this->Auth->user('id');;
+                $colegio->fecha_creacion = Time::now();
+                $colegio->colegio_eliminado = 0;
+                $colegio->direccion_id = $this->guardarDireccion($colegio->direccione);
 
-            if ($this->Colegios->save($colegio)) {
-                $this->Flash->success(__('El colegio fue guardado'));
+                if ($this->Colegios->save($colegio)) {
+                    $this->Flash->success(__('El colegio fue guardado'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('El colegio no pudo ser guardado. Por favor, intente nuevamente'));
+                }
             }
-            else {
-                $this->Flash->error(__('El colegio no pudo ser guardado. Por favor, intente nuevamente'));
-            }
+            $this->set(compact('colegio'));
+            $this->set('_serialize', ['colegio']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
         }
-        $this->set(compact('colegio'));
-        $this->set('_serialize', ['colegio']);
     }
 
     public function guardarDireccion($direccion) {
@@ -72,19 +92,26 @@ class ColegiosController extends AppController{
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null) {
-        $this->request->allowMethod(['post', 'delete']);
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $this->request->allowMethod(['post', 'delete']);
 
-        $colegio = $this->Colegios->get($id);
-        $colegio->colegio_eliminado = 1;
-        $colegio->usuario_eliminado = $this->Auth->user('id');;
-        $colegio->fecha_eliminado = Time::now();
-        if ($this->Colegios->save($colegio)) {
-            $this->Flash->success(__('El colegio fue eliminado'));
+            $colegio = $this->Colegios->get($id);
+            $colegio->colegio_eliminado = 1;
+            $colegio->usuario_eliminado = $this->Auth->user('id');;
+            $colegio->fecha_eliminado = Time::now();
+            if ($this->Colegios->save($colegio)) {
+                $this->Flash->success(__('El colegio fue eliminado'));
+            } else {
+                $this->Flash->error(__('El colegio no pudo ser eliminado. Por favor, intente nuevamente'));
+            }
+
+            return $this->redirect(['action' => 'index']);
         } else {
-            $this->Flash->error(__('El colegio no pudo ser eliminado. Por favor, intente nuevamente'));
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
         }
-
-        return $this->redirect(['action' => 'index']);
     }
 
     public function viewCamadas ($id = null) {
@@ -100,29 +127,36 @@ class ColegiosController extends AppController{
     }
 
     public function edit($id = null) {
-        $colegio = $this->Colegios->get($id, ['contain' => ['Direcciones']]);
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $colegio = $this->Colegios->get($id, ['contain' => ['Direcciones']]);
 
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $colegio = $this->Colegios->patchEntity($colegio, $this->request->data, [
-                'associated' => [
-                    'Direcciones'
-                ]
-            ]);
+            if ($this->request->is(['patch', 'post', 'put'])) {
+                $colegio = $this->Colegios->patchEntity($colegio, $this->request->data, [
+                    'associated' => [
+                        'Direcciones'
+                    ]
+                ]);
 
-            $colegio->usuario_modificacion = $this->Auth->user('id');
-            $colegio->fecha_modificacion = Time::now();
-            $colegio->direccion_id = $this->guardarDireccion($colegio->direccione);
+                $colegio->usuario_modificacion = $this->Auth->user('id');
+                $colegio->fecha_modificacion = Time::now();
+                $colegio->direccion_id = $this->guardarDireccion($colegio->direccione);
 
 
-            if ($this->Colegios->save($colegio)) {
-                $this->Flash->success(__('El colegio fue guardado'));
+                if ($this->Colegios->save($colegio)) {
+                    $this->Flash->success(__('El colegio fue guardado'));
 
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('El colegio no pudo ser guardado. Por favor, intente nuevamente'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('El colegio no pudo ser guardado. Por favor, intente nuevamente'));
+                }
             }
+            $this->set(compact('colegio'));
+            $this->set('_serialize', ['colegio']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
         }
-        $this->set(compact('colegio'));
-        $this->set('_serialize', ['colegio']);
     }
 }

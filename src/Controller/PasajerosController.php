@@ -9,6 +9,7 @@
 namespace App\Controller;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
+use Cake\Mailer\Email;
 
 
 class PasajerosController extends AppController {
@@ -91,6 +92,17 @@ class PasajerosController extends AppController {
         $this->set('_serialize', ['pasajero']);
         $this->set(compact('codigoGrupo'));
         $this->set('_serialize', ['codigoGrupo']);
+    }
+
+    public function sendEmail() {
+        $email = new Email('default');
+        $email->sender('administracion@somoskick.com', 'Kick');
+      //  $email->profile('default');
+        $email->from('administracion@somoskick.com')
+            ->addTo('mflorencia.velarde@gmail.com')
+            ->subject('test')
+            ->message('hola');
+        $email->send();
     }
 
 

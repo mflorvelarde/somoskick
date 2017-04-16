@@ -14,47 +14,7 @@
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
-            <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title">Cuotas</h3>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover">
-                        <tr>
-                            <th>Cuota</th>
-                            <th>Monto pesos</th>
-                            <th>Monto dólares</th>
-                            <th>Monto abonado en pesos</th>
-                            <th>Monto abonado en dolares</th>
-                            <th>Vencimiento</th>
-                            <th>Estado de cuota</th>
-                            <th>Estado de notificación</th>
-                            <th>Acciones</th>
-                        </tr>
-                        <?php foreach ($cuotas as $cuotaAplicada): ?>
-                        <tr>
-                            <td><?= h($cuotaAplicada->id)?></td>
-                            <td><?= h($cuotaAplicada->cuota->monto_pesos)?></td>
-                            <td><?= h($cuotaAplicada->cuota->monto_colares)?></td>
-                            <td>3400</td>
-                            <td>3600</td>
-                            <td><?= h($cuotaAplicada->cuota->vencimiento)?></td>
-                            <td><span class="label label-success">Pago acreditado</span></td>
-                            <td><span class="label label-success">Pago acreditado</span></td>
-                            <td><?= $cuotaAplicada->boton?>
-                          <!--      <button type="button" class="btn btn-block btn-default btn-xs"
-                                        onclick="showNotif(<?= h($cuotaAplicada->id)?>)" style="width:120px">Ver notificación
-                                </button>-->
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </div>
-                <!-- /.box-body -->
-            </div>
-            <!-- /.box -->
-            <!-- Horizontal Form -->
+        <!-- Horizontal Form -->
             <div id="form-carga-notificaciones" class="box box-info hidden-element">
                 <div class="box-header with-border">
                     <h3 class="box-title">Cargar notificación</h3>
@@ -187,12 +147,46 @@
                 </form>
             </div>
             <!-- /.box -->
-                        <div class="row">
-        <div id="notif" class="col-xs-12"></div>
+            <div class="row">
+            <div id="notif" class="col-xs-12"></div>
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Cuotas</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>Cuota</th>
+                            <th>Monto pesos</th>
+                            <th>Monto dólares</th>
+                            <th>Monto abonado en pesos</th>
+                            <th>Monto abonado en dolares</th>
+                            <th>Vencimiento</th>
+                            <th>Estado de cuota</th>
+                            <th>Estado de notificación</th>
+                            <th>Acciones</th>
+                        </tr>
+                        <?php foreach ($cuotas as $cuotaAplicada): ?>
+                        <tr>
+                            <td><?= h($cuotaAplicada->id)?></td>
+                            <td><?= h($cuotaAplicada->cuota->monto_pesos)?></td>
+                            <td><?= h($cuotaAplicada->cuota->monto_colares)?></td>
+                            <td>3400</td>
+                            <td>3600</td>
+                            <td><?= h($cuotaAplicada->cuota->vencimiento)?></td>
+                            <td><span class="label label-success">Pago acreditado</span></td>
+                            <td><span class="label label-success">Pago acreditado</span></td>
+                            <td><?= $cuotaAplicada->boton?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
     </div>
 </section>
-
-
 <script>
     $(function () {
         //Date picker
@@ -227,10 +221,6 @@
     		$('#form-carga-notificaciones').removeClass('hidden-element');
           }
         });
-	}
-
-	function closeNotifForm() {
-		$('#form-carga-notificaciones').addClass('hidden-element');
 	}
 
 	function showNotif(cuotaID) {

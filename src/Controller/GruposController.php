@@ -13,49 +13,56 @@ use Cake\I18n\Time;
 class GruposController  extends AppController{
 
     public function aplicartarifa($tarifa_id) {
-        $grupos_options = $this->Grupos->find('list', array(
-            'conditions' => array('	tarifa_aplicada_id IS' => null),
-            'valueField' => array('nombre')
-        ));
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $grupos_options = $this->Grupos->find('list', array(
+                'conditions' => array('	tarifa_aplicada_id IS' => null),
+                'valueField' => array('nombre')
+            ));
 
-        $grupo = $this->Grupos->newEntity();
-        $tarifa = TableRegistry::get('Tarifas')->get($tarifa_id, ['contain' => []]);
-        $primeracuota = Time::now();
+            $grupo = $this->Grupos->newEntity();
+            $tarifa = TableRegistry::get('Tarifas')->get($tarifa_id, ['contain' => []]);
+            $primeracuota = Time::now();
 
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $data = $this->request->data;
-            $json = json_encode($data);
-            $entity = json_decode($json);
+            if ($this->request->is(['patch', 'post', 'put'])) {
+                $data = $this->request->data;
+                $json = json_encode($data);
+                $entity = json_decode($json);
 
-            $tarifasAplicadasTable = TableRegistry::get('TarifasAplicadas');
-            $tarifaAplicada = $tarifasAplicadasTable->newEntity();
-            $tarifaAplicada->tarifa_id = $tarifa_id;
-            $tarifaAplicada->tarifa_aplicada_eliminado = 0;
-            $tarifaAplicada->fecha_primer_pago = Time::create($entity->primeracuota->year,
-                $entity->primeracuota->month, $entity->primeracuota->day);
-            $tarifaAplicada->fecha_creacion = Time::now();
-            $tarifaAplicada->usuario_creacion = $this->Auth->user('id');;
+                $tarifasAplicadasTable = TableRegistry::get('TarifasAplicadas');
+                $tarifaAplicada = $tarifasAplicadasTable->newEntity();
+                $tarifaAplicada->tarifa_id = $tarifa_id;
+                $tarifaAplicada->tarifa_aplicada_eliminado = 0;
+                $tarifaAplicada->fecha_primer_pago = Time::create($entity->primeracuota->year,
+                    $entity->primeracuota->month, $entity->primeracuota->day);
+                $tarifaAplicada->fecha_creacion = Time::now();
+                $tarifaAplicada->usuario_creacion = $this->Auth->user('id');;
 
-            $result = $tarifasAplicadasTable->save($tarifaAplicada);
-            $tarifaAplicadaID = $result->id;
+                $result = $tarifasAplicadasTable->save($tarifaAplicada);
+                $tarifaAplicadaID = $result->id;
 
-            $this->agregarTarifaAplicadaAgrupos($entity->Grupos , $tarifaAplicadaID);
-            $this->agregarTarifaAplicadaApasajerosdDeGrupos($entity->Grupos , $tarifaAplicadaID);
+                $this->agregarTarifaAplicadaAgrupos($entity->Grupos, $tarifaAplicadaID);
+                $this->agregarTarifaAplicadaApasajerosdDeGrupos($entity->Grupos, $tarifaAplicadaID);
 
+                return $this->redirect(
+                //     ['controller' => 'Tarifas_aplicadas', 'action' => 'aplicartarifaagrupos', $json]
+                    ['controller' => 'Cuotas', 'action' => 'add', $tarifaAplicadaID]
+                );
+            }
+
+            $this->set('grupo', $grupo);
+            $this->set('_serialize', ['grupo']);
+            $this->set('grupos_options', $grupos_options);
+            $this->set('_serialize', ['grupos_options']);
+            $this->set('primeracuota', $primeracuota);
+            $this->set('_serialize', ['primeracuota']);
+            $this->set('tarifa', $tarifa);
+            $this->set('_serialize', ['tarifa']);
+        } else {
             return $this->redirect(
-           //     ['controller' => 'Tarifas_aplicadas', 'action' => 'aplicartarifaagrupos', $json]
-                ['controller' => 'Cuotas', 'action' => 'add', $tarifaAplicadaID]
+                ['controller' => 'Error', 'action' => 'notAuthorized']
             );
         }
-
-        $this->set('grupo', $grupo);
-        $this->set('_serialize', ['grupo']);
-        $this->set('grupos_options', $grupos_options);
-        $this->set('_serialize', ['grupos_options']);
-        $this->set('primeracuota', $primeracuota);
-        $this->set('_serialize', ['primeracuota']);
-        $this->set('tarifa', $tarifa);
-        $this->set('_serialize', ['tarifa']);
     }
 
     private function agregarTarifaAplicadaAgrupos($ids, $tarifaAplicadaID) {
@@ -72,11 +79,11 @@ class GruposController  extends AppController{
         $this->Grupos->saveMany($queryResults);
     }
 
-    //TODO: Agregar el eliminado = o
+    //TODO: chequear el eliminado = o
     private function agregarTarifaAplicadaApasajerosdDeGrupos($grupoIDs, $tarifaAplicadaID) {
         $pasajerosDeGruposTable = TableRegistry::get('Pasajerosdegrupos');
         $pasajerosDeGrupos = $pasajerosDeGruposTable->find('all', array(
-            'conditions' => array('id IN' => $grupoIDs)
+            'conditions' => array('id IN' => $grupoIDs, 'pasajerodegrupo_eliminado' => 0)
         ));
         foreach ($pasajerosDeGrupos as $pasajero) {
             $pasajero->usuario_modificacion = $this->Auth->user('id');
