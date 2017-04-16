@@ -48,7 +48,12 @@ class PersonasController extends AppController{
             $user = $this->Auth->identify();
             if ($user) {
                 $this->Auth->setUser($user);
-                return $this->redirect(['controller'=>'Camadas','action' => 'index']);
+                if ($this->isClient($this->Auth->user('id'))) {
+                    return $this->redirect(['controller'=>'Home','action' => 'clientes']);
+
+                } else {
+                    return $this->redirect(['controller'=>'Home','action' => 'admin']);
+                }
             }
 
             $this->Flash->error(__('Invalid username or password, try again'));

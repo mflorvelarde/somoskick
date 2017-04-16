@@ -42,8 +42,15 @@
         </li>
 		<li class="header">MI CUENTA</li>
         <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Ver perfil</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Salir</span></a></li>
+        <li>
+          <a href="<?php echo $this->Url->build(["action" => "logout"]);?>">
+            <i class="fa fa-circle-o text-red"></i> <span>Salir</span>
+          </a>
+        </li>
       </ul>
     </section>
     <!-- /.sidebar -->
   </aside>
+
+
+

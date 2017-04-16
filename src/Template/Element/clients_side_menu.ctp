@@ -15,7 +15,7 @@
           </a>
         </li>
 		<li>
-          <a href="../clients/pagos.php">
+          <a href="<?php echo $this->Url->build(["controller" => "CuotasAplicadas", "action" => "index"]);?>">
             <i class="fa fa-th"></i> <span>Pagos</span>
           </a>
         </li>
@@ -32,6 +32,12 @@
 		<li>
           <a href="pages/widgets.html">
             <i class="fa fa-credit-card"></i> <span>Formas de pago</span>
+          </a>
+        </li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Ver perfil</span></a></li>
+        <li>
+          <a href="<?php echo $this->Url->build(["action" => "logout"]);?>">
+            <i class="fa fa-circle-o text-red"></i> <span>Salir</span>
           </a>
         </li>
       </ul>

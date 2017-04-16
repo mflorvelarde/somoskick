@@ -18,17 +18,7 @@
                   <span class="hidden-xs"><?php  echo $this->request->session()->read('Auth.User.nombre'); ?> <?php echo $this->request->session()->read('Auth.User.apellido'); ?></span>
                       <i class="fa fa-user"></i>
                     </a>
-                    <ul class="dropdown-menu" style="width:150px">
-                      <li>
-                        <!-- inner menu: contains the actual data -->
-                        <ul class="menu">
-                          <li>
-                               <?= $this->Html->link(__('Ver perfil'), ['action' => 'logout'] , ['style' => 'text-align:right' ]) ?>
-                          </li>
-                          <li>
-                               <?= $this->Html->link(__('Salir'), ['action' => 'logout'] , ['style' => 'text-align:right' ]) ?>
-                          </li>
-                    </ul>
         </li>
+        </ul>
     </div>
 </nav>
