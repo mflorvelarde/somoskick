@@ -69,4 +69,8 @@ class ErrorController extends AppController
     public function notAuthorized() {
         $this->viewBuilder()->layout('blankLayout');
     }
+
+    public function underconstruction() {
+        $this->viewBuilder()->layout('blankLayout');
+    }
 }

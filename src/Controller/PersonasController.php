@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\I18n\Time;
+use Cake\Auth\DefaultPasswordHasher;
 
 /**
  * Users Controller
@@ -14,28 +15,16 @@ class PersonasController extends AppController{
 
     public function initialize() {
         parent::initialize();
-        $this->Auth->allow('registrarok');
+        $this->Auth->allow(['changepassword','registrarok']);
     }
 
-    /**
-     * Index method
-     * @return \Cake\Network\Response|null
-     */
     public function index() {
         $personas = $this->paginate($this->Personas);
 
         $this->set(compact('personas'));
         $this->set('_serialize', ['personas']);
     }
-    
 
-    /**
-     * View method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function view($id = null) {
         $persona = $this->Personas->get($id);
 
@@ -61,6 +50,34 @@ class PersonasController extends AppController{
         $this->viewBuilder()->layout('blankLayout');
     }
 
+    //TODO ver que pasa con la pass
+    public function changepassword($code) {
+        $persona = $this->Personas->find()
+            ->where(['contrasena' => $code])
+            ->first();
+        if (!is_null($persona)) {
+            $this->viewBuilder()->layout('blankLayout');
+            if ($this->request->is(['patch', 'post', 'put'])) {
+                $requestData = $this->request->data;
+                $contrasena = $requestData["contrasena"];
+                $chequeo = $requestData["chequeo"];
+
+                if (strcmp($contrasena, $chequeo)) {
+                    $persona->contrasena = $contrasena;
+                    $persona->contrasena_reset = 0;
+                    $persona->fecha_modificacion = Time::now();
+                    $persona->usuario_modificacion = $persona->id;
+
+                    $this->Personas->save($persona);
+                    return $this->redirect(['action' => 'login']);
+                }
+            }
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
 
     public function registrarok() {
         $this->viewBuilder()->layout('blankLayout');
@@ -68,11 +85,7 @@ class PersonasController extends AppController{
             $this->redirect(['action' => 'login']);
         }
     }
-    /**
-     * Add method
-     *
-     * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
-     */
+
     public function add() {
         $persona = $this->Personas->newEntity();
         if ($this->request->is('post')) {
@@ -92,13 +105,6 @@ class PersonasController extends AppController{
         $this->set('_serialize', ['persona']);
     }
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
@@ -113,13 +119,6 @@ class PersonasController extends AppController{
         return $this->redirect(['action' => 'index']);
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function edit($id = null) {
         $persona = $this->Personas->get($id, ['contain' => []]);
 

@@ -44,8 +44,6 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
-
-        //TODO: CAmbiar el home
         $this->loadComponent('Auth', [
             'loginAction' => [ 'controller' => 'Personas', 'action' => 'login', 'plugin' => false], // or 'Members' if plugin ],
                 'loginRedirect' => [

@@ -54,10 +54,6 @@
                         </div>
                         <div class="col-xs-12">
                         <?= $this->Form->create($grupo) ?>
-                <!--            <?php foreach ($grupos as $grupo): ?>
-                                 <?   echo $this->Form->input(h($grupo->nombre), array('type' => 'checkbox')); ?>
-                            <?php endforeach; ?> -->
-
                             <div class="form-group">
                                 <?php echo $this->Form->input('Grupos', array(
                                     'options' => $grupos_options,

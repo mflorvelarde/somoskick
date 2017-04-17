@@ -16,7 +16,7 @@ class GruposController  extends AppController{
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
             $grupos_options = $this->Grupos->find('list', array(
-                'conditions' => array('	tarifa_aplicada_id IS' => null),
+                'conditions' => array('tarifa_aplicada_id IS' => null, 'grupo_eliminado' => 0),
                 'valueField' => array('nombre')
             ));
 
@@ -45,7 +45,6 @@ class GruposController  extends AppController{
                 $this->agregarTarifaAplicadaApasajerosdDeGrupos($entity->Grupos, $tarifaAplicadaID);
 
                 return $this->redirect(
-                //     ['controller' => 'Tarifas_aplicadas', 'action' => 'aplicartarifaagrupos', $json]
                     ['controller' => 'Cuotas', 'action' => 'add', $tarifaAplicadaID]
                 );
             }
@@ -79,11 +78,10 @@ class GruposController  extends AppController{
         $this->Grupos->saveMany($queryResults);
     }
 
-    //TODO: chequear el eliminado = o
     private function agregarTarifaAplicadaApasajerosdDeGrupos($grupoIDs, $tarifaAplicadaID) {
         $pasajerosDeGruposTable = TableRegistry::get('Pasajerosdegrupos');
         $pasajerosDeGrupos = $pasajerosDeGruposTable->find('all', array(
-            'conditions' => array('id IN' => $grupoIDs, 'pasajerodegrupo_eliminado' => 0)
+            'conditions' => array('id_grupo IN' => $grupoIDs, 'pasajerodegrupo_eliminado' => 0)
         ));
         foreach ($pasajerosDeGrupos as $pasajero) {
             $pasajero->usuario_modificacion = $this->Auth->user('id');

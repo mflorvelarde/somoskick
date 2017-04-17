@@ -51,15 +51,16 @@
                                 </div>
                                 <!-- /.row -->
                             </div>
+                    <h3 style="margin-bottom: 20px; color: red; background-color: #FBEFEF;"><?= h($error)?></h3>
                     <table id="example1" class="table table-bordered table-striped">
+                        <?= $this->Form->create($cuotas) ?>
                         <?php foreach ($cuotas as $cuota): ?>
                         <tbody>
-                        <?= $this->Form->create($cuota) ?>
                             <tr>
                                 <td>
                                     <div class="form-group">
                                         <div class="input text required">
-                                            <?php  echo $this->Form->input('vencimiento',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('vencimiento',  ['required' => true, ['class' => 'form-control'] ] ); ?>
                                         </div>
                                     </div>
                                 </td>

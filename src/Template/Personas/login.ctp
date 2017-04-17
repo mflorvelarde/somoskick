@@ -1,6 +1,6 @@
 <div class="login-box">
     <div class="login-logo">
-      <a href="../../index2.html"><b>Kick</b></a>
+      <a href="#"><b>Kick</b></a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
@@ -8,7 +8,7 @@
     <?= $this->Form->create() ?>
       <div class="form-group has-feedback" style="margin-top:20px">
              <div><label style="color:#fff">Mail</label></div>
-            <?= $this->Form->input('mail', ['class'=>'form-control', 'placeholder'=>'Mail' , 'name'=>'mail', 'label' => '','type'=>'mail', 'autofocus'] ) ?>
+            <?= $this->Form->input('c', ['class'=>'form-control', 'placeholder'=>'Mail' , 'name'=>'mail', 'label' => '','type'=>'mail', 'autofocus'] ) ?>
       </div>
       <div class="form-group has-feedback">
              <div><label style="color:#fff">Contraseña</label></div>

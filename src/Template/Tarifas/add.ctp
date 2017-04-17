@@ -29,6 +29,9 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <?php echo $this->Form->input('viaje_id', ['options' => $viajes_options]); ?>
+                            </div>
+                            <div class="form-group">
                                 <?php  echo $this->Form->input('monto_pesos',  ['required' => true, 'class' => 'form-control' ] ); ?>
                             </div>
 
