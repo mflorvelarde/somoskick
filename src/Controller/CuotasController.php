@@ -71,16 +71,11 @@ class CuotasController extends AppController{
                     }
                     $index = $index + 1;
                 }
-
-                /*
-                            for ($i = 0; $i < $cantidadCuotasDolares; $i++) {
-                                $cuotas[$i]->monto_dolares = $tarifa->monto_dolares / $cantidadCuotasDolares;
-                                $cuotas[$i]->monto_pesos = 0;
-                            }
-                            for ($i = $cantidadCuotasDolares; $i < $meses; $i++) {
-                                $cuotas[$i]->monto_pesos = $tarifa->monto_pesos / $cantidadCuotasPesos;
-                                $cuotas[$i]->monto_dolares = 0;
-                            }*/
+                for ($cuotaIndex = 0; $cuotaIndex < count($cuotas); $cuotaIndex++){
+                    for ($paramIndex = 0; $paramIndex < 3; $paramIndex++) {
+                        if ($paramIndex == 0 )$result[$cuotaIndex][$paramIndex] = array("vencimiento" . $cuotaIndex => $cuotas[$cuotaIndex]['vencimiento']);
+                    }
+                }
             }
 
 
@@ -154,6 +149,8 @@ class CuotasController extends AppController{
 //                }
 
             }
+            $this->set(compact('result'));
+            $this->set('_serialize', ['result']);
             $this->set(compact('tarifa'));
             $this->set('_serialize', ['tarifa']);
             $this->set(compact('error'));

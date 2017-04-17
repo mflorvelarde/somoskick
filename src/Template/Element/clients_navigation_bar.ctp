@@ -1,4 +1,4 @@
-<a href="../admin/index.php" class="logo">
+<a class="logo" href="<?php echo $this->Url->build(["controller" => "Home", "action" => "clientes"]);?>">
     <!-- mini logo for sidebar mini 50x50 pixels -->
     <span class="logo-mini">Kick</span>
     <!-- logo for regular state and mobile devices -->

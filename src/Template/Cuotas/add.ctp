@@ -53,8 +53,10 @@
                             </div>
                     <h3 style="margin-bottom: 20px; color: red; background-color: #FBEFEF;"><?= h($error)?></h3>
                     <table id="example1" class="table table-bordered table-striped">
-                        <?= $this->Form->create($cuotas) ?>
                         <?php foreach ($cuotas as $cuota): ?>
+                        <?php $i = 0?>
+                        <?= $this->Form->create($cuota) ?>
+
                         <tbody>
                             <tr>
                                 <td>
@@ -79,12 +81,12 @@
                                     </div>
                                 </td>
                             </tr>
+                                                    <?php $i = $i + 1?>
                         <?php endforeach; ?>
                         </tbody>
                     </table>
                     <?= $this->Html->link(__('Volver'), ['action' => 'index'] , array('class'=>'btn btn-danger', 'style' => 'margin-top:1em') ) ?>
                     <?= $this->Form->button(__('Guardar'), ['class'=>'btn btn-success', 'style' => 'margin-top:1em']) ?>
-                    <?= $this->Form->end() ?>
                 </div>
             </div>
         </div>
