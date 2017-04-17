@@ -71,7 +71,6 @@
                             <tr>
                                 <th>Nombre</th>
                                 <th>Ciudad</th>
-                                <th>Dirección</th>
                                 <th>Teléfono</th>
                                 <th>Contacto</th>
                                 <th>Observaciones</th>
