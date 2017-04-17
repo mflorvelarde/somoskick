@@ -32,7 +32,6 @@
                             <tr>
                                 <th>Nombre</th>
                                 <th>Ciudad</th>
-                                <th>Dirección</th>
                                 <th>Teléfono</th>
                                 <th>Contacto</th>
                                 <th>Observaciones</th>
@@ -43,8 +42,7 @@
                         <tbody>
                         <tr>
                             <td><?= h($colegio->nombre) ?></td>
-                            <td>C.A.B.A.</td>
-                            <td><?= $this->Number->format($colegio->direccion_id) ?></td>
+                            <td><?= h($colegio->direccione->ciudad) ?></td>
                             <td><?= $this->Number->format($colegio->telefono) ?></td>
                             <td><?= h($colegio->contacto) ?></td>
                             <td><?= h($colegio->comentarios) ?></td>

@@ -15,7 +15,7 @@ class ColegiosController extends AppController{
     public function index() {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
-            $colegios = $this->Colegios->find('all')->where(['colegio_eliminado' => 0]);
+            $colegios = $this->Colegios->find('all', ['contain' => ['Direcciones']])->where(['colegio_eliminado' => 0]);
 
             $this->set(compact('colegios'));
             $this->set('_serialize', ['colegios']);
