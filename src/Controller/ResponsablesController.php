@@ -196,7 +196,6 @@ class ResponsablesController extends AppController{
         $baseDireccion = TableRegistry::get('Direcciones');
 
         $direccion->fecha_creacion = Time::now();
-        $direccion->usuario_creacion = 2;
         $direccion->direccion_eliminado = 0;
 
         $resultDireccion = $baseDireccion->save($direccion);
@@ -208,14 +207,33 @@ class ResponsablesController extends AppController{
         $direcion_id = $this->persistirDireccion($persona->direccione);
         $basePersonas = TableRegistry::get('Personas');
 
-        $persona->persona_eliminado = 0;
-        $persona->perfil = "CLIENTE";
-        $persona->fecha_creacion = Time::now();
-        $persona->contrasena = $persona->dni . Time::now()->toDateTimeString();
-        $persona->direccion_id = $direcion_id;
+        $contrasena = md5($persona->dni . Time::now()->toDateTimeString());
+        $result = $query = $basePersonas->query()
+            ->insert(['nombre', 'apellido', 'dni', 'telefono', 'celular', 'nacionalidad', 'mail', 'contrasena',
+                'perfil', 'fecha_nacimiento', 'direccion_id', 'contrasena_reset', 'persona_eliminado',
+                'fecha_creacion'])
+            ->values(['nombre' => $persona->nombre, 'apellido' => $persona->apellido, 'dni' => $persona->dni,
+                'telefono' => $persona->telefono, 'celular' => $persona->celular, 'nacionalidad' => $persona->nacionalidad,
+                'mail' => $persona->mail, 'contrasena' => $contrasena,
+                'perfil' => "CLIENTE", 'fecha_nacimiento' => $persona->fecha_nacimiento,
+                'direccion_id' => $direcion_id, 'contrasena_reset' => 1, 'persona_eliminado' => 0,
+                'fecha_creacion' => Time::now()])
+            ->execute();
 
-        $resultPersona = $basePersonas->save($persona);
-        return $resultPersona->id;
+        $this->sendWelcomeEmail($contrasena);
+        $id = $result->lastInsertId('Personas');
+        return $id;
     }
 
+    private function sendWelcomeEmail($code) {
+        $email = new Email('default');
+        $email->sender('administracion@somoskick.com', 'Kick');
+        $email->from('administracion@somoskick.com')
+            ->addTo('mflorencia.velarde@gmail.com')
+            ->subject('Se ha registrado correctamente')
+            ->emailFormat('html')
+            ->viewVars(['code' => $code])
+            ->template('default');
+        $email->send();
+    }
 }

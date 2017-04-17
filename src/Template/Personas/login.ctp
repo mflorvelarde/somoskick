@@ -25,8 +25,6 @@
     </form>
     <div id="labels" style="margin-top:15%">
     <a href="#">Olvidé mi contraseña</a><br>
-    <?= $this->Html->link('Registrarse', ['action' => 'irRegistrarse'] ) ?>
-
     <a href="../pasajeros/registrarse" class="text-center">Registrarse</a>
     </div>
   </div>

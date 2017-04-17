@@ -13,10 +13,9 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 ?>
-<?php
-$content = explode("\n", $content);
-
-foreach ($content as $line):
-    echo '<p> ' . $line . "</p>\n";
-endforeach;
-?>
+<h1 style="color:#d81b60">Kick</h1>
+<h2>Se ha registrado correctamente</h2>
+<h4>Para completar el alta de su perfil, por favor ingrese en el siguiente link y cambie su contraseña</h4>
+<a href="http://administracion.somoskick.com/personas/changepassword/"<?= $code ?>>
+<img src="http://administracion.somoskick.com/img/button.png" />
+</a>
