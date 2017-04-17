@@ -144,4 +144,16 @@ class PasajerosController extends AppController {
         return $query->first();
     }
 
+    public function miperfil() {
+        $userID = $this->Auth->user('id');
+        if ($this->isClient($userID)) {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'underconstruction']
+            );
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
 }

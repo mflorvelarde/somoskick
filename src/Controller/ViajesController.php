@@ -10,6 +10,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\I18n\Time;
+use Cake\ORM\TableRegistry;
 
 class ViajesController extends AppController {
     /**
@@ -122,6 +123,54 @@ class ViajesController extends AppController {
             }
             $this->set(compact('viaje'));
             $this->set('_serialize', ['viaje']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
+    public function view() {
+        $userID = $this->Auth->user('id');
+        if ($this->isClient($userID)) {
+            $this->viewBuilder()->layout('clientsLayout');
+
+            $pasajeroGrupoQuery = TableRegistry::get('Pasajerosdegrupos')->find()
+                ->hydrate(false)
+                ->join([
+                    'pasajeros' => [
+                        'table' => 'pasajeros',
+                        'type' => 'INNER',
+                        'conditions' => ['pasajeros.id = pasajerosdegrupos.id_pasajero', 'pasajeros.persona_id =' => $userID],
+                    ]
+                ]);
+            $pasajero =  $pasajeroGrupoQuery->first();
+
+            $tarifaTable = TableRegistry::get('Tarifas');
+            $query = $tarifaTable->find()
+                ->hydrate(false)
+                ->join([
+                    'tarifas_aplicadas' => [
+                        'table' => 'tarifas_aplicadas',
+                        'type' => 'INNER',
+                        'conditions' => ['tarifas_aplicadas.tarifa_id = tarifas.id', 'tarifas_aplicadas.id' => $pasajero['tarifa_aplicada_id']]
+                    ]
+                ]);
+            $tarifa = $query->first();
+            $viaje = $this->Viajes->get($tarifa['viaje_id']);
+
+
+            $camadaQuery = TableRegistry::get('Camadas')->find('all', ['contain' => ['Colegios', 'Grupos']])
+                ->where(['grupo_id' => $pasajero['id_grupo'], 'camada_eliminado' => 0]);
+            $camada = $camadaQuery->first();
+
+            $this->set(compact('tarifa'));
+            $this->set('_serialize', ['tarifa']);
+            $this->set(compact('viaje'));
+            $this->set('_serialize', ['viaje']);
+            $this->set(compact('camada'));
+            $this->set('_serialize', ['camada']);
+
         } else {
             return $this->redirect(
                 ['controller' => 'Error', 'action' => 'notAuthorized']

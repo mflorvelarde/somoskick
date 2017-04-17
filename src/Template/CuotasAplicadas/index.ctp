@@ -5,7 +5,7 @@
         <small>Status</small>
     </h1>
     <ol class="breadcrumb">
-        <li><a href="../clients/index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="<?php echo $this->Url->build(["controller" => "Home", "action" => "clientes"]);?>">Home</a></li>
         <li class="active">Pagos</li>
     </ol>
 </section>

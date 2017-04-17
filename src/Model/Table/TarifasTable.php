@@ -19,6 +19,12 @@ class TarifasTable extends Table {
         $this->displayField('id');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
+
+        $this->hasOne('Viajes', [
+            'className' => 'Viajes',
+            'foreignKey' => 'id',
+            'bindingKey' => 'viaje_id'
+        ]);
     }
 
 }
