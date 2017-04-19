@@ -165,4 +165,18 @@ class PasajerosController extends AppController {
             );
         }
     }
+
+    public function view ($id) {
+        $pasajero = $this->Pasajeros->get($id, ['contain' => ['Personas' => ['Direcciones']]]);
+
+        $responsablesTable = TableRegistry::get('Responsables');
+        $responsablesQuery = $responsablesTable->find('all', ['contain' => ['Personas']])
+            ->where(['pasajero_id' => $id]);
+        $responsables = $this->paginate($responsablesQuery);
+
+        $this->set(compact('pasajero'));
+        $this->set('_serialize', ['pasajero']);
+        $this->set(compact('responsables'));
+        $this->set('_serialize', ['responsables']);
+    }
 }
