@@ -128,12 +128,12 @@
                                      </div>
                                      <div class="col-md-3">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('persona.direccione.piso',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('persona.direccione.piso',  ['required' => false, 'class' => 'form-control' ] ); ?>
                                          </div>
                                      </div>
                                      <div class="col-md-3">
                                           <div class="form-group">
-                                             <?php  echo $this->Form->input('persona.direccione.departamento',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                             <?php  echo $this->Form->input('persona.direccione.departamento',  ['required' => false, 'class' => 'form-control' ] ); ?>
                                           </div>
                                      </div>
                                      <div class="col-md-3" style="padding-right:0px">

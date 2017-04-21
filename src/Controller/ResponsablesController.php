@@ -26,7 +26,7 @@ class ResponsablesController extends AppController{
 
     public function paso2($pasajeroGrupo_id) {
         $pasajeroGrupo = TableRegistry::get('Pasajerosdegrupos')->get($pasajeroGrupo_id,
-            ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'],'Grupos']]);
+            ['contain' => ['Pasajeros' => ['Personas'],'Grupos']]);
 
 
         $this->viewBuilder()->layout('blankLayout');

@@ -50,7 +50,6 @@ class PersonasController extends AppController{
         $this->viewBuilder()->layout('blankLayout');
     }
 
-    //TODO ver que pasa con la pass
     public function changepassword($code) {
         $persona = $this->Personas->find()
             ->where(['contrasena' => $code])
@@ -62,7 +61,7 @@ class PersonasController extends AppController{
                 $contrasena = $requestData["contrasena"];
                 $chequeo = $requestData["chequeo"];
 
-                if (strcmp($contrasena, $chequeo)) {
+                if ($contrasena === $chequeo) {
                     $persona->contrasena = $contrasena;
                     $persona->contrasena_reset = 0;
                     $persona->fecha_modificacion = Time::now();
@@ -77,6 +76,10 @@ class PersonasController extends AppController{
                 ['controller' => 'Error', 'action' => 'notAuthorized']
             );
         }
+        $this->set(compact('contrasena'));
+        $this->set('_serialize', ['contrasena']);
+        $this->set(compact('chequeo'));
+        $this->set('_serialize', ['chequeo']);
     }
 
     public function registrarok() {

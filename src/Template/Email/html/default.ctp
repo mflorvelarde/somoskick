@@ -16,6 +16,5 @@
 <h1 style="color:#d81b60">Kick</h1>
 <h2>Se ha registrado correctamente</h2>
 <h4>Para completar el alta de su perfil, por favor ingrese en el siguiente link y cambie su contraseña</h4>
-<a href="http://administracion.somoskick.com/personas/changepassword/"<?= $code ?>>
-<img src="http://administracion.somoskick.com/img/button.png" />
+<a href=<?= "http://administracion.somoskick.com/personas/changepassword/" . $code ?>>Cambiar contraseña
 </a>

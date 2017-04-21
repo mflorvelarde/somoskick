@@ -89,6 +89,13 @@
                                          </div>
                                      </div>
                                  </div>
+                                                                   <div class="col-md-12" style="padding: 0px">
+                                                                       <div class="col-md-12" style="padding-left: 0px">
+                                                                             <div class="form-group">
+                                                                                <?php  echo $this->Form->input('persona.fecha_nacimiento',  ['required' => true, 'class' => 'form-control','minYear' => 1900,'maxYear' => 2010 ] ); ?>
+                                                                             </div>
+                                                                       </div>
+                                                                   </div>
                               <div class="form-group">
                                  <?php  echo $this->Form->input('persona.nacionalidad',  ['required' => true, 'class' => 'form-control' ] ); ?>
                               </div>
@@ -123,12 +130,12 @@
                                      </div>
                                      <div class="col-md-3">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('persona.direccione.piso',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('persona.direccione.piso',  ['required' => false, 'class' => 'form-control' ] ); ?>
                                          </div>
                                      </div>
                                      <div class="col-md-3">
                                           <div class="form-group">
-                                             <?php  echo $this->Form->input('persona.direccione.departamento',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                             <?php  echo $this->Form->input('persona.direccione.departamento',  ['required' => false, 'class' => 'form-control' ] ); ?>
                                           </div>
                                      </div>
                                      <div class="col-md-3" style="padding-right:0px">

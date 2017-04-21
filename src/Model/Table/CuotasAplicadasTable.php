@@ -25,8 +25,8 @@ class CuotasAplicadasTable extends Table {
             'bindingKey' => 'cuota_id'
         ]);
 
-        $this->hasOne('pasajeros_de_grupos', [
-            'className' => 'Pasajeros_de_grupos',
+        $this->hasOne('pasajerosdegrupos', [
+            'className' => 'pasajerosdegrupos',
             'foreignKey' => 'id',
             'bindingKey' => 'pasajero_grupo_id'
         ]);

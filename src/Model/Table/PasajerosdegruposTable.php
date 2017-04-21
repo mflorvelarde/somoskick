@@ -10,7 +10,7 @@ namespace App\Model\Table;
 
 use Cake\ORM\Table;
 
-class PasajerosDeGruposTable extends Table {
+class PasajerosdegruposTable extends Table {
     public function initialize(array $config) {
         parent::initialize($config);
 

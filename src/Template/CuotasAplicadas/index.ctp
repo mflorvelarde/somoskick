@@ -87,7 +87,7 @@
 		closeNotifSection();
 		$('#cuota-id').val(id);
         $.ajax({
-          url: '../../appkick/notificacionesPagos/add/' + id,
+          url: '../../notificacionesPagos/add/' + id,
           success: function(data) {
             $("#form-carga-notificaciones").html(data);
     		$('#form-carga-notificaciones').removeClass('hidden-element');
@@ -99,7 +99,7 @@
 		closeNotifForm(); //Si está el form abierto de carga de notificaciones, lo cierro
 
         $.ajax({
-          url: '../../appkick/notificacionesPagos/viewnotifications/' + cuotaID,
+          url: '../../notificacionesPagos/viewnotifications/' + cuotaID,
           success: function(data) {
             $("#notif").html(data);
             $("#notif").removeClass("hidden-element");

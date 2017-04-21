@@ -135,33 +135,44 @@ class ViajesController extends AppController {
         if ($this->isClient($userID)) {
             $this->viewBuilder()->layout('clientsLayout');
 
-            $pasajeroGrupoQuery = TableRegistry::get('Pasajerosdegrupos')->find()
-                ->hydrate(false)
-                ->join([
-                    'pasajeros' => [
-                        'table' => 'pasajeros',
-                        'type' => 'INNER',
-                        'conditions' => ['pasajeros.id = pasajerosdegrupos.id_pasajero', 'pasajeros.persona_id =' => $userID],
-                    ]
-                ]);
-            $pasajero =  $pasajeroGrupoQuery->first();
+            $responsablesTable = TableRegistry::get('Responsables');
+            $responsable = $responsablesTable->find('all', ['contain' => ['Pasajeros']])
+                ->where(['Responsables.persona_id' => $userID])
+                ->first();
+
+            if (is_null($responsable)) {
+                $pasajerosTable = TableRegistry::get('Pasajeros');
+                $pasajero = $pasajerosTable->find()
+                    ->where(['persona_id' => $userID])
+                    ->first();
+                $idPasajero = $pasajero->id;
+            } else {
+                $idPasajero = $responsable->pasjero->id;
+            }
+
+            $pasajero= TableRegistry::get('Pasajerosdegrupos')->find()
+                ->where(['id_pasajero' => $idPasajero, 'pasajerodegrupo_eliminado' => 0])
+                ->first();
 
             $tarifaTable = TableRegistry::get('Tarifas');
-            $query = $tarifaTable->find()
-                ->hydrate(false)
-                ->join([
-                    'tarifas_aplicadas' => [
-                        'table' => 'tarifas_aplicadas',
-                        'type' => 'INNER',
-                        'conditions' => ['tarifas_aplicadas.tarifa_id = tarifas.id', 'tarifas_aplicadas.id' => $pasajero['tarifa_aplicada_id']]
-                    ]
-                ]);
-            $tarifa = $query->first();
-            $viaje = $this->Viajes->get($tarifa['viaje_id']);
-
+            if (!is_null($pasajero->tarifa_aplicada_id)) {
+                $query = $tarifaTable->find()
+                    ->hydrate(false)
+                    ->join([
+                        'tarifas_aplicadas' => [
+                            'table' => 'tarifas_aplicadas',
+                            'type' => 'INNER',
+                            'conditions' => ['tarifas_aplicadas.tarifa_id = tarifas.id', 'tarifas_aplicadas.id' => $pasajero->tarifa_aplicada_id]
+                        ]
+                    ]);
+                $tarifa = $query->first();
+                $viaje = $this->Viajes->get($tarifa['viaje_id']);
+            } else {
+                $tarifa = $tarifaTable->newEntity();
+            }
 
             $camadaQuery = TableRegistry::get('Camadas')->find('all', ['contain' => ['Colegios', 'Grupos']])
-                ->where(['grupo_id' => $pasajero['id_grupo'], 'camada_eliminado' => 0]);
+                ->where(['grupo_id' => $pasajero->id_grupo, 'camada_eliminado' => 0]);
             $camada = $camadaQuery->first();
 
             $this->set(compact('tarifa'));
