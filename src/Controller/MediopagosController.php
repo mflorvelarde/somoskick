@@ -36,6 +36,10 @@ class MediopagosController extends AppController {
             $medioPago->direccion_id = $direccion_id;
             $this->Mediopagos->save($medioPago);
 
+            return $this->redirect(
+                ['controller' => 'Personas', 'action' => 'registrarok']
+            );
+
         }
 
         $this->set(compact('medioPago'));

@@ -16,15 +16,8 @@
     <!-- MetisMenu CSS -->
     <?php echo $this->Html->css('metisMenu/metisMenu.min.css'); ?>
 
-    <!-- Custom CSS -->
-  <!--  <?php echo $this->Html->css('sb-admin-2.css'); ?>-->
-<?php echo $this->Html->css('custom.css'); ?>
-    <!-- Morris Charts CSS -->
-     <?php echo $this->Html->css('plugins/morris/morris.css'); ?>
-
     <!-- Custom Fonts -->
     <?php echo $this->Html->css('font-awesome/css/font-awesome.min.css'); ?>
-    <!--<link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">-->
 
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
@@ -77,33 +70,20 @@
 
     <!-- jQuery -->
     <?php echo $this->Html->script('jquery/jquery.min.js'); ?>
-    <!--<script src="../vendor/jquery/jquery.min.js"></script>-->
     <!-- jQuery UI 1.11.4 -->
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <?php echo $this->Html->script('bootstrap/js/bootstrap.min.js'); ?>
-    <!--<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>-->
 
     <!-- Metis Menu Plugin JavaScript -->
     <?php echo $this->Html->script('metisMenu/metisMenu.min.js'); ?>
-    <!--<script src="../vendor/metisMenu/metisMenu.min.js"></script>-->
 
     <!-- Morris Charts JavaScript -->
     <?php echo $this->Html->script('raphael/raphael.min.js'); ?>
-    <!--<script src="../vendor/raphael/raphael.min.js"></script>-->
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <?php echo $this->Html->script('plugins/morris/morris.min.js'); ?>
-    <!--<script src="../vendor/morrisjs/morris.min.js"></script>-->
-
-    <?php echo $this->Html->script('morris-data.js'); ?>
-    <!--<script src="../data/morris-data.js"></script>-->
 
     <!-- Custom Theme JavaScript -->
     <?php echo $this->Html->script('sb-admin-2.js'); ?>
-    <!--<script src="../dist/js/sb-admin-2.js"></script>-->
-
 
     <!-- Sparkline -->
     <?php echo $this->Html->script('plugins/sparkline/jquery.sparkline.min.js'); ?>

@@ -11,6 +11,8 @@ namespace App\Controller;
 use App\Model\Entity\Responsable;
 use Cake\ORM\TableRegistry;
 use Cake\I18n\Time;
+use Cake\Mailer\Email;
+
 
 class ResponsablesController extends AppController{
     public $pasajero;

@@ -14,7 +14,7 @@ class PasajerosDeGruposTable extends Table {
     public function initialize(array $config) {
         parent::initialize($config);
 
-        $this->table('pasajeros_de_grupos');
+        $this->table('pasajerosdegrupos');
         $this->displayField('id');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
