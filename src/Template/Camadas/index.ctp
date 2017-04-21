@@ -55,7 +55,7 @@ $( document ).ready(function(){
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ><i class="fa fa-align-center"></i></button>
                                         <ul class="dropdown-menu" role="menu">
                                             <li><?= $this->Form->postLink('Ver camadas', ['action' => 'view', $camada->id]) ?></li>
-                                            <li><?= $this->Html->link('Cambiar status', ['action' => 'edit', $camada->id] ) ?></li>
+                                            <li><?= $this->Html->link('Editar camada', ['action' => 'edit', $camada->id] ) ?></li>
                                             <li><?= $this->Html->link('Aplicar tarifa', ['action' => 'buscartarifas', $camada->id] ) ?></li>
                                         </ul>
                                     </div>

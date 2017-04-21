@@ -222,16 +222,16 @@ class ResponsablesController extends AppController{
                 'fecha_creacion' => Time::now()])
             ->execute();
 
-        $this->sendWelcomeEmail($contrasena);
+        $this->sendWelcomeEmail($contrasena, $persona->mail);
         $id = $result->lastInsertId('Personas');
         return $id;
     }
 
-    private function sendWelcomeEmail($code) {
+    private function sendWelcomeEmail($code, $mail) {
         $email = new Email('default');
         $email->sender('administracion@somoskick.com', 'Kick');
         $email->from('administracion@somoskick.com')
-            ->addTo('mflorencia.velarde@gmail.com')
+            ->addTo($mail)
             ->subject('Se ha registrado correctamente')
             ->emailFormat('html')
             ->viewVars(['code' => $code])

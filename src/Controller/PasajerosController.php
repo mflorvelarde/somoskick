@@ -94,11 +94,12 @@ class PasajerosController extends AppController {
         $this->set('_serialize', ['codigoGrupo']);
     }
 
-    private function sendWelcomeEmail($code) {
+    private function sendWelcomeEmail($code, $mail) {
+
         $email = new Email('default');
         $email->sender('administracion@somoskick.com', 'Kick');
         $email->from('administracion@somoskick.com')
-            ->addTo('mflorencia.velarde@gmail.com')
+            ->addTo($mail)
             ->subject('Se ha registrado correctamente')
             ->emailFormat('html')
             ->viewVars(['code' => $code])
@@ -135,9 +136,9 @@ class PasajerosController extends AppController {
                     'fecha_creacion' => Time::now()])
             ->execute();
 
-        $this->sendWelcomeEmail($contrasena);
+        $mail = $persona->mail;
+        $this->sendWelcomeEmail($contrasena, $mail);
         $id = $result->lastInsertId('Personas');
-
         return $id;
     }
 

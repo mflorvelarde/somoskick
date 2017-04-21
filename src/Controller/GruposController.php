@@ -105,12 +105,18 @@ class GruposController  extends AppController{
 
             $filesTable = TableRegistry::get('Files');
             $file = $filesTable->find()
-                ->where(['grupo_id' => $grupo['id'], 'status' => 1])
+                ->where(['id' => $grupo['contrato'], 'status' => 1])
                 ->first();
-            $this->response->file($file->path . $file->name);
-            $this->response->header('Content-Disposition', 'inline');
-            return $this->response;
 
+            if ($file) {
+                $this->response->file($file->path . $file->name);
+                $this->response->header('Content-Disposition', 'inline');
+                return $this->response;
+            } else {
+                return $this->redirect(
+                    ['controller' => 'Home', 'action' => 'clientes']
+                );
+            }
         } else {
             return $this->redirect(
                 ['controller' => 'Error', 'action' => 'notAuthorized']

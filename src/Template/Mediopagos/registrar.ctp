@@ -115,12 +115,12 @@
                                       </div>
                                        <div class="col-md-3">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('direccione.piso',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('direccione.piso',  ['required' => false, 'class' => 'form-control' ] ); ?>
                                          </div>
                                        </div>
                                        <div class="col-md-3">
                                           <div class="form-group">
-                                             <?php  echo $this->Form->input('direccione.departamento',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                             <?php  echo $this->Form->input('direccione.departamento',  ['required' => false, 'class' => 'form-control' ] ); ?>
                                           </div>
                                        </div>
                                        <div class="col-md-3" style="padding-right:0px">
