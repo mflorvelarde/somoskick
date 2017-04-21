@@ -64,6 +64,55 @@ class GruposController  extends AppController{
         }
     }
 
+    public function contrato() {
+        $userID = $this->Auth->user('id');
+        if ($userID) {
+            $responsablesTable = TableRegistry::get('Responsables');
+            $responsable = $responsablesTable->find('all', ['contain' => ['Pasajeros']])
+                ->where(['Responsables.persona_id' => $userID])
+                ->first();
+
+            if (is_null($responsable)) {
+                $pasajerosTable = TableRegistry::get('Pasajeros');
+                $pasajero = $pasajerosTable->find()
+                    ->where(['persona_id' => $userID])
+                    ->first();
+                $idPasajero = $pasajero->id;
+            } else {
+                $idPasajero = $responsable->pasjero->id;
+            }
+
+            $query = $this->Grupos->find()
+                ->hydrate(false)
+                ->join([
+                    'pasajerosdegrupos' => [
+                        'table' => 'pasajerosdegrupos',
+                        'type' => 'INNER',
+                        'conditions' => ['id_grupo = grupos.id']
+                    ],
+                    'pasajeros' => [
+                        'table' => 'pasajeros',
+                        'type' => 'INNER',
+                        'conditions' => ['pasajeros.id = id_pasajero'],
+                    ]
+
+            ])->where(['pasajeros.id' => $idPasajero]);
+            $grupo = $this->paginate($query)->first();
+
+            if ($grupo->id == 42) {
+                $this->response->file('img/contrato.pdf');
+                $this->response->header('Content-Disposition', 'inline');
+                return $this->response;
+            }
+
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+
+    }
+
     private function agregarTarifaAplicadaAgrupos($ids, $tarifaAplicadaID) {
         $queryResults = $this->Grupos->find('all', array(
             'conditions' => array('id IN' => $ids)

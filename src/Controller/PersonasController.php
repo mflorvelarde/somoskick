@@ -90,19 +90,26 @@ class PersonasController extends AppController{
     }
 
     public function add() {
-        $persona = $this->Personas->newEntity();
-        if ($this->request->is('post')) {
-            $persona = $this->Personas->patchEntity($persona, $this->request->data);
+        $userID = $this->Auth->user('id');
+        if ($this->isAdmin($userID)) {
+            $persona = $this->Personas->newEntity();
+            if ($this->request->is('post')) {
+                $persona = $this->Personas->patchEntity($persona, $this->request->data);
 
-            $persona->contrasena = "velarde";
+                $persona->contrasena = "velarde";
 
-            if ($this->Personas->save($persona)) {
-                $this->Flash->success(__('The user has been saved.'));
+                if ($this->Personas->save($persona)) {
+                    $this->Flash->success(__('The user has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                }
             }
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
         }
         $this->set(compact('persona'));
         $this->set('_serialize', ['persona']);
@@ -110,32 +117,46 @@ class PersonasController extends AppController{
 
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $userID = $this->Auth->user('id');
+        if ($this->isAdmin($userID)) {
+            $this->request->allowMethod(['post', 'delete']);
 
-        $persona = $this->Personas->get($id);
-        if ($this->Personas->delete($persona)) {
-            $this->Flash->success(__('The user has been deleted.'));
+            $persona = $this->Personas->get($id);
+            if ($this->Personas->delete($persona)) {
+                $this->Flash->success(__('The user has been deleted.'));
+            } else {
+                $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+            }
         } else {
-            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
         }
 
         return $this->redirect(['action' => 'index']);
     }
 
     public function edit($id = null) {
-        $persona = $this->Personas->get($id, ['contain' => []]);
+        $userID = $this->Auth->user('id');
+        if ($this->isAdmin($userID)) {
+            $persona = $this->Personas->get($id, ['contain' => []]);
 
-        if ($this->request->is(['patch', 'post', 'put']))
-        {
-            $persona = $this->Personas->patchEntity($persona, $this->request->data);
+            if ($this->request->is(['patch', 'post', 'put']))
+            {
+                $persona = $this->Personas->patchEntity($persona, $this->request->data);
 
-            if ($this->Personas->save($persona)) {
-                $this->Flash->success(__('The user has been saved.'));
+                if ($this->Personas->save($persona)) {
+                    $this->Flash->success(__('The user has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                }
             }
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
         }
         $this->set(compact('persona'));
         $this->set('_serialize', ['persona']);
