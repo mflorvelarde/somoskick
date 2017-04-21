@@ -182,6 +182,23 @@ class CamadasController extends AppController{
                     ]
                 ]);
 
+                $file = $this->request->data['file'];
+                $fileName = $this->request->data['file']['name'];
+                $uploadPath = 'uploads/files/';
+                $uploadFile = $uploadPath.$fileName;
+                if(move_uploaded_file($this->request->data['file']['tmp_name'],$uploadFile)) {
+                    $tablaFile = TableRegistry::get('Files');
+                    $uploadData = $tablaFile->newEntity();
+                    $uploadData->name = $fileName;
+                    $uploadData->path = $uploadPath;
+                    $uploadData->created = date("Y-m-d H:i:s");
+                    $uploadData->modified = date("Y-m-d H:i:s");
+                    if ($tablaFile->save($uploadData)) {
+                        $this->Flash->success(__('File has been uploaded and inserted successfully.'));
+                    } else {
+                        $this->Flash->error(__('Unable to upload file, please try again.'));
+                    }
+                }
                 $grupos = TableRegistry::get('Grupos')->newEntity();
                 $grupos->nombre = $camada->grupo->nombre;
                 $grupos->contrato = $camada->grupo->contrato;
@@ -315,21 +332,51 @@ class CamadasController extends AppController{
     public function edit($id = null) {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
-            $camada = $this->Camadas->get($id, ['contain' => ['Grupos']]);
+            $camada = $this->Camadas->get($id, ['contain' => ['Grupos', 'Diccionarios']]);
+            $estados =  TableRegistry::get('Diccionarios')->find('list', array(
+                'conditions' => array('param1' => 'CAMADAS', 'param2' => 'STATUS'),
+                'valueField' => array('value')
+            ));
 
             if ($this->request->is(['patch', 'post', 'put'])) {
-                $camada = $this->Camadas->patchEntity($camada, $this->request->data);
+                $camada = $this->Camadas->patchEntity($camada, $this->request->data, [
+                'associated' => [
+                    'Grupos'
+                ]]);
                 $camada->usuario_modificacion = $this->Auth->user('id');;
                 $camada->fecha_modificacion = date("d/m/Y");
 
-                if ($this->Camadas->save($camada)) {
-                    $this->Flash->success(__('La camada fue guardada'));
+                $grupo = TableRegistry::get('Grupos')->get($camada->grupo_id);
+                $grupo->nombre = $camada->grupo->nombre;
 
+
+                $fileName = $this->request->data['file']['name'];
+                $uploadPath = 'uploads/files/';
+                $uploadFile = $uploadPath.$fileName;
+                if(move_uploaded_file($this->request->data['file']['tmp_name'],$uploadFile)) {
+                    $tablaFile = TableRegistry::get('Files');
+                    $uploadData = $tablaFile->newEntity();
+                    $uploadData->name = $fileName;
+                    $uploadData->path = $uploadPath;
+                    $uploadData->created = date("Y-m-d H:i:s");
+                    $uploadData->modified = date("Y-m-d H:i:s");
+
+                    $resultFile = $tablaFile->save($uploadData);
+                    $file_id = $resultFile->id;
+
+                    $grupo->contrato = $file_id;
+                }
+
+                $this->updateGrupo($grupo->id, $grupo->nombre, $grupo->contrato);
+
+                if ($this->Camadas->save($camada)) {
                     return $this->redirect(['action' => 'index']);
                 } else {
                     $this->Flash->error(__('La camada no pudo ser guardada. Por favor, intente nuevamente'));
                 }
             }
+            $this->set(compact('estados'));
+            $this->set('_serialize', ['estados']);
             $this->set(compact('camada'));
             $this->set('_serialize', ['camada']);
         } else {
@@ -337,5 +384,14 @@ class CamadasController extends AppController{
                 ['controller' => 'Error', 'action' => 'notAuthorized']
             );
         }
+    }
+
+    private function updateGrupo($grupo_id, $nombre, $contrato) {
+        $gruposTable = TableRegistry::get('Grupos');
+        $grupo = $gruposTable->get($grupo_id);
+        $grupo->contrato = $contrato;
+        $grupo->nombre = $nombre;
+
+        $gruposTable->save($grupo);
     }
 }

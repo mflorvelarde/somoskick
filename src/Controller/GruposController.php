@@ -45,8 +45,12 @@ class GruposController  extends AppController{
                 $this->agregarTarifaAplicadaApasajerosdDeGrupos($entity->Grupos, $tarifaAplicadaID);
 
                 return $this->redirect(
-                    ['controller' => 'Cuotas', 'action' => 'add', $tarifaAplicadaID]
+                    ['controller' => 'Tarifas', 'action' => 'index']
                 );
+
+//                return $this->redirect(
+//                    ['controller' => 'Cuotas', 'action' => 'add', $tarifaAplicadaID]
+//                );
             }
 
             $this->set('grupo', $grupo);
@@ -99,11 +103,13 @@ class GruposController  extends AppController{
             ])->where(['pasajeros.id' => $idPasajero]);
             $grupo = $this->paginate($query)->first();
 
-            if ($grupo->id == 42) {
-                $this->response->file('img/contrato.pdf');
-                $this->response->header('Content-Disposition', 'inline');
-                return $this->response;
-            }
+            $filesTable = TableRegistry::get('Files');
+            $file = $filesTable->find()
+                ->where(['grupo_id' => $grupo['id'], 'status' => 1])
+                ->first();
+            $this->response->file($file->path . $file->name);
+            $this->response->header('Content-Disposition', 'inline');
+            return $this->response;
 
         } else {
             return $this->redirect(

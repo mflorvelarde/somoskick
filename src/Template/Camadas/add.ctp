@@ -18,7 +18,7 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
-                    <?= $this->Form->create($camada) ?>
+                    <?= $this->Form->create($camada, ['enctype' => 'multipart/form-data']) ?>
                     <div class="row">
                         <div class="col-sm-12">
                               <div class="col-sm-12" style="padding: 0px">
@@ -76,6 +76,14 @@
 
                                       </div>
                                   </div>
+                                  <div class="col-md-12" style="padding: 0px">
+                                      <div class="col-md-12" style="padding-left: 0px">
+                                            <div class="form-group">
+                                                <?php  echo $this->Form->file('file'); ?>
+                                            </div>
+                                      </div>
+                                  </div>
+
                             <?= $this->Form->button(__('Guardar'), ['class'=>'btn btn-success']) ?>
                             <?= $this->Html->link(__('Cancelar'), ['action' => 'index'] , array('class'=>'btn btn-danger') ) ?>
                             <?= $this->Form->end() ?>
