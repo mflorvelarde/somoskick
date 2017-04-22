@@ -23,14 +23,12 @@
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
                         <tr>
-                            <th>Cuota</th>
                             <th>Monto pesos</th>
                             <th>Monto dólares</th>
                             <th>Vencimiento</th>
                         </tr>
                         <?php foreach ($cuotas as $cuotaAplicada): ?>
                         <tr>
-                            <td><?= h($cuotaAplicada->id)?></td>
                             <td><?= h($cuotaAplicada->cuota->monto_pesos)?></td>
                             <td><?= h($cuotaAplicada->cuota->monto_colares)?></td>
                             <td><?= h($cuotaAplicada->cuota->vencimiento)?></td>
@@ -42,7 +40,7 @@
             </div>
         </div>
         <div class="col-xs-12" style="margin-top:25px">
-            <?= $this->Form->button('Aceptar contrato', ['class'=>'btn bg-maroon btn-block btn-flat'] ) ; ?>
+            <?= $this->Form->button('Aceptar plan de cuotas', ['class'=>'btn bg-maroon btn-block btn-flat'] ) ; ?>
         </div>
         </form>
     </div>

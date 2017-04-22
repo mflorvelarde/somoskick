@@ -12,25 +12,46 @@ use Cake\ORM\TableRegistry;
 
 class HomeController extends AppController {
 
-    public function home() {
-        $this->loadComponent('RequestHandler');
-        $this->loadComponent('Flash');
+//    public function home() {
+//        $this->loadComponent('RequestHandler');
+//        $this->loadComponent('Flash');
+//
+//        $this->loadComponent('Auth', [
+//            'loginAction' => [ 'controller' => 'Personas', 'action' => 'login', 'plugin' => false], // or 'Members' if plugin ],
+//            'loginRedirect' => [
+//                'controller' => 'Home',
+//                'action' => 'clientes'
+//            ],
+//            'logoutRedirect' => [
+//                'controller' => 'Personas',
+//                'action' => 'login'
+//            ],
+//            'authenticate' => ['Form' => ['userModel' => 'Personas','fields' => ['username' => 'mail', 'password' => 'contrasena']]]
+//        ]);
+//    }
 
-        $this->loadComponent('Auth', [
-            'loginAction' => [ 'controller' => 'Personas', 'action' => 'login', 'plugin' => false], // or 'Members' if plugin ],
-            'loginRedirect' => [
-                'controller' => 'Camadas',
-                'action' => 'index'
-            ],
-            'logoutRedirect' => [
-                'controller' => 'Personas',
-                'action' => 'login'
-            ],
-            'authenticate' => ['Form' => ['userModel' => 'Personas','fields' => ['username' => 'mail', 'password' => 'contrasena']]]
-        ]);
+public function home() {
+    $userID = $this->Auth->user('id');
+    if ($this->isClient($userID)) {
+        $this->clientes();
+    } else {
+        $this->admin();
+    }
+}
+
+    public function login () {
+        $userID = $this->Auth->user('id');
+        if ($this->isClient($userID)) {
+            $this->clientes();
+        } else {
+            $this->admin();
+        }
     }
     public function admin() {
         $userID = $this->Auth->user('id');
+        if ($this->isClient($userID)) {
+            $this->clientes();
+        }
         if (!$this->isNotClient($userID)) {
             return $this->redirect(
                 ['controller' => 'Error', 'action' => 'notAuthorized']
@@ -49,7 +70,7 @@ class HomeController extends AppController {
                 $this->viewBuilder()->layout('clientsLayout');
             } else {
                 return $this->redirect(
-                    ['controller' => 'Pasajerosdegrupos', 'action' => 'aceptarContrato', $pasajero->id]
+                    ['controller' => 'Pasajerosdegrupos', 'action' => 'aceptarcontrato', $pasajero->id]
                 );            }
 
 

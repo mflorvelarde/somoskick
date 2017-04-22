@@ -29,26 +29,16 @@
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
                         <tr>
-                            <th>Cuota</th>
                             <th>Monto pesos</th>
                             <th>Monto dólares</th>
-                            <th>Monto abonado en pesos</th>
-                            <th>Monto abonado en dolares</th>
                             <th>Vencimiento</th>
-                            <th>Estado de cuota</th>
-                            <th>Estado de notificación</th>
                             <th>Acciones</th>
                         </tr>
                         <?php foreach ($cuotas as $cuotaAplicada): ?>
                         <tr>
-                            <td><?= h($cuotaAplicada->id)?></td>
                             <td><?= h($cuotaAplicada->cuota->monto_pesos)?></td>
                             <td><?= h($cuotaAplicada->cuota->monto_colares)?></td>
-                            <td>3400</td>
-                            <td>3600</td>
                             <td><?= h($cuotaAplicada->cuota->vencimiento)?></td>
-                            <td><span class="label label-success">Pago acreditado</span></td>
-                            <td><span class="label label-success">Pago acreditado</span></td>
                             <td><?= $cuotaAplicada->boton?></td>
                         </tr>
                         <?php endforeach; ?>

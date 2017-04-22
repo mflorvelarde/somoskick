@@ -113,7 +113,7 @@ class PasajerosDeGruposController extends AppController {
         }
     }
 
-    public function aceptarContrato($pasajerogrupoID) {
+    public function aceptarcontrato($pasajerogrupoID) {
         $userID = $this->Auth->user('id');
         if ($this->isClient($userID)) {
             $this->viewBuilder()->layout('clientsBlankLayout');
@@ -121,21 +121,14 @@ class PasajerosDeGruposController extends AppController {
 
             $gruposTable = TableRegistry::get('Grupos');
             $query = $gruposTable->find()
-                ->hydrate(false)
-                ->join([
-                    'pasajerosdegrupos' => [
-                        'table' => 'pasajerosdegrupos',
-                        'type' => 'INNER',
-                        'conditions' => ['id_grupo = grupos.id']
-                    ]
-                ])->where(['pasajerosdegrupos.id' => $pasajerogrupoID]);
+                ->where(['id' => $pasajerogrupo->id_grupo]);
             $grupo = $query->first();
             $contratoID = $grupo['contrato'];
 
             if ($this->request->is(['patch', 'post', 'put'])) {
                 $pasajerogrupo->tarifa_aceptada = 1;
                 $this->Pasajerosdegrupos->save($pasajerogrupo);
-                return $this->redirect(['action' => 'aceptarPlan', $pasajerogrupoID]);
+                return $this->redirect(['action' => 'aceptarplan', $pasajerogrupoID]);
             }
             $this->set('contratoID', $contratoID);
             $this->set('pasajerogrupo', $pasajerogrupo);
@@ -146,7 +139,7 @@ class PasajerosDeGruposController extends AppController {
         }
     }
 
-    public function aceptarPlan($pasajerogrupoID) {
+    public function aceptarplan($pasajerogrupoID) {
         $userID = $this->Auth->user('id');
         if ($this->isClient($userID)) {
             $this->viewBuilder()->layout('clientsBlankLayout');

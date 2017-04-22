@@ -102,7 +102,7 @@ class PasajerosController extends AppController {
         $cuotasAplicadasTable = TableRegistry::get('CuotasAplicadas');
         $cuotasTable = TableRegistry::get('Cuotas');
         $query = $cuotasTable->find('all')
-            ->where(['tarifa_aplicada_id' => $pasajeroGrupoID]);
+            ->where(['tarifa_aplicada_id' => $tarifaID]);
         $cuotas = $this->paginate($query);
 
         $cuotasAplicadas = array();
@@ -117,6 +117,8 @@ class PasajerosController extends AppController {
             array_push($cuotasAplicadas, $cuotaAplicada);
         }
         $cuotasAplicadasTable->saveMany($cuotasAplicadas);
+        $this->set(compact('cuotasAplicadas'));
+        $this->set(compact('cuotas'));
     }
 
     private function sendWelcomeEmail($code, $mail) {

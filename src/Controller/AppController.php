@@ -47,8 +47,8 @@ class AppController extends Controller
         $this->loadComponent('Auth', [
             'loginAction' => [ 'controller' => 'Personas', 'action' => 'login', 'plugin' => false], // or 'Members' if plugin ],
                 'loginRedirect' => [
-                'controller' => 'Camadas',
-                'action' => 'index'
+                'controller' => 'Home',
+                'action' => 'login'
             ],
             'logoutRedirect' => [
                 'controller' => 'Personas',

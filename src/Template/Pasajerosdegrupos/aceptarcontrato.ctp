@@ -1,6 +1,6 @@
 <div class="login-box">
     <div class="login-logo">
-      <a href="#"><b> agegar logo</b></a>
+      <?php echo $this->Html->image('logo.png', ['alt' => 'Kick', 'style' => 'width:200px;margin-left:10%;margin-right: 10%;']);?>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
