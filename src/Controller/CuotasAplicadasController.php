@@ -48,10 +48,18 @@ class CuotasAplicadasController extends AppController{
                 ->where(['pasajero_grupo_id' => $idPasajeroGrupo, 'cuota_aplicada_eliminado' => 0]);
             $cuotas = $this->paginate($query);
 
+            $today = Time::now();
+
             if ($cuotas->count() > 0) {
                 foreach ($cuotas as $cuota) {
-                    $cuota->boton = "<button type=\"button\" class=\"btn btn-block btn-default btn-xs cargar-notif\"
-                                onclick=\"openNotifForm($cuota->id)\" style=\"width:120px\">Cargar notificación</button>";
+                    if ($today > $cuota->cuota->vencimiento) {
+                        $cuota->status = "<span class=\"label label-danger\">Cuota vencida</span>";
+                    } else {
+                        $cuota->status = "<span class=\"label label-info\">Cuota vigente</span>";
+                    }
+
+                    //$cuota->boton = "<button type=\"button\" class=\"btn btn-block btn-default btn-xs cargar-notif\"
+                               // onclick=\"openNotifForm($cuota->id)\" style=\"width:120px\">Cargar notificación</button>";
 
                     array_push($idsCuotas, $cuota->id);
                 }
@@ -68,20 +76,31 @@ class CuotasAplicadasController extends AppController{
                         $notificacionesParaCuota = array();
                         $statusNotificaciones = array();
                         $tieneNotificaciones = false;
+                        $cuota->tieneNotif =0;
                         if ($noticacion->cuota_aplicada_id == $cuota->id) {
                             array_push($notificacionesParaCuota, $noticacion);
                             array_push($statusNotificaciones, $noticacion->diccionario->param3);
+                            $cuota->tieneNotif = 1;
                             $tieneNotificaciones = true;
                         }
                         $cuota->notificaciones = $notificacionesParaCuota;
                         if ($tieneNotificaciones) {
-                            if (in_array("RECHAZADA", $statusNotificaciones) || in_array("CANCELADA", $statusNotificaciones)) {
-                                if (!in_array("ACREDITADA", $statusNotificaciones) && !in_array("PENDIENTE", $statusNotificaciones)) {
-                                    $cuota->boton = "<button type=\"button\" class=\"btn btn-block btn-default btn-xs\" onclick=\"showNotif($cuota->id)\" style=\"width:120px\">Ver notificaciones</button>" . $cuota->boton;
-                                }
-                            } else {
-                                $cuota->boton = "<button type=\"button\" class=\"btn btn-block btn-default btn-xs\" onclick=\"showNotif($cuota->id)\" style=\"width:120px\">Ver notificaciones</button>";
+                            if (in_array("ACREDITADA", $statusNotificaciones)) {
+                                $cuota->status = "<span class=\"label label-success\">Pago acreditado</span>";
+                                $cuota->statusNotif = "<span class=\"label label-success\">Notificación acreditada</span>";
+                            } else if (in_array("PENDIENTE", $statusNotificaciones)) {
+                                $cuota->statusNotif = "<span class=\"label label-info\">Pendiente de revisión</span>";
+                            } else if (in_array("RECHAZADA", $statusNotificaciones)) {
+                                $cuota->statusNotif = "<span class=\"label label-danger\">Rechazada</span>";
                             }
+//                            if (in_array("RECHAZADA", $statusNotificaciones) || in_array("CANCELADA", $statusNotificaciones)) {
+//                                if (!in_array("ACREDITADA", $statusNotificaciones) && !in_array("PENDIENTE", $statusNotificaciones)) {
+//                                    $cuota->status = "<span class=\"label label-success\">Pago acreditado</span>";
+//                                    //  $cuota->boton = "<button type=\"button\" class=\"btn btn-block btn-default btn-xs\" onclick=\"showNotif($cuota->id)\" style=\"width:120px\">Ver notificaciones</button>" . $cuota->boton;
+//                                }
+//                            } else {
+//                                //$cuota->boton = "<button type=\"button\" class=\"btn btn-block btn-default btn-xs\" onclick=\"showNotif($cuota->id)\" style=\"width:120px\">Ver notificaciones</button>";
+//                            }
                         }
 
                     }
@@ -100,6 +119,22 @@ class CuotasAplicadasController extends AppController{
             );
         }
     }
+
+    public function viewNotificaciones($cuotaAplicadaID) {
+        return $this->redirect(
+            ['controller' => 'NotificacionesPagos', 'action' => 'viewnotifications', $cuotaAplicadaID]
+        );
+    }
+
+    public function cargarNotificaciones($cuotaAplicadaID) {
+        return $this->redirect(
+            ['controller' => 'NotificacionesPagos', 'action' => 'add', $cuotaAplicadaID]
+        );
+    }
+
+//    private function getCuotasStatus() {
+//        return TableRegistry::get('Diccionarios')->find('all')->where(['param1' => "NOTIFICACION_PAGO", 'param2' => "STATUS"]);
+//    }
 
     private function getDiccionariosStatus() {
         return TableRegistry::get('Diccionarios')->find('all')->where(['param1' => "NOTIFICACION_PAGO", 'param2' => "STATUS"]);
