@@ -29,6 +29,7 @@ $( document ).ready(function(){
                                 <th>Camadas</th>
                                 <th>Colegio</th>
                                 <th>Año</th>
+                                <th>Código</th>
                                 <th>Vendedor</th>
                                 <th>Estado</th>
 <!--                                <th>En lista de espera</th>
@@ -44,6 +45,7 @@ $( document ).ready(function(){
                                 <td><?= h($camada->grupo->nombre)?></td>
                                 <td><?= h($camada->colegio->nombre)?></td>
                                 <td><?= h($camada->año)?></td>
+                                <td><?= h($camada->grupo->codigo_grupo)?></td>
                                 <td><?= h($camada->persona->nombre)?></td>
                                 <td><span class="label label-success"><?= h($camada->diccionario->value)?></span></td>
 <!--                                 <td>No</td>
@@ -56,7 +58,7 @@ $( document ).ready(function(){
                                         <ul class="dropdown-menu" role="menu">
                                             <li><?= $this->Form->postLink('Ver camadas', ['action' => 'view', $camada->id]) ?></li>
                                             <li><?= $this->Html->link('Editar camada', ['action' => 'edit', $camada->id] ) ?></li>
-                                            <li><?= $this->Html->link('Aplicar tarifa', ['action' => 'buscartarifas', $camada->id] ) ?></li>
+                                            <li><?= $this->Html->link('Eliminar camada', ['action' => 'delete', $camada->id] ) ?></li>
                                         </ul>
                                     </div>
                                 </td>

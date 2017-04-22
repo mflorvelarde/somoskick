@@ -123,4 +123,22 @@ class AppController extends Controller
     public function logout() {
         return $this->redirect($this->Auth->logout());
     }
+
+    protected function getPasajeroID($userID) {
+        $responsablesTable = TableRegistry::get('Responsables');
+        $responsable = $responsablesTable->find('all', ['contain' => ['Pasajeros']])
+            ->where(['Responsables.persona_id' => $userID])
+            ->first();
+
+        if (is_null($responsable)) {
+            $pasajerosTable = TableRegistry::get('Pasajeros');
+            $pasajero = $pasajerosTable->find()
+                ->where(['persona_id' => $userID])
+                ->first();
+            $idPasajero = $pasajero->id;
+        } else {
+            $idPasajero = $responsable->pasjero->id;
+        }
+        return $idPasajero;
+    }
 }

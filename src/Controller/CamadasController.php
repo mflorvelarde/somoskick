@@ -254,19 +254,16 @@ class CamadasController extends AppController{
     public function delete($id = null) {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
-            $this->request->allowMethod(['post', 'delete']);
-
-            $camada = $this->Camadas->get($id);
-            $camada->camada_eliminado = 1;
-            $camada->usuario_eliminado = $this->Auth->user('id');;
-            $camada->fecha_eliminado = date("d/m/Y");
-            if ($this->Camadas->save($camada)) {
-                $this->Flash->success(__('La camada fue eliminada'));
-            } else {
-                $this->Flash->error(__('La camada no pudo ser eliminada. Por favor, intente nuevamente'));
-            }
-
-            return $this->redirect(['action' => 'index']);
+                $camada = $this->Camadas->get($id);
+                $camada->camada_eliminado = 1;
+                $camada->usuario_eliminado = $this->Auth->user('id');;
+                $camada->fecha_eliminado = date("d/m/Y");
+                if ($this->Camadas->save($camada)) {
+                    $this->Flash->success(__('La camada fue eliminada'));
+                } else {
+                    $this->Flash->error(__('La camada no pudo ser eliminada. Por favor, intente nuevamente'));
+                }
+                return $this->redirect(['action' => 'index']);
         } else {
             return $this->redirect(
                 ['controller' => 'Error', 'action' => 'notAuthorized']

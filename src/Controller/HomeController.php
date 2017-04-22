@@ -8,6 +8,7 @@
 
 namespace App\Controller;
 
+use Cake\ORM\TableRegistry;
 
 class HomeController extends AppController {
 
@@ -40,7 +41,18 @@ class HomeController extends AppController {
     public function clientes() {
         $userID = $this->Auth->user('id');
         if ($this->isClient($userID)) {
-            $this->viewBuilder()->layout('clientsLayout');
+            $idPasajero = $this->getPasajeroID($userID);
+            $pasajero= TableRegistry::get('Pasajerosdegrupos')->find()
+                ->where(['id_pasajero' => $idPasajero, 'pasajerodegrupo_eliminado' => 0])
+                ->first();
+            if ($pasajero->tarifa_aceptada) {
+                $this->viewBuilder()->layout('clientsLayout');
+            } else {
+                return $this->redirect(
+                    ['controller' => 'Pasajerosdegrupos', 'action' => 'aceptarContrato', $pasajero->id]
+                );            }
+
+
         } else {
             return $this->redirect(
                 ['controller' => 'Error', 'action' => 'notAuthorized']

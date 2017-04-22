@@ -58,6 +58,8 @@ class ResponsablesController extends AppController{
 
             return $this->redirect(['action' => 'paso3', $pasajeroGrupo_id]);
         }
+        $this->set(compact('pasajeroGrupo_id'));
+        $this->set('_serialize', ['pasajeroGrupo_id']);
         $this->set(compact('familiar1'));
         $this->set('_serialize', ['familiar1']);
         $this->set(compact('cuitcuil1'));
@@ -67,7 +69,7 @@ class ResponsablesController extends AppController{
     public function paso3($pasajeroGrupo_id) {
         $pasajeroGrupo = TableRegistry::get('Pasajerosdegrupos')->get($pasajeroGrupo_id,
             ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'],'Grupos']]);
-
+        $pasajero_id = $pasajeroGrupo->pasajero->id;
 
         $this->viewBuilder()->layout('blankLayout');
         $familiar1 = $this->Responsables->newEntity();
@@ -97,13 +99,25 @@ class ResponsablesController extends AppController{
             $familiar_id = $this->persistirResponsable($familiar1);
 
             return $this->redirect(
-                ['controller' => 'Mediopagos', 'action' => 'registrar', $pasajeroGrupo->pasajero->id]
+                ['controller' => 'Mediopagos', 'action' => 'registrar', $pasajero_id]
             );
         }
+        $this->set(compact('pasajero_id'));
+        $this->set('_serialize', ['pasajero_id']);
         $this->set(compact('familiar1'));
         $this->set('_serialize', ['familiar1']);
         $this->set(compact('cuitcuil1'));
         $this->set('_serialize', ['cuitcuil1']);
+    }
+
+    public function saltearesponsable2($pasajeroGrupo_id) {
+        return $this->redirect(['action' => 'paso3', $pasajeroGrupo_id]);
+    }
+
+    public function saltearesponsable3($pasajero_id) {
+        return $this->redirect(
+            ['controller' => 'Mediopagos', 'action' => 'registrar', $pasajero_id]
+        );
     }
 
     public function registrar($pasajero = null) {

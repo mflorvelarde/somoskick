@@ -92,7 +92,7 @@ class GruposController  extends AppController{
                     'pasajerosdegrupos' => [
                         'table' => 'pasajerosdegrupos',
                         'type' => 'INNER',
-                        'conditions' => ['id_grupo = grupos.id']
+                        'conditions' => ['id_grupo = Grupos.id']
                     ],
                     'pasajeros' => [
                         'table' => 'pasajeros',
@@ -123,6 +123,25 @@ class GruposController  extends AppController{
             );
         }
 
+    }
+
+    public function vercontrato($id) {
+        $userID = $this->Auth->user('id');
+        if (!is_null($userID)) {
+            $this->viewBuilder()->layout('ajax');
+            $filesTable = TableRegistry::get('Files');
+            $file = $filesTable->find()
+                ->where(['id' => $id, 'status' => 1])
+                ->first();
+            $this->set('file', $file);
+
+//
+//            if ($file) {
+//                $this->response->file($file->path . $file->name);
+//                $this->response->header('Content-Disposition', 'inline');
+//                return $this->response;
+//            }
+        }
     }
 
     private function agregarTarifaAplicadaAgrupos($ids, $tarifaAplicadaID) {

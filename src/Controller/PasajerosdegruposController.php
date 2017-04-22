@@ -112,4 +112,84 @@ class PasajerosDeGruposController extends AppController {
             );
         }
     }
+
+    public function aceptarContrato($pasajerogrupoID) {
+        $userID = $this->Auth->user('id');
+        if ($this->isClient($userID)) {
+            $this->viewBuilder()->layout('clientsBlankLayout');
+            $pasajerogrupo = $this->Pasajerosdegrupos->get($pasajerogrupoID);
+
+            $gruposTable = TableRegistry::get('Grupos');
+            $query = $gruposTable->find()
+                ->hydrate(false)
+                ->join([
+                    'pasajerosdegrupos' => [
+                        'table' => 'pasajerosdegrupos',
+                        'type' => 'INNER',
+                        'conditions' => ['id_grupo = grupos.id']
+                    ]
+                ])->where(['pasajerosdegrupos.id' => $pasajerogrupoID]);
+            $grupo = $query->first();
+            $contratoID = $grupo['contrato'];
+
+            if ($this->request->is(['patch', 'post', 'put'])) {
+                $pasajerogrupo->tarifa_aceptada = 1;
+                $this->Pasajerosdegrupos->save($pasajerogrupo);
+                return $this->redirect(['action' => 'aceptarPlan', $pasajerogrupoID]);
+            }
+            $this->set('contratoID', $contratoID);
+            $this->set('pasajerogrupo', $pasajerogrupo);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
+    public function aceptarPlan($pasajerogrupoID) {
+        $userID = $this->Auth->user('id');
+        if ($this->isClient($userID)) {
+            $this->viewBuilder()->layout('clientsBlankLayout');
+            $pasajerogrupo = $this->Pasajerosdegrupos->get($pasajerogrupoID);
+            $cuotasAplicadasTable = TableRegistry::get('CuotasAplicadas');
+                
+            $query = $cuotasAplicadasTable->find('all', ['contain' => ['Cuotas', 'pasajerosdegrupos']])
+                ->where(['pasajero_grupo_id' => $pasajerogrupoID, 'cuota_aplicada_eliminado' => 0]);
+            $cuotas = $this->paginate($query);
+
+            if ($cuotas->count() <= 0) {
+                $cuotas = array();
+            }
+
+
+            if ($this->request->is(['patch', 'post', 'put'])) {
+                $pasajerogrupo->plan_aceptado = 1;
+                $this->Pasajerosdegrupos->save($pasajerogrupo);
+                return $this->redirect(
+                    ['controller' => 'Home', 'action' => 'clientes', $pasajerogrupoID])
+                ;
+            }
+
+            $this->set(compact('cuotas'));
+            $this->set('_serialize', ['cuotas']);
+
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
+
+    /*
+        $filesTable = TableRegistry::get('Files');
+            $file = $filesTable->find()
+                ->where(['id' => $grupo['contrato'], 'status' => 1])
+                ->first();
+
+            if ($file) {
+                $this->response->file($file->path . $file->name);
+                $this->response->header('Content-Disposition', 'inline');
+                return $this->response;
+    */
 }

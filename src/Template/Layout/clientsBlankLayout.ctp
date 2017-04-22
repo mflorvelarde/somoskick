@@ -51,7 +51,7 @@
             <?= $this->element('clients_navigation_bar') ?>
           </header>
           <aside id="sidebar" class="main-sidebar">
-            <?= $this->element('clients_side_menu') ?>
+            <?= $this->element('locked_side_menu') ?>
           </aside>
           <div class="content-wrapper">
 

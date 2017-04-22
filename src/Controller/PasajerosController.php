@@ -8,6 +8,7 @@
 
 namespace App\Controller;
 use Cake\I18n\Time;
+use Cake\ORM\ResultSet;
 use Cake\ORM\TableRegistry;
 use Cake\Mailer\Email;
 
@@ -80,6 +81,9 @@ class PasajerosController extends AppController {
                 $result = $pasajerosGruposTable->save($pasajeroGrupo);
                 $pasajeroGrupo_id = $result->id;
 
+                $this->aplicarCuotasAPasajero($pasajeroGrupo_id, $grupo->tarifa_aplicada_id, $persona_id);
+
+
                 return $this->redirect(
                     ['controller' => 'Responsables', 'action' => 'paso2', $pasajeroGrupo_id]
                 );
@@ -92,6 +96,27 @@ class PasajerosController extends AppController {
         $this->set('_serialize', ['pasajero']);
         $this->set(compact('codigoGrupo'));
         $this->set('_serialize', ['codigoGrupo']);
+    }
+
+    private function aplicarCuotasAPasajero($pasajeroGrupoID, $tarifaID, $persona_id) {
+        $cuotasAplicadasTable = TableRegistry::get('CuotasAplicadas');
+        $cuotasTable = TableRegistry::get('Cuotas');
+        $query = $cuotasTable->find('all')
+            ->where(['tarifa_aplicada_id' => $pasajeroGrupoID]);
+        $cuotas = $this->paginate($query);
+
+        $cuotasAplicadas = array();
+        foreach ($cuotas as $cuota) {
+            $cuotaAplicada = $cuotasAplicadasTable->newEntity();
+            $cuotaAplicada->cuota_id = $cuota->id;
+            $cuotaAplicada->pasajero_grupo_id = $pasajeroGrupoID;
+            $cuotaAplicada->usuario_creacion = $persona_id;
+            $cuotaAplicada->fecha_creacion = Time::now();
+            $cuotaAplicada->cuota_aplicada_eliminado = 0;
+
+            array_push($cuotasAplicadas, $cuotaAplicada);
+        }
+        $cuotasAplicadasTable->saveMany($cuotasAplicadas);
     }
 
     private function sendWelcomeEmail($code, $mail) {

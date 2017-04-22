@@ -52,7 +52,10 @@
                                         <div class="form-group">
                                             <div><label>Tipo de factura</label></div>
                                             <?php  echo $this->Form->select('tipo_factura',
-                                            ['B' => 'B'],
+                                            [
+                                                'A' => 'A',
+                                                'B' => 'B'
+                                            ],
                                             [
                                                 'required' => true,
                                                 'id' => 'tipo-factura',
@@ -90,7 +93,7 @@
                                     <?php  echo $this->Form->select('condicionIVA',
                                     [
                                         'C - Consumidor final' => 'C - Consumidor final',
-                                        'E - Exento' => 'E - ExentoE - Exento',
+                                        'E - Exento' => 'E - Exento',
                                         'M - Resp. Monotributo' => 'M - Resp. Monotributo',
                                         'I - Responsable inscripto' => 'I - Responsable inscripto'
                                     ],
