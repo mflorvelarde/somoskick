@@ -21,7 +21,7 @@ class ResponsablesController extends AppController{
 
     public function initialize() {
         parent::initialize();
-        $this->Auth->allow(['registrar', 'paso2', 'paso3']);
+        $this->Auth->allow(['registrar', 'paso2', 'paso3', 'saltearesponsable2', 'saltearesponsable3']);
     }
 
     public function paso2($pasajeroGrupo_id) {
@@ -111,7 +111,9 @@ class ResponsablesController extends AppController{
     }
 
     public function saltearesponsable2($pasajeroGrupo_id) {
-        return $this->redirect(['action' => 'paso3', $pasajeroGrupo_id]);
+        return $this->redirect(
+            ['controller' => 'Responsables', 'action' => 'paso3', $pasajeroGrupo_id]
+        );
     }
 
     public function saltearesponsable3($pasajero_id) {
