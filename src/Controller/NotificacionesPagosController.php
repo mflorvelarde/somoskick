@@ -44,7 +44,7 @@ class NotificacionesPagosController extends AppController{
     public function viewnotifications($cuotaAplicadaID) {
         $userID = $this->Auth->user('id');
         if ($this->isClient($userID)) {
-            $this->viewBuilder()->layout('ajax');
+            $this->viewBuilder()->layout('clientsLayout');
             $notificacionesQuery = $this->NotificacionesPagos->find('all', ['contain' => ['Diccionarios']])
                 ->where(['notificacion_pago_eliminado' => 0,
                     'cuota_aplicada_id' => $cuotaAplicadaID
@@ -73,7 +73,7 @@ class NotificacionesPagosController extends AppController{
     public function add($cuotaAplicadaID) {
         $userID = $this->Auth->user('id');
         if ($this->isClient($userID)) {
-            $this->viewBuilder()->layout('ajax');
+            $this->viewBuilder()->layout('clientsLayout');
             $notificacion = $this->NotificacionesPagos->newEntity();
             $this->request->data['cuota_aplicada_id'] = $cuotaAplicadaID;
     //        $notificacion->cuota_aplicada_id = $cuotaAplicadaID;
@@ -115,39 +115,9 @@ class NotificacionesPagosController extends AppController{
                 $this->NotificacionesPagos->save($notificacion);
 
 
-                /*            $file = $requestData["submittedfile"];
-
-                            $path = $file["tmp_name"] . "/" . $file["name"];
-                            $fichero_subido = $path . basename($_FILES[$file["tmp_name"]][$file["name"]]);
-                            $type = pathinfo($path, PATHINFO_EXTENSION);
-                            $data = file_get_contents($path);
-                            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);*/
-
-    //            $resultado = "";
-    //            if (move_uploaded_file($_FILES[$file["tmp_name"]][$file["name"]], $fichero_subido)) {
-    //                $resultado = "El fichero es válido y se subió con éxito.\n";
-    //            } else {
-    //                $resultado = "¡Posible ataque de subida de ficheros!\n";
-    //            }
-
-
-                //  $notificacion->comprobante = $base64;
-    //            $colegio = $this->Colegios->patchEntity($colegio, $this->request->data);
-    //            $colegio->usuario_creacion = $this->Auth->user('id');;
-    //            $colegio->fecha_creacion = Time::now();
-    //            $colegio->colegio_eliminado = 0;
-    //
-    //            if ($this->Colegios->save($colegio)) {
-    //                $this->Flash->success(__('El colegio fue guardado'));
-    //
-    //                return $this->redirect(['action' => 'index']);
-    //            }
-    //            else {
-    //                $this->Flash->error(__('El colegio no pudo ser guardado. Por favor, intente nuevamente'));
-    //            }
-
                 return $this->irCuotas();
             }
+            $this->set(compact('cuotaAplicadaID'));
             $this->set(compact('resultado'));
             $this->set('_serialize', ['resultado']);
             $this->set(compact('fichero_subido'));

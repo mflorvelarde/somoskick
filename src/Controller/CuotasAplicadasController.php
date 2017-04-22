@@ -10,6 +10,7 @@ namespace App\Controller;
 
 use Cake\ORM\TableRegistry;
 use Cake\I18n\Time;
+use Cake\Database\Type;
 
 class CuotasAplicadasController extends AppController{
 
@@ -57,12 +58,12 @@ class CuotasAplicadasController extends AppController{
                     } else {
                         $cuota->status = "<span class=\"label label-info\">Cuota vigente</span>";
                     }
-
-                    //$cuota->boton = "<button type=\"button\" class=\"btn btn-block btn-default btn-xs cargar-notif\"
-                               // onclick=\"openNotifForm($cuota->id)\" style=\"width:120px\">Cargar notificación</button>";
-
                     array_push($idsCuotas, $cuota->id);
                 }
+
+
+                //Type::build('datetime')->useLocaleParser()->setLocaleFormat('YYYY-mm-dd');
+
 
                 $notificacionesTable = TableRegistry::get('NotificacionesPagos');
                 $notificacionesQuery = $notificacionesTable->find('all', ['contain' => ['Diccionarios']])
@@ -81,6 +82,7 @@ class CuotasAplicadasController extends AppController{
                             array_push($notificacionesParaCuota, $noticacion);
                             array_push($statusNotificaciones, $noticacion->diccionario->param3);
                             $cuota->tieneNotif = 1;
+                            $cuota->tieneNotificaciones = true;
                             $tieneNotificaciones = true;
                         }
                         $cuota->notificaciones = $notificacionesParaCuota;

@@ -15,7 +15,7 @@
 
     <!-- MetisMenu CSS -->
     <?php echo $this->Html->css('metisMenu/metisMenu.min.css'); ?>
-
+    <?php echo $this->Html->css('custom.css'); ?>
     <!-- Custom Fonts -->
     <?php echo $this->Html->css('font-awesome/css/font-awesome.min.css'); ?>
 

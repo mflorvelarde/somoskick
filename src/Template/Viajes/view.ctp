@@ -23,7 +23,7 @@
                                 <div class="box-footer no-padding">
                                     <ul class="nav nav-stacked" id="camada-info">
                                         <li><a>Colegio <span class="pull-right badge bg-blue"><?= h($camada['colegio']['nombre'])?></span></a></li>
-                                        <li><a>Camada <span class="pull-right badge bg-blue"><?= h($camada['grupo']['nombre'])?></span></a></li>
+                                        <li><a>Camada <span class="pull-right badge bg-blue"><?= h($camada['grupo']['nombre'])?> <?= h($camada['año'])?></span></a></li>
                                     </ul>
                                 </div>
                             <div class="box-footer">

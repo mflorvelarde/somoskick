@@ -154,27 +154,26 @@ class ViajesController extends AppController {
                 ->where(['id_pasajero' => $idPasajero, 'pasajerodegrupo_eliminado' => 0])
                 ->first();
 
-            $tarifaTable = TableRegistry::get('Tarifas');
-            if (!is_null($pasajero->tarifa_aplicada_id)) {
-                $query = $tarifaTable->find()
-                    ->hydrate(false)
-                    ->join([
-                        'tarifas_aplicadas' => [
-                            'table' => 'tarifas_aplicadas',
-                            'type' => 'INNER',
-                            'conditions' => ['tarifas_aplicadas.tarifa_id = tarifas.id', 'tarifas_aplicadas.id' => $pasajero->tarifa_aplicada_id]
-                        ]
-                    ]);
-                $tarifa = $query->first();
-                $viaje = $this->Viajes->get($tarifa['viaje_id']);
-            } else {
-                $tarifa = $tarifaTable->newEntity();
-            }
 
             $camadaQuery = TableRegistry::get('Camadas')->find('all', ['contain' => ['Colegios', 'Grupos']])
                 ->where(['grupo_id' => $pasajero->id_grupo, 'camada_eliminado' => 0]);
             $camada = $camadaQuery->first();
 
+            $tarifaAplicadaID = $camada['grupo']['tarifa_aplicada_id'];
+            $tarifaTable = TableRegistry::get('Tarifas');
+            if (!is_null($tarifaAplicadaID)) {
+                $tarifaAplicadaTable = TableRegistry::get('TarifasAplicadas',['contain' => ['Tarifas']]);
+                $tarifaAplicada = $tarifaAplicadaTable->get($tarifaAplicadaID);
+                $tarifa = $tarifaTable->get($tarifaAplicada['tarifa_id'], ['contain' => ['Viajes']]);
+                $viaje = $tarifa['viaje'];
+            } else {
+                $tarifa = $tarifaTable->newEntity();
+            }
+
+
+            $this->set(compact('pasajero'));
+
+            $this->set(compact('tarifaAplicada'));
             $this->set(compact('tarifa'));
             $this->set('_serialize', ['tarifa']);
             $this->set(compact('viaje'));

@@ -32,6 +32,8 @@
                             <th>Monto pesos</th>
                             <th>Monto dólares</th>
                             <th>Vencimiento</th>
+                            <th>Status de pago</th>
+                            <th>Status notificación</th>
                             <th>Acciones</th>
                         </tr>
                         <?php foreach ($cuotas as $cuotaAplicada): ?>
@@ -39,7 +41,24 @@
                             <td><?= h($cuotaAplicada->cuota->monto_pesos)?></td>
                             <td><?= h($cuotaAplicada->cuota->monto_colares)?></td>
                             <td><?= h($cuotaAplicada->cuota->vencimiento)?></td>
-                            <td><?= $cuotaAplicada->boton?></td>
+                            <td><?= $cuotaAplicada->status?></td>
+                            <td><?= $cuotaAplicada->statusNotif?></td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default">Acciones</button>
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><?= $this->Form->postLink('Cargar notificación', ['action' => 'cargarNotificaciones', $cuotaAplicada->id]) ?></li>
+                                        <?php if ($cuotaAplicada->tieneNotificaciones) {?>
+                                            <li><?= $this->Form->postLink('Ver notificaciones', ['action' => 'viewNotificaciones', $cuotaAplicada->id]) ?></li>
+                                        <?php }?>
+                                    </ul>
+                                </div>
+
+                            </td>
                         </tr>
                         <?php endforeach; ?>
                     </table>
@@ -73,23 +92,11 @@
 		}
 	}
 
-	function openNotifForm(id){
-		closeNotifSection();
-		$('#cuota-id').val(id);
-        $.ajax({
-          url: '../../notificacionesPagos/add/' + id,
-          success: function(data) {
-            $("#form-carga-notificaciones").html(data);
-    		$('#form-carga-notificaciones').removeClass('hidden-element');
-          }
-        });
-	}
-
 	function showNotif(cuotaID) {
 		closeNotifForm(); //Si está el form abierto de carga de notificaciones, lo cierro
 
         $.ajax({
-          url: '../../notificacionesPagos/viewnotifications/' + cuotaID,
+          url: '../notificacionesPagos/viewnotifications/' + cuotaID,
           success: function(data) {
             $("#notif").html(data);
             $("#notif").removeClass("hidden-element");

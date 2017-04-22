@@ -1,28 +1,27 @@
-<div class="box-header with-border">
-    <h3 class="box-title">Cargar notificación</h3>
-</div>
-<!-- /.box-header -->
-<!-- form start -->
+<section class="content-header">
+    <h1 class="page-header">
+        Cargar notificación
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <i class="fa fa-wrench"></i>  <a href="index.html">Administraci&oacute;n</a>
+        </li>
+        <li class="active">
+            <a href="<?php echo $this->Url->build(["controller" => "CuotasAplicadas", "action" => "index"]);?>"> Cuotas </a>
+        </li>
+        <li class="active">
+            <i class="fa fa-pencil"></i> Cargar notificación?>
+        </li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
 <?= $this->Form->create($notificacion, ['class' => 'form-horizontal', 'type' => 'file']) ?>
 
 <!-- <form class="form-horizontal"> -->
     <div class="box-body">
-        <div class="form-group">
-            <label for="nroCuota" class="col-sm-2 control-label">Cuota</label>
-            <div class="col-sm-10">
-                <?php  echo $this->Form->input('cuota_aplicada_id',  [
-                    'name' => 'data[cuota_aplicada_id]',
-                    'required' => true,
-                    'class' => 'form-control',
-                    'label' => false,
-                    'id' => 'nroCuota',
-                    'value' => 'cuota_aplicada_id',
-                    'disabled' => true
-                    ]);
-                ?>
-   <!--             <input id="cuota-id" type="text" class="form-control" value="#Cuota" disabled="true"> -->
-            </div>
-        </div>
         <div class="form-group col-xs-12" style="padding: 0px">
             <div class="col-xs-2" style="text-align:right">
                 <label>Medio de pago</label>
@@ -224,6 +223,11 @@
     </div>
     <!-- /.box-footer -->
 </form>
+
+            </div>
+        </div>
+    </div>
+</section>
 
 
 <script>
