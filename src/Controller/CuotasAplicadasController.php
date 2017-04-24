@@ -23,21 +23,7 @@ class CuotasAplicadasController extends AppController{
         if ($this->isClient($userID)) {
             $this->viewBuilder()->layout('clientsLayout');
 
-            $responsablesTable = TableRegistry::get('Responsables');
-            $responsable = $responsablesTable->find('all', ['contain' => ['Pasajeros']])
-                ->where(['Responsables.persona_id' => $userID])
-                ->first();
-
-            if (is_null($responsable)) {
-                $pasajerosTable = TableRegistry::get('Pasajeros');
-                $pasajero = $pasajerosTable->find()
-                    ->where(['persona_id' => $userID])
-                    ->first();
-                $idPasajero = $pasajero->id;
-            } else {
-                $idPasajero = $responsable->pasajero->id;
-            }
-
+            $idPasajero = $this->getPasajeroID($userID);
             $pasajeroGrupo = TableRegistry::get('Pasajerosdegrupos')->find()
                 ->where(['id_pasajero' => $idPasajero])
                 ->first();

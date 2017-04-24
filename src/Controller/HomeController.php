@@ -30,14 +30,14 @@ class HomeController extends AppController {
 //        ]);
 //    }
 
-public function home() {
-    $userID = $this->Auth->user('id');
-    if ($this->isClient($userID)) {
-        $this->clientes();
-    } else {
-        $this->admin();
+    public function home() {
+        $userID = $this->Auth->user('id');
+        if ($this->isClient($userID)) {
+            $this->clientes();
+        } else {
+            $this->admin();
+        }
     }
-}
 
     public function login () {
         $userID = $this->Auth->user('id');
@@ -66,13 +66,14 @@ public function home() {
             $pasajero= TableRegistry::get('Pasajerosdegrupos')->find()
                 ->where(['id_pasajero' => $idPasajero, 'pasajerodegrupo_eliminado' => 0])
                 ->first();
-            if (!$pasajero->tarifa_aceptada) {
+
+            if (!$pasajero['tarifa_aceptada']) {
                 return $this->redirect(
-                    ['controller' => 'Pasajerosdegrupos', 'action' => 'aceptarcontrato', $pasajero->id]
+                    ['controller' => 'Pasajerosdegrupos', 'action' => 'aceptarcontrato', $pasajero['id']]
                 );
-            } else if (!$pasajero->plan_aceptado) {
+            } else if (!$pasajero['plan_aceptado']) {
                 return $this->redirect(
-                    ['controller' => 'Pasajerosdegrupos', 'action' => 'aceptarplan', $pasajero->id]
+                    ['controller' => 'Pasajerosdegrupos', 'action' => 'aceptarplan', $pasajero['id']]
                 );
             } else {
                 $this->viewBuilder()->layout('clientsLayout');

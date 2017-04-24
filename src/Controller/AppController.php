@@ -132,12 +132,12 @@ class AppController extends Controller
 
         if (is_null($responsable)) {
             $pasajerosTable = TableRegistry::get('Pasajeros');
-            $pasajero = $pasajerosTable->find()
+            $pasajero = $pasajerosTable->find('all')
                 ->where(['persona_id' => $userID])
                 ->first();
             $idPasajero = $pasajero->id;
         } else {
-            $idPasajero = $responsable->pasajero->id;
+            $idPasajero = $responsable['pasajero']->id;
         }
         return $idPasajero;
     }

@@ -135,11 +135,6 @@ class ViajesController extends AppController {
         if ($this->isClient($userID)) {
             $this->viewBuilder()->layout('clientsLayout');
 
-            $responsablesTable = TableRegistry::get('Responsables');
-            $responsable = $responsablesTable->find('all', ['contain' => ['Pasajeros']])
-                ->where(['Responsables.persona_id' => $userID])
-                ->first();
-
             $idPasajero = $this->getPasajeroID($userID);
 
             $pasajero= TableRegistry::get('Pasajerosdegrupos')->find()

@@ -172,17 +172,4 @@ class PasajerosDeGruposController extends AppController {
             );
         }
     }
-
-
-    /*
-        $filesTable = TableRegistry::get('Files');
-            $file = $filesTable->find()
-                ->where(['id' => $grupo['contrato'], 'status' => 1])
-                ->first();
-
-            if ($file) {
-                $this->response->file($file->path . $file->name);
-                $this->response->header('Content-Disposition', 'inline');
-                return $this->response;
-    */
 }
