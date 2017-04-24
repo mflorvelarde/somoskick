@@ -11,14 +11,14 @@
         <span class="sr-only">Toggle navigation</span>
     </a>
     <!-- Navbar Right Menu -->
-    <div class="navbar-custom-menu" style="width:150px">
-        <ul class="nav navbar-nav" style="width:150px">
-        <li class="dropdown notifications-menu" style="width:150px">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-align:right">
-                  <span class="hidden-xs"><?php  echo $this->request->session()->read('Auth.User.nombre'); ?> <?php echo $this->request->session()->read('Auth.User.apellido'); ?></span>
-                      <i class="fa fa-user"></i>
-                    </a>
-        </li>
+    <div class="navbar-custom-menu" style="width:250px">
+        <ul class="nav navbar-nav" style="width:250px">
+            <li class="dropdown notifications-menu" style="width:2500px">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-align:right">
+              <span class="hidden-xs"><?php  echo $this->request->session()->read('Auth.User.nombre'); ?> <?php echo $this->request->session()->read('Auth.User.apellido'); ?></span>
+                  <i class="fa fa-user"></i>
+                </a>
+            </li>
         </ul>
-        </div>
+    </div>
 </nav>

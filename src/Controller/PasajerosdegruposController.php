@@ -39,6 +39,18 @@ class PasajerosDeGruposController extends AppController {
                 if ($pasajerosGrupo->regularidad = $regular_id) $pasajerosGrupo->regular = "Regular";
                 else $pasajerosGrupo->regular = "Irregular";
 
+                if ($pasajerosGrupo->tarifa_aceptada) {
+                    $pasajerosGrupo->contratoaceptado = "<span class=\"label label-success\">Aceptado</span>";
+                } else {
+                    $pasajerosGrupo->contratoaceptado =  "<span class=\"label label-danger\">Pendiente</span>";
+                }
+
+                if ($pasajerosGrupo->planaceptado) {
+                    $pasajerosGrupo->planaceptado = "<span class=\"label label-success\">Aceptado</span>";
+                } else {
+                    $pasajerosGrupo->planaceptado =  "<span class=\"label label-danger\">Pendiente</span>";
+                }
+
                 if ($pasajerosGrupo->actividad_cuenta = $activo_id) $pasajerosGrupo->cuenta = "Activo";
                 else $pasajerosGrupo->cuenta = "Inactivo";
             }
@@ -213,4 +225,44 @@ class PasajerosDeGruposController extends AppController {
             );
         }
     }
+
+    public function verPasajero($idPasajero) {
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            return $this->redirect(
+                ['controller' => 'Pasajeros', 'action' => 'view', $idPasajero]
+            );
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
+    public function editarPasajero($idPasajero) {
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            return $this->redirect(
+                ['controller' => 'Pasajeros', 'action' => 'edit', $idPasajero]
+            );
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
+    public function eliminarPasajero($idPasajero) {
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+//            return $this->redirect(
+//                ['controller' => 'Pasajero', 'action' => 'delete', $idPasajero]
+//            );
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
 }

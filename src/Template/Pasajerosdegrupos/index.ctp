@@ -30,8 +30,10 @@ $( document ).ready(function(){
                                 <th>Apellido</th>
                                 <th>DNI</th>
                                 <th>Grupo</th>
-                                <th>Situación</th>
-                                <th>Cuenta</th>
+                                <th>Contrato</th>
+                                <th>Plan de cuotas</th>
+                             <!--   <th>Situación</th>
+                                <th>Cuenta</th>-->
                                 <th></th>
                             </tr>
                         </thead>
@@ -42,15 +44,17 @@ $( document ).ready(function(){
                                 <td><?= h($pasajeroGrupo->pasajero->persona->apellido)?></td>
                                 <td><?= h($pasajeroGrupo->pasajero->persona->dni)?></td>
                                 <td><?= h($pasajeroGrupo->grupo->nombre)?></td>
-                                <td><span class="label label-success"><?= h($pasajeroGrupo->cuenta)?></span></td>
-                                <td><span class="label label-success"><?= h($pasajeroGrupo->regular)?></span></td>
+                                <td><?= $pasajeroGrupo->contratoaceptado?></td>
+                                <td><?= $pasajeroGrupo->planaceptado?></td>
+                   <!--             <td><span class="label label-success"><?= h($pasajeroGrupo->cuenta)?></span></td>
+                                <td><span class="label label-success"><?= h($pasajeroGrupo->regular)?></span></td> -->
                                 <td>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ><i class="fa fa-align-center"></i></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><?= $this->Form->postLink('Ver pasajero', ['action' => 'view', $pasajerosGrupos->id]) ?></li>
-                                            <li><?= $this->Html->link('Editar pasajero', ['action' => 'edit', $pasajerosGrupos->id] ) ?></li>
-                                            <li><?= $this->Html->link('Borrar pasajero', ['action' => 'delete', $pasajerosGrupos->id] ) ?></li>
+                                            <li><?= $this->Form->postLink('Ver pasajero', ['action' => 'verPasajero', $pasajeroGrupo->pasajero->id]) ?></li>
+                                            <li><?= $this->Html->link('Editar pasajero', ['action' => 'editarPasajero', $pasajeroGrupo->pasajero->id] ) ?></li>
+                                            <li><?= $this->Html->link('Borrar pasajero', ['action' => 'borrarPasajero', $pasajeroGrupo->pasajero->id] ) ?></li>
                                         </ul>
                                     </div>
                                 </td>
@@ -64,8 +68,10 @@ $( document ).ready(function(){
                                 <th>Apellido</th>
                                 <th>DNI</th>
                                 <th>Grupo</th>
-                                <th>Situación</th>
-                                <th>Cuenta</th>
+                                <th>Contrato</th>
+                                <th>Plan de cuotas</th>
+                             <!--   <th>Situación</th>
+                                <th>Cuenta</th>-->
                                 <th></th>
                             </tr>
                         </tfoot>

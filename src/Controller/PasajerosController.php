@@ -193,7 +193,7 @@ class PasajerosController extends AppController {
         $pasajero = $this->Pasajeros->get($id, ['contain' => ['Personas' => ['Direcciones']]]);
 
         $responsablesTable = TableRegistry::get('Responsables');
-        $responsablesQuery = $responsablesTable->find('all', ['contain' => ['Personas']])
+        $responsablesQuery = $responsablesTable->find('all', ['contain' => ['Personas' => ['Direcciones']]])
             ->where(['pasajero_id' => $id]);
         $responsables = $this->paginate($responsablesQuery);
 
