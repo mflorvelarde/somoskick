@@ -66,14 +66,14 @@ class HomeController extends AppController {
             $pasajero= TableRegistry::get('Pasajerosdegrupos')->find()
                 ->where(['id_pasajero' => $idPasajero, 'pasajerodegrupo_eliminado' => 0])
                 ->first();
-
+            $idPasajerodegrupo = $pasajero['id'];
             if (!$pasajero['tarifa_aceptada']) {
                 return $this->redirect(
-                    ['controller' => 'Pasajerosdegrupos', 'action' => 'aceptarcontrato', $pasajero['id']]
+                    ['controller' => 'Pasajerosdegrupos', 'action' => 'aceptarcontrato', $idPasajerodegrupo]
                 );
             } else if (!$pasajero['plan_aceptado']) {
                 return $this->redirect(
-                    ['controller' => 'Pasajerosdegrupos', 'action' => 'aceptarplan', $pasajero['id']]
+                    ['controller' => 'Pasajerosdegrupos', 'action' => 'aceptarplan', $idPasajerodegrupo]
                 );
             } else {
                 $this->viewBuilder()->layout('clientsLayout');
