@@ -145,7 +145,6 @@
                                     </div>
                                    </div>
                                 <?= $this->Form->button(__('Guardar y continuar'), ['class'=>'btn btn-success  btn-info-full']) ?>
-                                <?= $this->Html->link(__('Cancelar'), ['action' => 'index'] , array('class'=>'btn btn-danger') ) ?>
                             </div>
                         </div>
                         </div>
