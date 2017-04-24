@@ -135,9 +135,9 @@ class AppController extends Controller
             $pasajero = $pasajerosTable->find('all')
                 ->where(['persona_id' => $userID])
                 ->first();
-            $idPasajero = $pasajero->id;
+            $idPasajero = $pasajero['id'];
         } else {
-            $idPasajero = $responsable['pasajero']->id;
+            $idPasajero = $responsable['pasajero']['id'];
         }
         return $idPasajero;
     }

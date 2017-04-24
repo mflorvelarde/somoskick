@@ -113,10 +113,31 @@ class PasajerosDeGruposController extends AppController {
         }
     }
 
-    public function aceptarcontrato($pasajerogrupoID) {
+    public function aceptarcontrato($pasajerogrupoID=null) {
         $userID = $this->Auth->user('id');
         if ($this->isClient($userID)) {
             $this->viewBuilder()->layout('clientsBlankLayout');
+            if (is_null($pasajerogrupoID)) {
+                $responsablesTable = TableRegistry::get('Responsables');
+                $responsable = $responsablesTable->find('all', ['contain' => ['Pasajeros']])
+                    ->where(['Responsables.persona_id' => $userID])
+                    ->first();
+
+                if (is_null($responsable)) {
+                    $pasajerosTable = TableRegistry::get('Pasajeros');
+                    $pasajero = $pasajerosTable->find('all')
+                        ->where(['persona_id' => $userID])
+                        ->first();
+                    $idPasajero = $pasajero['id'];
+                } else {
+                    $idPasajero = $responsable['pasajero']['id'];
+                }
+                $pasajerodegrupo= TableRegistry::get('Pasajerosdegrupos')->find()
+                    ->where(['id_pasajero' => $idPasajero, 'pasajerodegrupo_eliminado' => 0])
+                    ->first();
+                $pasajerogrupoID= $pasajerodegrupo['id'];
+            }
+
             $pasajerogrupo = $this->Pasajerosdegrupos->get($pasajerogrupoID);
 
             $gruposTable = TableRegistry::get('Grupos');
@@ -139,10 +160,30 @@ class PasajerosDeGruposController extends AppController {
         }
     }
 
-    public function aceptarplan($pasajerogrupoID) {
+    public function aceptarplan($pasajerogrupoID=null) {
         $userID = $this->Auth->user('id');
         if ($this->isClient($userID)) {
             $this->viewBuilder()->layout('clientsBlankLayout');
+            if (is_null($pasajerogrupoID)) {
+                $responsablesTable = TableRegistry::get('Responsables');
+                $responsable = $responsablesTable->find('all', ['contain' => ['Pasajeros']])
+                    ->where(['Responsables.persona_id' => $userID])
+                    ->first();
+
+                if (is_null($responsable)) {
+                    $pasajerosTable = TableRegistry::get('Pasajeros');
+                    $pasajero = $pasajerosTable->find('all')
+                        ->where(['persona_id' => $userID])
+                        ->first();
+                    $idPasajero = $pasajero['id'];
+                } else {
+                    $idPasajero = $responsable['pasajero']['id'];
+                }
+                $pasajerodegrupo= TableRegistry::get('Pasajerosdegrupos')->find()
+                    ->where(['id_pasajero' => $idPasajero, 'pasajerodegrupo_eliminado' => 0])
+                    ->first();
+                $pasajerogrupoID= $pasajerodegrupo['id'];
+            }
             $pasajerogrupo = $this->Pasajerosdegrupos->get($pasajerogrupoID);
             $cuotasAplicadasTable = TableRegistry::get('CuotasAplicadas');
                 
