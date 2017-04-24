@@ -137,7 +137,7 @@ class AppController extends Controller
                 ->first();
             $idPasajero = $pasajero->id;
         } else {
-            $idPasajero = $responsable->pasjero->id;
+            $idPasajero = $responsable->pasajero->id;
         }
         return $idPasajero;
     }

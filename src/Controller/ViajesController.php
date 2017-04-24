@@ -140,15 +140,7 @@ class ViajesController extends AppController {
                 ->where(['Responsables.persona_id' => $userID])
                 ->first();
 
-            if (is_null($responsable)) {
-                $pasajerosTable = TableRegistry::get('Pasajeros');
-                $pasajero = $pasajerosTable->find()
-                    ->where(['persona_id' => $userID])
-                    ->first();
-                $idPasajero = $pasajero->id;
-            } else {
-                $idPasajero = $responsable->pasjero->id;
-            }
+            $idPasajero = $this->getPasajeroID($userID);
 
             $pasajero= TableRegistry::get('Pasajerosdegrupos')->find()
                 ->where(['id_pasajero' => $idPasajero, 'pasajerodegrupo_eliminado' => 0])

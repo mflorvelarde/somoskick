@@ -43,7 +43,7 @@
                         <div class="tab-pane active" role="tabpanel" id="step4">
                             <div class="login-box">
                                 <div class="login-logo">
-                                  <a href="../../index2.html"><b>Kick</b></a>
+                                  <?php echo $this->Html->image('logo.png', ['alt' => 'Kick', 'style' => 'width:150px;margin-left:10%;margin-right: 10%;']);?>
                                 </div>
                                 <!-- /.login-logo -->
                                 <div class="login-box-body">
@@ -53,7 +53,7 @@
                                   <div class="row">
                                     <!-- /.col -->
                                     <div class="col-xs-12" style="margin-top:25px">
-                                        <?= $this->Form->button('Home', ['class'=>'btn bg-maroon btn-block btn-flat'] ) ; ?>
+                                        <?= $this->Form->button('Inicio', ['class'=>'btn bg-maroon btn-block btn-flat'] ) ; ?>
                                     </div>
                                     <!-- /.col -->
                                   </div>

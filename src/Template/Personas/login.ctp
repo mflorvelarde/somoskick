@@ -24,7 +24,7 @@
       </div>
     </form>
     <div id="labels" style="margin-top:15%">
-    <a href="#">Olvidé mi contraseña</a><br>
+    <a href="../personas/cambiarcontraseña">Olvidé mi contraseña</a><br>
     <a href="../pasajeros/registrarse" class="text-center">Registrarse</a>
     </div>
   </div>

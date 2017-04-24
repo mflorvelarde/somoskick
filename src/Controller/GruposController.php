@@ -76,15 +76,7 @@ class GruposController  extends AppController{
                 ->where(['Responsables.persona_id' => $userID])
                 ->first();
 
-            if (is_null($responsable)) {
-                $pasajerosTable = TableRegistry::get('Pasajeros');
-                $pasajero = $pasajerosTable->find()
-                    ->where(['persona_id' => $userID])
-                    ->first();
-                $idPasajero = $pasajero->id;
-            } else {
-                $idPasajero = $responsable->pasjero->id;
-            }
+            $idPasajero = $this->getPasajeroID($userID);
 
             $query = $this->Grupos->find()
                 ->hydrate(false)

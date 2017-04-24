@@ -10,7 +10,6 @@ namespace App\Controller;
 
 use Cake\ORM\TableRegistry;
 use Cake\I18n\Time;
-use Cake\Database\Type;
 
 class CuotasAplicadasController extends AppController{
 
@@ -36,7 +35,7 @@ class CuotasAplicadasController extends AppController{
                     ->first();
                 $idPasajero = $pasajero->id;
             } else {
-                $idPasajero = $responsable->pasjero->id;
+                $idPasajero = $responsable->pasajero->id;
             }
 
             $pasajeroGrupo = TableRegistry::get('Pasajerosdegrupos')->find()
@@ -53,11 +52,14 @@ class CuotasAplicadasController extends AppController{
 
             if ($cuotas->count() > 0) {
                 foreach ($cuotas as $cuota) {
+
                     if ($today > $cuota->cuota->vencimiento) {
                         $cuota->status = "<span class=\"label label-danger\">Cuota vencida</span>";
                     } else {
                         $cuota->status = "<span class=\"label label-info\">Cuota vigente</span>";
                     }
+             //       $cuota->cuota->vencimeinto->
+    //                $cuota->cuota->venciminento = Type::build('datetime')->useLocaleParser()->setLocaleFormat('YYYY-mm-dd');
                     array_push($idsCuotas, $cuota->id);
                 }
 

@@ -31,7 +31,7 @@
                         <tr>
                             <th>Monto pesos</th>
                             <th>Monto dólares</th>
-                            <th>Vencimiento</th>
+                            <th>Vencimiento (MES DÍA AÑO)</th>
                             <th>Status de pago</th>
                             <th>Status notificación</th>
                             <th>Acciones</th>

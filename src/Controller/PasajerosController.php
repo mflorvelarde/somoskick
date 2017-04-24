@@ -20,10 +20,6 @@ class PasajerosController extends AppController {
         $this->Auth->allow('registrarse');
     }
 
-    /**
-     * Index method
-     * @return \Cake\Network\Response|null
-     */
     public function listAll($camada_id = null) {
 /*        $this->viewBuilder()->layout('ajax');
 
@@ -33,7 +29,6 @@ class PasajerosController extends AppController {
         $this->set('camadas', $this->paginate($query));
         $this->set('_serialize', ['camadas']);*/
     }
-
 
     public function registrarse() {
         $this->viewBuilder()->layout('blankLayout');

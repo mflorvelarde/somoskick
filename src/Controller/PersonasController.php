@@ -4,6 +4,8 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\I18n\Time;
 use Cake\Auth\DefaultPasswordHasher;
+use Cake\Mailer\Email;
+use Cake\ORM\TableRegistry;
 
 /**
  * Users Controller
@@ -15,7 +17,7 @@ class PersonasController extends AppController{
 
     public function initialize() {
         parent::initialize();
-        $this->Auth->allow(['changepassword','registrarok']);
+        $this->Auth->allow(['changepassword','registrarok', 'cambiarcontraseña', 'cambiocontrasenaok']);
     }
 
     public function index() {
@@ -82,7 +84,55 @@ class PersonasController extends AppController{
         $this->set('_serialize', ['chequeo']);
     }
 
+    private function sendResetPasswordMail($code, $mail) {
+        $email = new Email();
+        $email->sender('administracion@somoskick.com', 'Kick');
+        $email->from('administracion@somoskick.com')
+            ->addTo($mail)
+            ->subject('Cambio de contraseña')
+            ->emailFormat('html')
+            ->viewVars(['code' => $code])
+            ->template('cambiocontrasena');
+        $email->send();
+    }
+
+    public function cambiarcontraseña($mensaje = null) {
+        $this->viewBuilder()->layout('blankLayout');
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $requestData = $this->request->data;
+            $mail = $requestData["mail"];
+
+            $basePersonas = TableRegistry::get('Personas');
+            $persona = $this->Personas->find()
+                ->where(['mail' => $mail])
+                ->first();
+            if (!is_null($persona)) {
+                $contrasena = md5($persona->dni . Time::now()->toDateTimeString());
+                $query = $basePersonas->query();
+                $query->update()
+                    ->set(['contrasena' => $contrasena, 'contrasena_reset' => 1, 'usuario_modificacion' => $persona->id, 'fecha_modificacion' => Time::now()])
+                    ->where(['mail' => $mail])
+                    ->execute();
+                $this->sendResetPasswordMail($contrasena, $mail);
+                return $this->redirect(['action' => 'cambiocontrasenaok']);
+            } else {
+                return $this->redirect(['action' => 'cambiarcontraseña', "La dirección de correo ingresada es incorrecto"]);
+            }
+        }
+        $this->set(compact('mensaje'));
+        $this->set(compact('email'));
+        $this->set('_serialize', ['email']);
+    }
+
     public function registrarok() {
+        $this->viewBuilder()->layout('blankLayout');
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $this->redirect(['action' => 'login']);
+        }
+    }
+
+    public function cambiocontrasenaok() {
         $this->viewBuilder()->layout('blankLayout');
         if ($this->request->is(['patch', 'post', 'put'])) {
             $this->redirect(['action' => 'login']);
