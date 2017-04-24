@@ -54,7 +54,7 @@ $( document ).ready(function(){
                                         <ul class="dropdown-menu" role="menu">
                                             <li><?= $this->Form->postLink('Ver pasajero', ['action' => 'verPasajero', $pasajeroGrupo->pasajero->id]) ?></li>
                                             <li><?= $this->Html->link('Editar pasajero', ['action' => 'editarPasajero', $pasajeroGrupo->pasajero->id] ) ?></li>
-                                            <li><?= $this->Html->link('Borrar pasajero', ['action' => 'borrarPasajero', $pasajeroGrupo->pasajero->id] ) ?></li>
+                                            <li><?= $this->Html->link('Borrar pasajero', ['action' => 'borrarPasajero', $pasajeroGrupo->id] ) ?></li>
                                         </ul>
                                     </div>
                                 </td>

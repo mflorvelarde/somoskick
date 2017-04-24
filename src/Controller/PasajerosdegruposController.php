@@ -252,17 +252,35 @@ class PasajerosDeGruposController extends AppController {
         }
     }
 
-    public function eliminarPasajero($idPasajero) {
+    public function borrarPasajero($idPasajeroGrupo) {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
-//            return $this->redirect(
-//                ['controller' => 'Pasajero', 'action' => 'delete', $idPasajero]
-//            );
+            $pasajeroGrupo = $this->Pasajerosdegrupos->get($idPasajeroGrupo, ['contain' => ['Pasajeros' => ['Personas']]]);
+            $pasajero = $pasajeroGrupo->pasajero;
+            $persona = $pasajero->persona;
+
+            $basePersona = TableRegistry::get('Personas');
+            $persona->persona_eliminado = 1;
+            $persona->usuario_eliminado = $this->Auth->user('id');;
+            $persona->fecha_eliminado = Time::now();
+            $result = $basePersona->save($persona);
+
+            $basePasajeros = TableRegistry::get('Pasajeros');
+            $pasajero->pasajero_eliminado = 1;
+            $pasajero->usuario_eliminado = $this->Auth->user('id');;
+            $pasajero->fecha_eliminado = Time::now();
+            $result = $basePasajeros->save($pasajero);
+
+            $pasajeroGrupo->pasajerodegrupo_eliminado = 1;
+            $pasajeroGrupo->usuario_eliminado = $this->Auth->user('id');;
+            $pasajeroGrupo->fecha_eliminado = Time::now();
+            $result = $this->Pasajerosdegrupos->save($pasajeroGrupo);
+
+            return $this->redirect(['action' => 'index']);
         } else {
             return $this->redirect(
                 ['controller' => 'Error', 'action' => 'notAuthorized']
             );
         }
     }
-
 }
