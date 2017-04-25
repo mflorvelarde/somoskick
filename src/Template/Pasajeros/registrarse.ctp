@@ -45,6 +45,8 @@
                             <div class="box-header with-border">
                               <h3 class="box-title">Datos del pasajero</h3>
                             </div>
+                           <h4 style="color: orangered; margin-left:10px"> <?= h($mensaje)?></h4>
+
                                 <?= $this->Form->create([$pasajero, $codigoGrupo]) ?>
                             <div class="box-body">
                                  <div class="form-group">
@@ -70,7 +72,7 @@
                                      </div>
                                      <div class="col-md-6" style="padding-right: 0px">
                                          <div class="form-group">
-                                            <?php  echo $this->Form->input('pasaporte',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('pasaporte',  ['required' => false, 'class' => 'form-control' ] ); ?>
                                          </div>
                                      </div>
                                  </div>

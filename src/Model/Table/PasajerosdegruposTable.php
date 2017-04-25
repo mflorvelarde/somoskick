@@ -43,5 +43,11 @@ class PasajerosdegruposTable extends Table {
             'foreignKey' => 'id',
             'bindingKey' => 'regularidad'
         ]);
+
+        $this->hasOne('TarifasAplicadas', [
+            'className' => 'TarifasAplicadas',
+            'foreignKey' => 'id',
+            'bindingKey' => 'tarifa_aplicada_id'
+        ]);
     }
 }

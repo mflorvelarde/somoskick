@@ -77,47 +77,81 @@ class PasajerosDeGruposController extends AppController {
         if ($this->isNotClient($userID)) {
             $this->viewBuilder()->layout('ajax');
 
-            $query = $this->Pasajerosdegrupos->find('all', ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'], 'Grupos']])
-                ->where(['id_grupo' => $grupo_id]);
+            $query = $this->Pasajerosdegrupos->find('all', ['contain' => ['Diccionarios',
+                'TarifasAplicadas' => ['Tarifas'], 'Pasajeros' => ['Personas'], 'Grupos' => ['TarifasAplicadas' => ['Tarifas']]]])
+                ->where(['id_grupo' => $grupo_id, 'pasajerodegrupo_eliminado' => 0]);
 
             $pasajerosdegrupos = $this->paginate($query);
             $this->set('pasajerosdegrupos', $pasajerosdegrupos);
             $this->set('_serialize', ['pasajerosdegrupos']);
-
-            //        $nombre_grupo = $pasajerosdegrupos->first()->grupo->nombre;
+            $pasajeros_estimados = 0;
+            if ($pasajerosdegrupos->count() > 0) {
+                $unpasajero = $pasajerosdegrupos->first();
+                $pasajeros_estimados = $unpasajero['grupo']['pasajeros_estimados'];
+            }
             $registrados = $pasajerosdegrupos->count();
-            //        $pasajerosEstimados = $pasajerosdegrupos->first()->grupo->pasajeros_estimados;
             $hombres = 0;
             $mujeres = 0;
-            $totalPesos = 1000;
-            $totalDolares = 1000;
-            $pagoPesos = 150;
-            $pagoDolares = 100;
+            $totalPesos = 0;
+            $totalDolares = 0;
             $acompanantes = array();
             $regulares = array();
             $listaEspera = array();
 
+            $diccionarios = $this->getDiccionariosPasajerosDeGrupo();
+
+            $regular_id = -1;
+            $activo_id = -1;
+            foreach ($diccionarios as $diccionario) {
+                if ($diccionario->param2 === "SITUACION" && $diccionario->param3 === "REGULAR") $regular_id = $diccionario->id;
+                if ($diccionario->param2 === "CUENTA" && $diccionario->param3 === "ACTIVO") $activo_id = $diccionario->id;
+
+            }
 
             foreach ($pasajerosdegrupos as $pasajero) {
                 if (strcmp($pasajero->persona, "F")) $mujeres = $mujeres + 1;
                 else $hombres = $hombres + 1;
 
+                if ($pasajero['tarifa_aplicada_id'] == null) {
+                    $pasajero['tarifas_aplicada'] = $pasajero['grupo']['tarifas_aplicada'];
+                }
+
+                $totalPesos = $totalPesos + $pasajero['tarifas_aplicada']['tarifa']['monto_pesos'];
+                $totalDolares = $totalDolares + $pasajero['tarifas_aplicada']['tarifa']['monto_dolares'];
+
+                if ($pasajero->regularidad = $regular_id) $pasajero->regular = "Regular";
+                else $pasajero->regular = "Irregular";
+
+                if ($pasajero->actividad_cuenta = $activo_id) $pasajero->cuenta = "Activo";
+                else $pasajero->cuenta = "Inactivo";
+
+
+                if ($pasajero->tarifa_aceptada) {
+                    $pasajero->contratoaceptado = "<span class=\"label label-success\">Aceptado</span>";
+                } else {
+                    $pasajero->contratoaceptado =  "<span class=\"label label-danger\">Pendiente</span>";
+                }
+
+                if ($pasajero->planaceptado) {
+                    $pasajero->planaceptado = "<span class=\"label label-success\">Aceptado</span>";
+                } else {
+                    $pasajero->planaceptado =  "<span class=\"label label-danger\">Pendiente</span>";
+                }
+
                 if ($pasajero->acompanante) array_push($acompanantes, $pasajero);
                 else array_push($regulares, $pasajero);
             }
 
+            $this->set('pasajeros_estimados', $pasajeros_estimados);
             $this->set('hombres', $hombres);
             $this->set('mujeres', $mujeres);
             $this->set('registrados', $registrados);
-            //        $this->set('nombre_grupo', $nombre_grupo);
-            //        $this->set('pasajerosEstimados', $pasajerosEstimados);
             $this->set('acompanantes', $acompanantes);
             $this->set('regulares', $regulares);
             $this->set('listaEspera', $listaEspera);
             $this->set('totalPesos', $totalPesos);
             $this->set('totalDolares', $totalDolares);
-            $this->set('pagoPesos', $pagoPesos);
-            $this->set('pagoDolares', $pagoDolares);
+
         } else {
             return $this->redirect(
                 ['controller' => 'Error', 'action' => 'notAuthorized']

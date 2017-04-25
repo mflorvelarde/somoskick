@@ -11,7 +11,7 @@
                 <div class="row">
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header"><?= h($registrados)?> / <span id="pasajeros-estimados"></span></h5>
+                            <h5 class="description-header"><?= h($registrados)?> / <?= h($pasajeros_estimados)?></span></h5>
                             <span class="description-text">Usuarios registrados</span>
                         </div>
                         <!-- /.description-block -->
@@ -35,16 +35,16 @@
                     <!-- /.col -->
                     <div class="col-sm-3 border-right">
                         <div class="description-block">
-                            <h5 class="description-header"><?= h($pagoPesos)?> / <?= h($totalPesos)?></h5>
-                            <span class="description-text">Total pagado ARS</span>
+                            <h5 class="description-header"><?= h($totalPesos)?></h5>
+                            <span class="description-text">Total ARS</span>
                         </div>
                         <!-- /.description-block -->
                     </div>
                     <!-- /.col -->
                     <div class="col-sm-3">
                         <div class="description-block">
-                            <h5 class="description-header"><?= h($pagoDolares)?> / <?= h($totalDolares)?></h5>
-                            <span class="description-text">Total pagado USD</span>
+                            <h5 class="description-header"><?= h($totalDolares)?></h5>
+                            <span class="description-text">Total USD</span>
                         </div>
                         <!-- /.description-block -->
                     </div>
@@ -61,27 +61,30 @@
             <div class="box-body table-responsive no-padding">
                 <table class="table table-hover">
                     <tr>
-                        <th></th>
                         <th>Pasajero</th>
                         <th>Precio ARS</th>
-                        <th>Saldo ARS</th>
                         <th>Precio USD</th>
-                        <th>Saldo USD</th>
-                        <th>Estado</th>
-                        <th>Situación</th>
-                        <th>Cuenta</th>
+                        <th>Contrato</th>
+                        <th>Plan de cuotas</th>
+                        <th></th>
                     </tr>
                     <?php foreach ($regulares as $regular): ?>
                     <tr>
-                        <td>1</td>
                         <td><?= h($regular->pasajero->persona->nombre)?> <?= h($regular->pasajero->persona->apellido)?></td>
-                        <td>1000</td>
-                        <td>500</td>
-                        <td>1200</td>
-                        <td>200</td>
-                        <td>Deudor</td>
-                        <td><span class="label label-success">Regular</span></td>
-                        <td><span class="label label-success">Activo</span></td>
+                        <td><?= h($regular->tarifas_aplicada->tarifa->monto_pesos)?></td>
+                        <td><?= h($regular->tarifas_aplicada->tarifa->monto_dolares)?></td>
+                        <td><?= $regular->contratoaceptado?></td>
+                        <td><?= $regular->planaceptado?></td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ><i class="fa fa-align-center"></i></button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><?= $this->Form->postLink('Ver pasajero', ['action' => 'verPasajero', $regular->pasajero->id]) ?></li>
+                                    <li><?= $this->Html->link('Editar pasajero', ['action' => 'editarPasajero', $regular->pasajero->id] ) ?></li>
+                                    <li><?= $this->Html->link('Borrar pasajero', ['action' => 'borrarPasajero', $regular->id] ) ?></li>
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
                     <?php endforeach; ?>
                 </table>
@@ -96,26 +99,30 @@
             <div class="box-body table-responsive no-padding">
                 <table class="table table-hover">
                     <tr>
-                        <th></th>
                         <th>Pasajero</th>
                         <th>Precio ARS</th>
-                        <th>Saldo ARS</th>
                         <th>Precio USD</th>
-                        <th>Saldo USD</th>
-                        <th>Estado</th>
-                        <th>Cuenta</th>
+                        <th>Contrato</th>
+                        <th>Plan de cuotas</th>
+                        <th></th>
                     </tr>
                     <?php foreach ($acompanantes as $acompanante): ?>
                     <tr>
-                        <td></td>
-                        <td><?= h($acompanante->pasajero->persona->nombre)?> <?= h($acompanante->pasajero->persona->apellido)?></td>
-                        <td>1000</td>
-                        <td>500</td>
-                        <td>1200</td>
-                        <td>200</td>
-                        <td>Deudor</td>
-                        <td><span class="label label-success">Activo</span></td>
-
+                        <td><?= h($acompanante->pasajero->persona->nombre)?> <?= h($regular->pasajero->persona->apellido)?></td>
+                        <td><?= h($acompanante->tarifas_aplicada->tarifa->monto_pesos)?></td>
+                        <td><?= h($acompanante->tarifas_aplicada->tarifa->monto_dolares)?></td>
+                        <td><?= $acompanante->contratoaceptado?></td>
+                        <td><?= $acompanante->planaceptado?></td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ><i class="fa fa-align-center"></i></button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><?= $this->Form->postLink('Ver pasajero', ['action' => 'verPasajero', $acompanante->pasajero->id]) ?></li>
+                                    <li><?= $this->Html->link('Editar pasajero', ['action' => 'editarPasajero', $acompanante->pasajero->id] ) ?></li>
+                                    <li><?= $this->Html->link('Borrar pasajero', ['action' => 'borrarPasajero', $acompanante->id] ) ?></li>
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
                     <?php endforeach; ?>
                 </table>
@@ -130,28 +137,30 @@
             <div class="box-body table-responsive no-padding">
                 <table class="table table-hover">
                     <tr>
-                        <th></th>
                         <th>Pasajero</th>
                         <th>Precio ARS</th>
-                        <th>Saldo ARS</th>
                         <th>Precio USD</th>
-                        <th>Saldo USD</th>
-                        <th>Estado</th>
-                        <th>Situación</th>
-                        <th>Cuenta</th>
+                        <th>Contrato</th>
+                        <th>Plan de cuotas</th>
+                        <th></th>
                     </tr>
                     <?php foreach ($listaEspera as $espera): ?>
                     <tr>
-                        <td>1</td>
-                        <td><?= h($espera->pasajero->persona->nombre)?> <?= h($espera->pasajero->persona->apellido)?></td>
-                        <td>1000</td>
-                        <td>500</td>
-                        <td>1200</td>
-                        <td>200</td>
-                        <td>Deudor</td>
-                        <td><span class="label label-success">Regular</span></td>
-                        <td><span class="label label-success">Activo</span></td>
-
+                        <td><?= h($espera->pasajero->persona->nombre)?> <?= h($regular->pasajero->persona->apellido)?></td>
+                        <td><?= h($espera->tarifas_aplicada->tarifa->monto_pesos)?></td>
+                        <td><?= h($espera->tarifas_aplicada->tarifa->monto_dolares)?></td>
+                        <td><?= $espera->contratoaceptado?></td>
+                        <td><?= $espera->planaceptado?></td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ><i class="fa fa-align-center"></i></button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><?= $this->Form->postLink('Ver pasajero', ['action' => 'verPasajero', $espera->pasajero->id]) ?></li>
+                                    <li><?= $this->Html->link('Editar pasajero', ['action' => 'editarPasajero', $espera->pasajero->id] ) ?></li>
+                                    <li><?= $this->Html->link('Borrar pasajero', ['action' => 'borrarPasajero', $espera->id] ) ?></li>
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
                     <?php endforeach; ?>
                 </table>

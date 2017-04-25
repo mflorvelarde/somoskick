@@ -30,7 +30,7 @@ class PasajerosController extends AppController {
         $this->set('_serialize', ['camadas']);*/
     }
 
-    public function registrarse() {
+    public function registrarse($mensaje = null) {
         $this->viewBuilder()->layout('blankLayout');
         $pasajero = $this->Pasajeros->newEntity();
         $pasajero->codigo_grupo = "";
@@ -53,40 +53,49 @@ class PasajerosController extends AppController {
                     ]
                 ]);
 
-                $persona_id = $this->persistirPersona($pasajero->persona);
-                $pasajero->fecha_creacion = Time::now();
-                $pasajero->pasajero_eliminado = 0;
-                $pasajero->persona_id = $persona_id;
-
-                $result = $this->Pasajeros->save($pasajero);
-                $pasajero_id = $result->id;
-
-                $pasajerosGruposTable = TableRegistry::get('Pasajerosdegrupos');
-                $pasajeroGrupo = $pasajerosGruposTable->newEntity();
-                $pasajeroGrupo->id_pasajero = $pasajero_id;
-                $pasajeroGrupo->id_grupo = $grupo->id;
-                $pasajeroGrupo->acompanante = 0;
-                $pasajeroGrupo->lista_espera = 0;
-                $pasajeroGrupo->actividad_cuenta = $this->getInactivo()->id;
-                $pasajeroGrupo->regularidad = $this->getRegular()->id;
-                $pasajeroGrupo->pasajerodegrupo_eliminado = 0;
-                $pasajeroGrupo->fecha_creacion = Time::now();
-                $pasajeroGrupo->usuario_creacion = $persona_id;
-
-                $result = $pasajerosGruposTable->save($pasajeroGrupo);
-                $pasajeroGrupo_id = $result->id;
-
-                $this->aplicarCuotasAPasajero($pasajeroGrupo_id, $grupo->tarifa_aplicada_id, $persona_id);
+                $personaBase = TableRegistry::get('Personas')->find('all')->where(['dni' => $pasajero->persona->dni])->first();
+                if (is_null($personaBase)) {
 
 
-                return $this->redirect(
-                    ['controller' => 'Responsables', 'action' => 'paso2', $pasajeroGrupo_id]
-                );
+                    $persona_id = $this->persistirPersona($pasajero->persona);
+                    $pasajero->fecha_creacion = Time::now();
+                    $pasajero->pasajero_eliminado = 0;
+                    $pasajero->persona_id = $persona_id;
+
+                    $result = $this->Pasajeros->save($pasajero);
+                    $pasajero_id = $result->id;
+
+                    $pasajerosGruposTable = TableRegistry::get('Pasajerosdegrupos');
+                    $pasajeroGrupo = $pasajerosGruposTable->newEntity();
+                    $pasajeroGrupo->id_pasajero = $pasajero_id;
+                    $pasajeroGrupo->id_grupo = $grupo->id;
+                    $pasajeroGrupo->acompanante = 0;
+                    $pasajeroGrupo->lista_espera = 0;
+                    $pasajeroGrupo->actividad_cuenta = $this->getInactivo()->id;
+                    $pasajeroGrupo->regularidad = $this->getRegular()->id;
+                    $pasajeroGrupo->pasajerodegrupo_eliminado = 0;
+                    $pasajeroGrupo->fecha_creacion = Time::now();
+                    $pasajeroGrupo->usuario_creacion = $persona_id;
+
+                    $result = $pasajerosGruposTable->save($pasajeroGrupo);
+                    $pasajeroGrupo_id = $result->id;
+
+                    $this->aplicarCuotasAPasajero($pasajeroGrupo_id, $grupo->tarifa_aplicada_id, $persona_id);
+
+
+                    return $this->redirect(
+                        ['controller' => 'Responsables', 'action' => 'paso2', $pasajeroGrupo_id]
+                    );
+                } else {
+                    $mensaje = 'Pasajero ya registrado';
+                    return $this->redirect(['action' => 'registrarse', $mensaje]);
+                }
             } else {
                 $this->Flash->error(__('Código de grupo inválido. Por favor, intente nuevamente'));
             }
         }
-
+        $this->set(compact('mensaje'));
+        $this->set('_serialize', ['mensaje']);
         $this->set(compact('pasajero'));
         $this->set('_serialize', ['pasajero']);
         $this->set(compact('codigoGrupo'));
