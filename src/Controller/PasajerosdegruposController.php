@@ -109,8 +109,10 @@ class PasajerosDeGruposController extends AppController {
             }
 
             foreach ($pasajerosdegrupos as $pasajero) {
-                if (strcmp($pasajero->persona, "F")) $mujeres = $mujeres + 1;
-                else $hombres = $hombres + 1;
+                if (!is_null($pasajero['persona']['sexo'])) {
+                    if (strcmp($pasajero->persona->sexo, "F")) $mujeres = $mujeres + 1;
+                    else $hombres = $hombres + 1;
+                }
 
                 if ($pasajero['tarifa_aplicada_id'] == null) {
                     $pasajero['tarifas_aplicada'] = $pasajero['grupo']['tarifas_aplicada'];

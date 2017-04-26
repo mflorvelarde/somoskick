@@ -47,7 +47,14 @@ class ResponsablesController extends AppController{
                 $familiar1->cuit = null;
             }
 
-            $persona_id = $this->persistirPersona($familiar1->persona);
+            if (strlen($familiar1->persona->direccione->pais) > 0) {
+                $persona_id = $this->persistirPersona($familiar1->persona);
+
+            } else {
+                $direccionID = $pasajeroGrupo->pasajero->persona->direccion_id;
+                $familiar1->persona->direccion_id = $direccionID;
+                $persona_id = $this->persistirPersonaConDireccionID($familiar1->persona);
+            }
 
             $familiar1->usuario_creacion = $pasajeroGrupo->pasajero->persona->id;
             $familiar1->fecha_creacion = Time::now();
@@ -89,7 +96,14 @@ class ResponsablesController extends AppController{
                 $familiar1->cuit = null;
             }
 
-            $persona_id = $this->persistirPersona($familiar1->persona);
+            if (strlen($familiar1->persona->direccione->pais) > 0) {
+                $persona_id = $this->persistirPersona($familiar1->persona);
+
+            } else {
+                $direccionID = $pasajeroGrupo->pasajero->persona->direccion_id;
+                $familiar1->persona->direccion_id = $direccionID;
+                $persona_id = $this->persistirPersonaConDireccionID($familiar1->persona);
+            }
 
             $familiar1->usuario_creacion = $pasajeroGrupo->pasajero->persona->id;
             $familiar1->fecha_creacion = Time::now();
@@ -97,7 +111,6 @@ class ResponsablesController extends AppController{
             $familiar1->persona_id = $persona_id;
             $familiar1->pasajero_id = $pasajeroGrupo->pasajero->id;
             $familiar_id = $this->persistirResponsable($familiar1);
-
             return $this->redirect(
                 ['controller' => 'Mediopagos', 'action' => 'registrar', $pasajero_id]
             );
@@ -253,5 +266,26 @@ class ResponsablesController extends AppController{
             ->viewVars(['code' => $code])
             ->template('default');
         $email->send();
+    }
+
+    private function persistirPersonaConDireccionID($persona) {
+        $basePersonas = TableRegistry::get('Personas');
+
+        $contrasena = md5($persona->dni . Time::now()->toDateTimeString());
+        $result = $query = $basePersonas->query()
+            ->insert(['nombre', 'apellido', 'dni', 'telefono', 'celular', 'nacionalidad', 'mail', 'contrasena',
+                'perfil', 'fecha_nacimiento', 'direccion_id', 'contrasena_reset', 'persona_eliminado',
+                'fecha_creacion'])
+            ->values(['nombre' => $persona->nombre, 'apellido' => $persona->apellido, 'dni' => $persona->dni,
+                'telefono' => $persona->telefono, 'celular' => $persona->celular, 'nacionalidad' => $persona->nacionalidad,
+                'mail' => $persona->mail, 'contrasena' => $contrasena,
+                'perfil' => "CLIENTE", 'fecha_nacimiento' => $persona->fecha_nacimiento,
+                'direccion_id' => $persona->direccion_id, 'contrasena_reset' => 1, 'persona_eliminado' => 0,
+                'fecha_creacion' => Time::now()])
+            ->execute();
+
+        $this->sendWelcomeEmail($contrasena, $persona->mail);
+        $id = $result->lastInsertId('Personas');
+        return $id;
     }
 }

@@ -5,35 +5,24 @@
                 <div class="wizard-inner">
                     <div class="connecting-line"></div>
                     <ul class="nav nav-tabs" role="tablist">
-
                         <li role="presentation" class="disabled">
-                            <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="Step 1">
-                            <span class="round-tab">
-                                <i class="glyphicon glyphicon-folder-open"></i>
-                            </span>
-                            </a>
-                        </li>
-
-                        <li role="presentation" class="disabled">
-                            <a href="#step2" data-toggle="tab" aria-controls="step2" role="tab" title="Step 2">
-                            <span class="round-tab">
-                                <i class="glyphicon glyphicon-pencil"></i>
-                            </span>
+                            <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="Pasajero">
+                                <span class="round-tab"><i class="fa fa-briefcase" aria-hidden="true"></i></span>
                             </a>
                         </li>
                         <li role="presentation" class="disabled">
-                            <a href="#step3" data-toggle="tab" aria-controls="step3" role="tab" title="Step 3">
-                            <span class="round-tab">
-                                <i class="glyphicon glyphicon-picture"></i>
-                            </span>
+                            <a href="#step2" data-toggle="tab" aria-controls="step2" role="tab" title="Padre / Tutor">
+                                <span class="round-tab"><i class="fa fa-male" aria-hidden="true"></i></span>
                             </a>
                         </li>
-
+                        <li role="presentation" class="disabled">
+                            <a href="#step3" data-toggle="tab" aria-controls="step3" role="tab" title="MAdre / Tutora">
+                                <span class="round-tab"><i class="fa fa-female" aria-hidden="true"></i></span>
+                            </a>
+                        </li>
                         <li role="presentation" class="active">
-                            <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="Complete">
-                            <span class="round-tab">
-                                <i class="glyphicon glyphicon-ok"></i>
-                            </span>
+                            <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="Medio de pago">
+                                <span class="round-tab"><i class="fa fa-credit-card" aria-hidden="true"></i></span>
                             </a>
                         </li>
                     </ul>

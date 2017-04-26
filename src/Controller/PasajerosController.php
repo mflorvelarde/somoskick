@@ -38,6 +38,7 @@ class PasajerosController extends AppController {
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $requestData = $this->request->data;
+            $sexo  = $requestData["sexo"];
             $data = $requestData["codigoGrupo"];
 
             $gruposTable = TableRegistry::get('Grupos');
@@ -52,11 +53,10 @@ class PasajerosController extends AppController {
                         ]
                     ]
                 ]);
-
                 $personaBase = TableRegistry::get('Personas')->find('all')->where(['dni' => $pasajero->persona->dni])->first();
                 if (is_null($personaBase)) {
 
-
+                    $pasajero->persona->sexo = $sexo;
                     $persona_id = $this->persistirPersona($pasajero->persona);
                     $pasajero->fecha_creacion = Time::now();
                     $pasajero->pasajero_eliminado = 0;
@@ -81,7 +81,6 @@ class PasajerosController extends AppController {
                     $pasajeroGrupo_id = $result->id;
 
                     $this->aplicarCuotasAPasajero($pasajeroGrupo_id, $grupo->tarifa_aplicada_id, $persona_id);
-
 
                     return $this->redirect(
                         ['controller' => 'Responsables', 'action' => 'paso2', $pasajeroGrupo_id]

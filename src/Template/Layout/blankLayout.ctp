@@ -17,14 +17,8 @@
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 
-
-    <!-- Bootstrap Core CSS -->
     <?php echo $this->Html->css('bootstrap/css/bootstrap.min.css'); ?>
-
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-
-    <!-- Theme style -->
+    <?php echo $this->Html->css('font-awesome/css/font-awesome.min.css'); ?>
     <?php echo $this->Html->css('dist/css/AdminLTE.min.css'); ?>
     <?php echo $this->Html->css('dist/css/skins/skin-blue.css'); ?>
     <?php echo $this->Html->css('plugins/iCheck/square/blue.css'); ?>

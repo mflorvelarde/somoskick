@@ -57,9 +57,9 @@
                                                                 <li><a>Año de la camada <span class="pull-right badge bg-red"><?= h($camada->año)?></span></a></li>
                                                                 <li><a>Estado <span class="pull-right badge bg-green"><?= h($camada->diccionario->value)?></span></a></li>
                                                                 <li><a>Código de grupo <span class="pull-right badge bg-blue"><?= h($camada->grupo->codigo_grupo)?></span></a></li>
-                                                                <li><a>Tarifa <span class="pull-right badge bg-green"><?= h($camada->grupo->tarifas__aplicada->tarifa->descripcion)?></span></a></li>
+                                                                <li><a>Tarifa <span class="pull-right badge bg-green"><?= h($camada->grupo->tarifas_aplicada->tarifa->descripcion)?></span></a></li>
                                                                 <li><a>Fecha firma <span class="pull-right badge bg-aqua"><?= h($camada->fecha_firma)?></span></a></li>
-                                                                <li><a>Contrato <span class="pull-right badge bg-red">link</span></a></li>
+                                                                <li><a href="<?php echo $this->Url->build(["action" => "vercontrato", $camada->grupo->contrato]);?>">Contrato <span class="pull-right badge bg-red">Ver</span></a></li>
                                                                 <li><a>Contacto <span class="pull-right badge bg-green"><?= h($camada->contacto1)?></span></a></li>
                                                                 <li><a>Contacto <span class="pull-right badge bg-blue"><?= h($camada->contacto2)?></span></a></li>
                                                             </ul>
@@ -69,7 +69,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <?= $this->Html->link(__('Editar camada'), ['action' => 'edit'] , array('class'=>'btn bg-maroon margin-bottom') ) ?>
+                                                <?= $this->Html->link(__('Editar camada'), ['action' => 'edit', $camada->id] , array('class'=>'btn bg-maroon margin-bottom') ) ?>
                                             </div>
                                         </div>
                                     </div>

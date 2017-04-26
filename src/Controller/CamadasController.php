@@ -383,6 +383,28 @@ class CamadasController extends AppController{
         }
     }
 
+    public function vercontrato($contratoID) {
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $filesTable = TableRegistry::get('Files');
+            $file = $filesTable->find()
+                ->where(['id' => $contratoID, 'status' => 1])
+                ->first();
+
+            if ($file) {
+                $this->response->file($file->path . $file->name);
+                $this->response->header('Content-Disposition', 'inline');
+                return $this->response;
+            } else {
+                return $this->redirect(['action' => 'index']);
+            }
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
     private function updateGrupo($grupo_id, $nombre, $contrato) {
         $gruposTable = TableRegistry::get('Grupos');
         $grupo = $gruposTable->get($grupo_id);
