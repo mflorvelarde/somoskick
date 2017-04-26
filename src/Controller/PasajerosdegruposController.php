@@ -45,7 +45,7 @@ class PasajerosDeGruposController extends AppController {
                     $pasajerosGrupo->contratoaceptado =  "<span class=\"label label-danger\">Pendiente</span>";
                 }
 
-                if ($pasajerosGrupo->planaceptado) {
+                if ($pasajerosGrupo->plan_aceptado) {
                     $pasajerosGrupo->planaceptado = "<span class=\"label label-success\">Aceptado</span>";
                 } else {
                     $pasajerosGrupo->planaceptado =  "<span class=\"label label-danger\">Pendiente</span>";
@@ -132,7 +132,7 @@ class PasajerosDeGruposController extends AppController {
                     $pasajero->contratoaceptado =  "<span class=\"label label-danger\">Pendiente</span>";
                 }
 
-                if ($pasajero->planaceptado) {
+                if ($pasajero->plan_aceptado) {
                     $pasajero->planaceptado = "<span class=\"label label-success\">Aceptado</span>";
                 } else {
                     $pasajero->planaceptado =  "<span class=\"label label-danger\">Pendiente</span>";
