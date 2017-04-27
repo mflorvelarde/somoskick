@@ -15,7 +15,7 @@
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab_1" data-toggle="tab">Pasajro</a></li>
                     <li><a href="#tab_2" data-toggle="tab">Responsables</a></li>
-                    <li><a href="#tab_3" data-toggle="tab">Notificaciones</a></li>
+                    <li><a href="#tab_3" data-toggle="tab"  onclick="getPasajeros('<?php echo $pasajeroGrupoID ?>')">Notificaciones</a></li>
                 </ul>
             <div class="tab-content">
             <div class="tab-pane active" id="tab_1">
@@ -129,7 +129,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="box">
-                                                        <?php foreach ($responsables as $responsable): ?>
+                        <?php foreach ($responsables as $responsable): ?>
 
                             <div class="box-body">
                                 <div class="row">
@@ -242,13 +242,19 @@
                 </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
 </section>
+
+
+
+<script>
+    function getPasajeros(pasajeroGrupo){
+        $.ajax({
+          url: '../../cuotasAplicadas/ver-notificaciones-de-pasajero-grupo/' + pasajeroGrupo,
+          success: function(data) {
+            $("#tab_3").html(data);
+          }
+        });
+    }
+</script>
+
+

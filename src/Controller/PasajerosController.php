@@ -205,6 +205,12 @@ class PasajerosController extends AppController {
             ->where(['pasajero_id' => $id]);
         $responsables = $this->paginate($responsablesQuery);
 
+        $pasajeroGrupo = TableRegistry::get('Pasajerosdegrupos')->find()
+            ->where(['id_pasajero' => $id])
+            ->first();
+        $pasajeroGrupoID = $pasajeroGrupo->id;
+
+        $this->set(compact('pasajeroGrupoID'));
         $this->set(compact('pasajero'));
         $this->set('_serialize', ['pasajero']);
         $this->set(compact('responsables'));
