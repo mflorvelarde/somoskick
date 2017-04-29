@@ -15,25 +15,45 @@ use Cake\ORM\TableRegistry;
 
 class NotificacionesPagosController extends AppController{
 
+    public function index()
+    {
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $idsCuotas = array();
 
-    /**
-     * Index method
-     * @return \Cake\Network\Response|null
-     */
-    public function index() {
-//        $notificacionesPagos = $this->paginate($this->NotificacionesPagos);
-//
-//        $this->set(compact('notificacionesPagos'));
-//        $this->set('_serialize', ['notificacionesPagos']);
+            $notificacionesQuery = $this->NotificacionesPagos->find('all', ['contain' => ['Diccionarios', 'CuotasAplicadas'
+            => ['pasajerosdegrupos' => ['Pasajeros' => ['Personas']], 'Cuotas' => ['TarifasAplicadas' => ['Tarifas']]]]])
+                ->where(['notificacion_pago_eliminado' => 0]);
+            $notificaciones = $this->paginate($notificacionesQuery);
+
+            $statusList = $this->getDiccionariosStatus();
+            foreach ($notificaciones as $notificacion) {
+                foreach ($statusList as $status) {
+                    if ($notificacion->status == $status->id) {
+                        if ($status->param3 === "PENDIENTE") {
+                            $notificacion->statusNotif = "<span class=\"label label-info\">Pendiente de revisión</span>";
+                        } else if ($status->param3 === "RECHAZADA") {
+                            $notificacion->statusNotif = "<span class=\"label label-danger\">Rechazada</span>";
+                        } else if ($status->param3 === "ACREDITADA") {
+                            $notificacion->statusNotif = "<span class=\"label label-success\">Pago acreditado</span>";
+                        } else if ($status->param3 === "CANCELADA") {
+                            $notificacion->statusNotif =  "<span class=\"label label-warning\">Cancelada</span>";
+                        }
+                    }
+                }
+
+            }
+            $this->set(compact('statusList'));
+            $this->set('_serialize', ['notificaciones']);
+            $this->set(compact('notificaciones'));
+            $this->set('_serialize', ['notificaciones']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function view($id = null) {
         $notificacionesPagos = $this->NotificacionesPagos->get($id);
 
@@ -192,8 +212,7 @@ class NotificacionesPagosController extends AppController{
         }
     }
 
-    public function acreditar($idNotificacion, $return)
-    {
+    public function acreditar($idNotificacion, $return) {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
             $notificacion = $this->NotificacionesPagos->get($idNotificacion);

@@ -21,7 +21,7 @@
           </a>
         </li>
 		<li>
-          <a href="<?php echo $this->Url->build(["controller" => "NotificacionesPago", "action" => "index"]);?>">
+          <a href="<?php echo $this->Url->build(["controller" => "NotificacionesPagos", "action" => "index"]);?>">
             <i class="fa fa-credit-card"></i> <span>Notifiaciones de pago</span>
           </a>
         </li>

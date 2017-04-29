@@ -47,11 +47,7 @@
                             <td><?= $notificacion->fecha_pago ?></td>
                             <td>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default">Acciones</button>
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ><i class="fa fa-align-center"></i></button>
                                     <ul class="dropdown-menu" role="menu">
                                         <li><?= $this->Form->postLink('Ver notificación', ['action' => 'verNotificacionesPasajero', $notificacion->id]) ?></li>
                                         <li><?= $this->Form->postLink('Marcar como acreditada', ['action' => 'acreditar', $notificacion->id, 'pendientes']) ?></li>
