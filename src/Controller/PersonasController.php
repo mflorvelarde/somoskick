@@ -17,7 +17,7 @@ class PersonasController extends AppController{
 
     public function initialize() {
         parent::initialize();
-        $this->Auth->allow(['changepassword','registrarok', 'cambiarcontraseña', 'cambiocontrasenaok']);
+        $this->Auth->allow(['changepassword','registrarok', 'cambiocontrasenaok', 'cambiarcontrasena']);
     }
 
     public function index() {
@@ -96,9 +96,9 @@ class PersonasController extends AppController{
         $email->send();
     }
 
-    public function cambiarcontraseña($mensaje = null) {
+    public function cambiarcontrasena() {
         $this->viewBuilder()->layout('blankLayout');
-
+        $mensaje = '';
         if ($this->request->is(['patch', 'post', 'put'])) {
             $requestData = $this->request->data;
             $mail = $requestData["mail"];
@@ -117,7 +117,7 @@ class PersonasController extends AppController{
                 $this->sendResetPasswordMail($contrasena, $mail);
                 return $this->redirect(['action' => 'cambiocontrasenaok']);
             } else {
-                return $this->redirect(['action' => 'cambiarcontraseña', "La dirección de correo ingresada es incorrecto"]);
+                $mensaje = 'Dirección de correo ingresada incorrecta';
             }
         }
         $this->set(compact('mensaje'));
