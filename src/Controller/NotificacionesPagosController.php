@@ -170,4 +170,80 @@ class NotificacionesPagosController extends AppController{
     private function getDiccionariosStatus() {
         return TableRegistry::get('Diccionarios')->find('all')->where(['param1' => "NOTIFICACION_PAGO", 'param2' => "STATUS"]);
     }
+
+    public function pendientes() {
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $idsCuotas = array();
+            $statusPendiente = $this->getStatusPendiente();
+
+            $notificacionesQuery = $this->NotificacionesPagos->find('all', ['contain' => ['Diccionarios', 'CuotasAplicadas'
+                => ['pasajerosdegrupos' => ['Pasajeros' => ['Personas']],'Cuotas' => ['TarifasAplicadas' => ['Tarifas']]]]])
+                ->where(['status' => $statusPendiente, 'notificacion_pago_eliminado' => 0]);
+
+            $notificaciones = $this->paginate($notificacionesQuery);
+
+            $this->set(compact('notificaciones'));
+            $this->set('_serialize', ['notificaciones']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
+    public function acreditar($idNotificacion, $return)
+    {
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $notificacion = $this->NotificacionesPagos->get($idNotificacion);
+            $notificacion->status = $this->getStatusAcreditada();
+            $notificacion->usuario_modificacion = $this->Auth->user('id');;
+            $notificacion->fecha_modificacion = Time::now();
+
+            $this->NotificacionesPagos->save($notificacion);
+
+            return $this->redirect(['action' => $return]);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
+    public function rechazar($idNotificacion, $return) {
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $notificacion = $this->NotificacionesPagos->get($idNotificacion);
+            $notificacion->status = $this->getStatusRechazada();
+            $notificacion->usuario_modificacion = $this->Auth->user('id');;
+            $notificacion->fecha_modificacion = Time::now();
+
+            $this->NotificacionesPagos->save($notificacion);
+
+            return $this->redirect(['action' => $return]);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
+    private function getStatusPendiente() {
+        $row = TableRegistry::get('Diccionarios')->find('all')->where(['param1' => "NOTIFICACION_PAGO",
+            'param2' => "STATUS", 'param3' => 'PENDIENTE'])->first();
+        return $row->id;
+    }
+
+    private function getStatusAcreditada() {
+        $row = TableRegistry::get('Diccionarios')->find('all')->where(['param1' => "NOTIFICACION_PAGO",
+            'param2' => "STATUS", 'param3' => 'ACREDITADA'])->first();
+        return $row->id;
+    }
+
+    private function getStatusRechazada() {
+        $row = TableRegistry::get('Diccionarios')->find('all')->where(['param1' => "NOTIFICACION_PAGO",
+            'param2' => "STATUS", 'param3' => 'RECHAZADA'])->first();
+        return $row->id;
+    }
 }
