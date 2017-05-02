@@ -54,38 +54,43 @@ class PasajerosController extends AppController {
                     ]
                 ]);
                 $personaBase = TableRegistry::get('Personas')->find('all')->where(['dni' => $pasajero->persona->dni,
-                    'pasajero_eliminado' => 1])->first();
+                    'persona_eliminado' => 0])->first();
                 if (is_null($personaBase)) {
+                    $personaMail = TableRegistry::get('Personas')->find('all')->where(['mail' => $pasajero->persona->mail,
+                        'persona_eliminado' => 0])->first();
+                    if (is_null($personaMail)) {
+                        $pasajero->persona->sexo = $sexo;
+                        $persona_id = $this->persistirPersona($pasajero->persona);
+                        $pasajero->fecha_creacion = Time::now();
+                        $pasajero->pasajero_eliminado = 0;
+                        $pasajero->persona_id = $persona_id;
 
-                    $pasajero->persona->sexo = $sexo;
-                    $persona_id = $this->persistirPersona($pasajero->persona);
-                    $pasajero->fecha_creacion = Time::now();
-                    $pasajero->pasajero_eliminado = 0;
-                    $pasajero->persona_id = $persona_id;
+                        $result = $this->Pasajeros->save($pasajero);
+                        $pasajero_id = $result->id;
 
-                    $result = $this->Pasajeros->save($pasajero);
-                    $pasajero_id = $result->id;
+                        $pasajerosGruposTable = TableRegistry::get('Pasajerosdegrupos');
+                        $pasajeroGrupo = $pasajerosGruposTable->newEntity();
+                        $pasajeroGrupo->id_pasajero = $pasajero_id;
+                        $pasajeroGrupo->id_grupo = $grupo->id;
+                        $pasajeroGrupo->acompanante = 0;
+                        $pasajeroGrupo->lista_espera = 0;
+                        $pasajeroGrupo->actividad_cuenta = $this->getInactivo()->id;
+                        $pasajeroGrupo->regularidad = $this->getRegular()->id;
+                        $pasajeroGrupo->pasajerodegrupo_eliminado = 0;
+                        $pasajeroGrupo->fecha_creacion = Time::now();
+                        $pasajeroGrupo->usuario_creacion = $persona_id;
 
-                    $pasajerosGruposTable = TableRegistry::get('Pasajerosdegrupos');
-                    $pasajeroGrupo = $pasajerosGruposTable->newEntity();
-                    $pasajeroGrupo->id_pasajero = $pasajero_id;
-                    $pasajeroGrupo->id_grupo = $grupo->id;
-                    $pasajeroGrupo->acompanante = 0;
-                    $pasajeroGrupo->lista_espera = 0;
-                    $pasajeroGrupo->actividad_cuenta = $this->getInactivo()->id;
-                    $pasajeroGrupo->regularidad = $this->getRegular()->id;
-                    $pasajeroGrupo->pasajerodegrupo_eliminado = 0;
-                    $pasajeroGrupo->fecha_creacion = Time::now();
-                    $pasajeroGrupo->usuario_creacion = $persona_id;
+                        $result = $pasajerosGruposTable->save($pasajeroGrupo);
+                        $pasajeroGrupo_id = $result->id;
 
-                    $result = $pasajerosGruposTable->save($pasajeroGrupo);
-                    $pasajeroGrupo_id = $result->id;
+                        $this->aplicarCuotasAPasajero($pasajeroGrupo_id, $grupo->tarifa_aplicada_id, $persona_id);
 
-                    $this->aplicarCuotasAPasajero($pasajeroGrupo_id, $grupo->tarifa_aplicada_id, $persona_id);
-
-                    return $this->redirect(
-                        ['controller' => 'Responsables', 'action' => 'paso2', $pasajeroGrupo_id]
-                    );
+                        return $this->redirect(
+                            ['controller' => 'Responsables', 'action' => 'paso2', $pasajeroGrupo_id]
+                        );
+                    } else {
+                        $mensaje = 'Correo electrónico ya registrado';
+                    }
                 } else {
                     $mensaje = 'Pasajero ya registrado';
                     return $this->redirect(['action' => 'registrarse', $mensaje]);

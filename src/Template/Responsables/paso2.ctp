@@ -37,6 +37,7 @@
                             <div class="box-header with-border">
                               <h3 class="box-title">Datos del padre / Tutor</h3>
                             </div>
+                            <h4 style="color: orangered; margin-left:10px"> <?= h($mensaje)?></h4>
                             <div class="col-md-12">
                                 <?= $this->Html->link(__('No vive'), ['action' => 'saltearesponsable2', $pasajeroGrupo_id] , array('class'=>'btn bg-maroon margin-bottom', 'style' => 'margin-top:20px') ) ?>
                             </div>

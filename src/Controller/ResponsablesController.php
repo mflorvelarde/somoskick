@@ -24,10 +24,9 @@ class ResponsablesController extends AppController{
         $this->Auth->allow(['registrar', 'paso2', 'paso3', 'saltearesponsable2', 'saltearesponsable3']);
     }
 
-    public function paso2($pasajeroGrupo_id) {
+    public function paso2($pasajeroGrupo_id, $mensaje = null) {
         $pasajeroGrupo = TableRegistry::get('Pasajerosdegrupos')->get($pasajeroGrupo_id,
             ['contain' => ['Pasajeros' => ['Personas'],'Grupos']]);
-
 
         $this->viewBuilder()->layout('blankLayout');
         $familiar1 = $this->Responsables->newEntity();
@@ -41,30 +40,36 @@ class ResponsablesController extends AppController{
                     ]
                 ]
             ]);
+            $personaMail = TableRegistry::get('Personas')->find('all')->where(['mail' => $familiar1->persona->mail,
+                'persona_eliminado' => 0])->first();
+            if (is_null($personaMail)) {
+                if ($cuitcuil1 === "Cuil") {
+                    $familiar1->cuil = $familiar1->cuit;
+                    $familiar1->cuit = null;
+                }
 
-            if ($cuitcuil1 === "Cuil") {
-                $familiar1->cuil = $familiar1->cuit;
-                $familiar1->cuit = null;
-            }
+                if (strlen($familiar1->persona->direccione->pais) > 0) {
+                    $persona_id = $this->persistirPersona($familiar1->persona);
 
-            if (strlen($familiar1->persona->direccione->pais) > 0) {
-                $persona_id = $this->persistirPersona($familiar1->persona);
+                } else {
+                    $direccionID = $pasajeroGrupo->pasajero->persona->direccion_id;
+                    $familiar1->persona->direccion_id = $direccionID;
+                    $persona_id = $this->persistirPersonaConDireccionID($familiar1->persona);
+                }
 
+                $familiar1->usuario_creacion = $pasajeroGrupo->pasajero->persona->id;
+                $familiar1->fecha_creacion = Time::now();
+                $familiar1->responsable_eliminado = 0;
+                $familiar1->persona_id = $persona_id;
+                $familiar1->pasajero_id = $pasajeroGrupo->pasajero->id;
+                $familiar_id = $this->persistirResponsable($familiar1);
+
+                return $this->redirect(['action' => 'paso3', $pasajeroGrupo_id]);
             } else {
-                $direccionID = $pasajeroGrupo->pasajero->persona->direccion_id;
-                $familiar1->persona->direccion_id = $direccionID;
-                $persona_id = $this->persistirPersonaConDireccionID($familiar1->persona);
+                $mensaje = 'Correo electrónico ya registrado';
             }
-
-            $familiar1->usuario_creacion = $pasajeroGrupo->pasajero->persona->id;
-            $familiar1->fecha_creacion = Time::now();
-            $familiar1->responsable_eliminado = 0;
-            $familiar1->persona_id = $persona_id;
-            $familiar1->pasajero_id = $pasajeroGrupo->pasajero->id;
-            $familiar_id = $this->persistirResponsable($familiar1);
-
-            return $this->redirect(['action' => 'paso3', $pasajeroGrupo_id]);
         }
+        $this->set(compact('mensaje'));
         $this->set(compact('pasajeroGrupo_id'));
         $this->set('_serialize', ['pasajeroGrupo_id']);
         $this->set(compact('familiar1'));
@@ -73,7 +78,7 @@ class ResponsablesController extends AppController{
         $this->set('_serialize', ['cuitcuil1']);
     }
 
-    public function paso3($pasajeroGrupo_id) {
+    public function paso3($pasajeroGrupo_id, $mensaje = null) {
         $pasajeroGrupo = TableRegistry::get('Pasajerosdegrupos')->get($pasajeroGrupo_id,
             ['contain' => ['Diccionarios', 'Pasajeros' => ['Personas'],'Grupos']]);
         $pasajero_id = $pasajeroGrupo->pasajero->id;
@@ -90,31 +95,37 @@ class ResponsablesController extends AppController{
                     ]
                 ]
             ]);
+            $personaMail = TableRegistry::get('Personas')->find('all')->where(['mail' => $familiar1->persona->mail,
+                'persona_eliminado' => 0])->first();
+            if (is_null($personaMail)) {
+                if ($cuitcuil1 === "Cuil") {
+                    $familiar1->cuil = $familiar1->cuit;
+                    $familiar1->cuit = null;
+                }
 
-            if ($cuitcuil1 === "Cuil") {
-                $familiar1->cuil = $familiar1->cuit;
-                $familiar1->cuit = null;
-            }
+                if (strlen($familiar1->persona->direccione->pais) > 0) {
+                    $persona_id = $this->persistirPersona($familiar1->persona);
 
-            if (strlen($familiar1->persona->direccione->pais) > 0) {
-                $persona_id = $this->persistirPersona($familiar1->persona);
+                } else {
+                    $direccionID = $pasajeroGrupo->pasajero->persona->direccion_id;
+                    $familiar1->persona->direccion_id = $direccionID;
+                    $persona_id = $this->persistirPersonaConDireccionID($familiar1->persona);
+                }
 
+                $familiar1->usuario_creacion = $pasajeroGrupo->pasajero->persona->id;
+                $familiar1->fecha_creacion = Time::now();
+                $familiar1->responsable_eliminado = 0;
+                $familiar1->persona_id = $persona_id;
+                $familiar1->pasajero_id = $pasajeroGrupo->pasajero->id;
+                $familiar_id = $this->persistirResponsable($familiar1);
+                return $this->redirect(
+                    ['controller' => 'Mediopagos', 'action' => 'registrar', $pasajero_id]
+                );
             } else {
-                $direccionID = $pasajeroGrupo->pasajero->persona->direccion_id;
-                $familiar1->persona->direccion_id = $direccionID;
-                $persona_id = $this->persistirPersonaConDireccionID($familiar1->persona);
+                $mensaje = 'Correo electrónico ya registrado';
             }
-
-            $familiar1->usuario_creacion = $pasajeroGrupo->pasajero->persona->id;
-            $familiar1->fecha_creacion = Time::now();
-            $familiar1->responsable_eliminado = 0;
-            $familiar1->persona_id = $persona_id;
-            $familiar1->pasajero_id = $pasajeroGrupo->pasajero->id;
-            $familiar_id = $this->persistirResponsable($familiar1);
-            return $this->redirect(
-                ['controller' => 'Mediopagos', 'action' => 'registrar', $pasajero_id]
-            );
         }
+        $this->set(compact('mensaje'));
         $this->set(compact('pasajero_id'));
         $this->set('_serialize', ['pasajero_id']);
         $this->set(compact('familiar1'));

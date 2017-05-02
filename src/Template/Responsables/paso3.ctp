@@ -39,6 +39,7 @@
                             <div class="box-header with-border">
                               <h3 class="box-title">Datos de la madre / Tutora</h3>
                             </div>
+                            <h4 style="color: orangered; margin-left:10px"> <?= h($mensaje)?></h4>
                             <?= $this->Form->create([$familiar1, $cuitcuil1]) ?>
                             <div class="col-md-12">
                                 <?= $this->Html->link(__('No vive'), ['action' => 'saltearesponsable3', $pasajero_id] , array('class'=>'btn bg-maroon margin-bottom', 'style' => 'margin-top:20px') ) ?>
