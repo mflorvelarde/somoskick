@@ -217,4 +217,39 @@ class PersonasController extends AppController{
             ['controller' => 'Pasajeros', 'action' => 'registrarse']
         );
     }
+
+    public function miperfil($mensaje = null) {
+        $userID = $this->Auth->user('id');
+        if ($userID) {
+            if ($this->isClient($userID)) {
+                $this->viewBuilder()->layout('clientsLayout');
+            }
+            $persona = $this->Personas->get($userID, ['contain' => ['Direcciones']]);
+            $this->set(compact('mensaje'));
+            $this->set(compact('persona'));
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
+    public function cambiarmicontrasena() {
+        $userID = $this->Auth->user('id');
+        if ($userID) {
+            $persona = $this->Personas->get($userID, ['contain' => ['Direcciones']]);
+            $contrasena = md5($persona->dni . Time::now()->toDateTimeString());
+            $query = $this->Personas->query();
+            $query->update()
+                ->set(['contrasena' => $contrasena, 'contrasena_reset' => 1, 'usuario_modificacion' => $persona->id, 'fecha_modificacion' => Time::now()])
+                ->where(['id' => $userID])
+                ->execute();
+            $this->sendResetPasswordMail($contrasena, $persona->mail);
+            $this->logout();
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
 }

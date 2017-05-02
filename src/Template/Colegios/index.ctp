@@ -23,7 +23,7 @@
             <div class="box">
                 <div class="box-body">
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-sm-12">
                             <?= $this->Html->link(__('Nuevo colegio'), ['action' => 'add'] , array('class'=>'btn bg-maroon margin-bottom') ) ?>
                         </div>
                     </div>

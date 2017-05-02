@@ -39,7 +39,9 @@
                             <div class="form-group">
                                 <?php  echo $this->Form->input('dni',  ['required' => true, 'class' => 'form-control' ] ); ?>
                             </div>
-                            
+                            <div class="form-group">
+                                <?php  echo $this->Form->input('contrasena',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                            </div>
 
                             
                     </div>

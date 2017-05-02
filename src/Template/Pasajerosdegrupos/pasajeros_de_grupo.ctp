@@ -59,7 +59,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
-                <table class="table table-hover">
+                <table id="pasajeros-table" class="table table-hover">
                     <tr>
                         <th>Pasajero</th>
                         <th>Precio ARS</th>
@@ -88,6 +88,14 @@
                     </tr>
                     <?php endforeach; ?>
                 </table>
+                <div class="paginator">
+                    <ul class="pagination">
+                        <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                        <?= $this->Paginator->numbers() ?>
+                        <?= $this->Paginator->next(__('next') . ' >') ?>
+                    </ul>
+                    <p><?= $this->Paginator->counter() ?></p>
+                </div>
             </div>
             <!-- /.box-body -->
         </div>

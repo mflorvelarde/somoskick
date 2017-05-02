@@ -38,7 +38,7 @@
 			    <th><?= $this->Paginator->sort('id', 'ID') ?></th>
 			    <th><?= $this->Paginator->sort('nombre', 'NOMBRE') ?></th>
 			    <th><?= $this->Paginator->sort('apellido', 'APELLIDO') ?></th>
-			    <th><?= $this->Paginator->sort('documento', 'NRO DOCUMENTO') ?></th>
+			    <th><?= $this->Paginator->sort('mail', 'MAIL') ?></th>
 
 			    <th class="actions"><?= __('Actions') ?></th>
 			</tr>
@@ -50,7 +50,7 @@
 			      <td><?= $this->Number->format($persona->id) ?></td>
 			      <td><?= h($persona->nombre) ?></td>
 			      <td><?= h($persona->apellido) ?></td>
-			      <td><?= h($persona->dni) ?></td>
+			      <td><?= h($persona->mail) ?></td>
 
 			      <td class="actions">
 			      

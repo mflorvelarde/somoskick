@@ -43,10 +43,8 @@ class NotificacionesPagosController extends AppController{
                 }
 
             }
-            $this->set(compact('statusList'));
             $this->set('_serialize', ['notificaciones']);
             $this->set(compact('notificaciones'));
-            $this->set('_serialize', ['notificaciones']);
         } else {
             return $this->redirect(
                 ['controller' => 'Error', 'action' => 'notAuthorized']

@@ -53,7 +53,8 @@ class PasajerosController extends AppController {
                         ]
                     ]
                 ]);
-                $personaBase = TableRegistry::get('Personas')->find('all')->where(['dni' => $pasajero->persona->dni])->first();
+                $personaBase = TableRegistry::get('Personas')->find('all')->where(['dni' => $pasajero->persona->dni,
+                    'pasajero_eliminado' => 1])->first();
                 if (is_null($personaBase)) {
 
                     $pasajero->persona->sexo = $sexo;
