@@ -30,7 +30,7 @@ class CuotasAplicadasController extends AppController{
 
             $idPasajeroGrupo = $pasajeroGrupo->id;
             $idsCuotas = array();
-            $query = $this->CuotasAplicadas->find('all', ['contain' => ['Cuotas', 'pasajerosdegrupos']])
+            $query = $this->CuotasAplicadas->find('all', ['contain' => ['Cuotas', 'Pasajerosdegrupos']])
                 ->where(['pasajero_grupo_id' => $idPasajeroGrupo, 'cuota_aplicada_eliminado' => 0]);
             $cuotas = $this->paginate($query);
 
@@ -114,7 +114,7 @@ class CuotasAplicadasController extends AppController{
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
             $idsCuotas = array();
-            $query = $this->CuotasAplicadas->find('all', ['contain' => ['Cuotas', 'pasajerosdegrupos']])
+            $query = $this->CuotasAplicadas->find('all', ['contain' => ['Cuotas', 'Pasajerosdegrupos']])
                 ->where(['pasajero_grupo_id' => $idPasajeroGrupo, 'cuota_aplicada_eliminado' => 0]);
             $cuotas = $this->paginate($query);
 

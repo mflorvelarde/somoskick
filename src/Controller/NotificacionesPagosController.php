@@ -15,14 +15,13 @@ use Cake\ORM\TableRegistry;
 
 class NotificacionesPagosController extends AppController{
 
-    public function index()
-    {
+    public function index() {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
             $idsCuotas = array();
 
             $notificacionesQuery = $this->NotificacionesPagos->find('all', ['contain' => ['Diccionarios', 'CuotasAplicadas'
-            => ['pasajerosdegrupos' => ['Pasajeros' => ['Personas']], 'Cuotas' => ['TarifasAplicadas' => ['Tarifas']]]]])
+            => ['Pasajerosdegrupos' => ['Pasajeros' => ['Personas']], 'Cuotas' => ['TarifasAplicadas' => ['Tarifas']]]]])
                 ->where(['notificacion_pago_eliminado' => 0]);
             $notificaciones = $this->paginate($notificacionesQuery);
 
@@ -68,7 +67,9 @@ class NotificacionesPagosController extends AppController{
                     'cuota_aplicada_id' => $cuotaAplicadaID
                 ]);
             $notificaciones = $this->paginate($notificacionesQuery);
-
+            $filesTable = TableRegistry::get('files');
+//            $comprobante = "https://placeholdit.imgix.net/~text?txtsize=28&txt=300%C3%97300&w=300&h=300";
+            $ids = array();
             foreach ($notificaciones as $notificacion) {
                 if ($notificacion->monto_pesos != 0 && !is_null($notificacion->monto_pesos)) {
                     $notificacion->moneda = "ARS";
@@ -77,10 +78,47 @@ class NotificacionesPagosController extends AppController{
                     $notificacion->moneda = "US$";
                     $notificacion->monto = $notificacion->monto_dolares;
                 }
+                array_push($ids, $notificacion->comprobante);
+            }
+            $comprobantes = $filesTable->find('all')->where(['id IN ' => $ids, 'status' => 1]);
+            foreach ($notificaciones as $notificacion) {
+                foreach ($comprobantes as $comprobante) {
+                    if ($notificacion->comprobante == $comprobante->id) {
+                        if ($comprobante->extension === "pdf") {
+//                            $notificacion->vercomprobante = "";
+//                            $notificacion->vercomprobante = ".$.this->Html->link(__('Ver comprobante'), ['action' => 'vercomprobante',"
+//                            . $comprobante->id . "] , array('class'=>'btn btn-block btn-primary btn-xs') )";
+                        } else {
+                            $notificacion->vercomprobante = "<img style='max-width: 100%' src='data:image/png;base64,"
+                                . $comprobante->contenido . "'/>";
+                        }
+                        $notificacion->fileComprobante = $comprobante;
+                    }
+                }
             }
 
             $this->set('notificaciones', $notificaciones);
             $this->set('_serialize', ['notificaciones']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
+    public function vercomprobante($idComprobante) {
+        $userID = $this->Auth->user('id');
+        if ($userID) {
+            $this->viewBuilder()->layout('ajax');
+            $filesTable = TableRegistry::get('Files');
+            $file = $filesTable->find()
+                ->where(['id' => $idComprobante, 'status' => 1])
+                ->first();
+            $this->response->file("data:application/pdf;base64," . $file->contenido);
+   //         $this->response->file(base64_decode($file->contenido));
+            $this->response->header('Content-Disposition', 'inline');
+            return $this->response;
+        //    $this->set('file', base64_decode($file->contenido));
         } else {
             return $this->redirect(
                 ['controller' => 'Error', 'action' => 'notAuthorized']
@@ -153,13 +191,29 @@ class NotificacionesPagosController extends AppController{
                     }
                 }
 
+                $data = $this->request->data['file']['tmp_name'];
+                $base64 = base64_encode(file_get_contents($data));
+
+
+                $fileTable = TableRegistry::get('files');
+                $file = $fileTable->newEntity();
+                $file->contenido = $base64;
+                $fileResult = $fileTable->save($file);
+                $idFile = $fileResult->id;
+
+                if ($this->request->data['file']['type'] === "application/pdf") {
+                    $file->extension = "pdf";
+                } else {
+                    $file->extension = "png";
+                }
+
                 $notificacion->status = $status;
                 $notificacion->notificacion_pago_eliminado = 0;
                 $notificacion->fecha_creacion = Time::now();
                 $notificacion->usuario_creacion = $this->Auth->user('id');
+                $notificacion->comprobante = $idFile;
 
                 $this->NotificacionesPagos->save($notificacion);
-
 
                 return $this->irCuotas();
             }
@@ -196,7 +250,7 @@ class NotificacionesPagosController extends AppController{
             $statusPendiente = $this->getStatusPendiente();
 
             $notificacionesQuery = $this->NotificacionesPagos->find('all', ['contain' => ['Diccionarios', 'CuotasAplicadas'
-                => ['pasajerosdegrupos' => ['Pasajeros' => ['Personas']],'Cuotas' => ['TarifasAplicadas' => ['Tarifas']]]]])
+                => ['Pasajerosdegrupos' => ['Pasajeros' => ['Personas']],'Cuotas' => ['TarifasAplicadas' => ['Tarifas']]]]])
                 ->where(['status' => $statusPendiente, 'notificacion_pago_eliminado' => 0]);
 
             $notificaciones = $this->paginate($notificacionesQuery);
@@ -262,5 +316,26 @@ class NotificacionesPagosController extends AppController{
         $row = TableRegistry::get('Diccionarios')->find('all')->where(['param1' => "NOTIFICACION_PAGO",
             'param2' => "STATUS", 'param3' => 'RECHAZADA'])->first();
         return $row->id;
+    }
+
+    public function fileupload() {
+        $notificacion = $this->NotificacionesPagos->newEntity();
+        if ($this->request->is('post')) {
+            $file = $this->request->data['file'];
+            $fileName = $this->request->data['file']['name'];
+            $uploadPath = 'uploads/files/';
+            $uploadFile = $uploadPath . $fileName;
+            $data = $this->request->data['file']['tmp_name'];
+            $base64 = base64_encode(file_get_contents($data));
+//            if (move_uploaded_file($this->request->data['file']['tmp_name'], $uploadFile)) {
+//
+//            }
+            $this->set(compact('data'));
+            $this->set(compact('base64'));
+            $this->set('_serialize', ['base64']);
+
+        }
+        $this->set(compact('notificacion'));
+
     }
 }

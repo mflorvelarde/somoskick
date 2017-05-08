@@ -168,21 +168,24 @@ class PasajerosDeGruposController extends AppController {
             if (is_null($pasajerogrupoID)) {
                 $responsablesTable = TableRegistry::get('Responsables');
                 $responsable = $responsablesTable->find('all', ['contain' => ['Pasajeros']])
-                    ->where(['Responsables.persona_id' => $userID])
+                    ->where(['Responsables.persona_id' => $userID, 'responsable_eliminado' => 0])
                     ->first();
 
                 if (is_null($responsable)) {
                     $pasajerosTable = TableRegistry::get('Pasajeros');
                     $pasajero = $pasajerosTable->find('all')
-                        ->where(['persona_id' => $userID])
+                        ->where(['persona_id' => $userID, 'pasajero_eliminado' => 0])
                         ->first();
                     $idPasajero = $pasajero['id'];
                 } else {
                     $idPasajero = $responsable['pasajero']['id'];
                 }
+
                 $pasajerodegrupo= TableRegistry::get('Pasajerosdegrupos')->find()
                     ->where(['id_pasajero' => $idPasajero, 'pasajerodegrupo_eliminado' => 0])
                     ->first();
+                $this->set('$pasajerodegrupo', $pasajerodegrupo);
+
                 $pasajerogrupoID= $pasajerodegrupo['id'];
             }
 
@@ -215,13 +218,13 @@ class PasajerosDeGruposController extends AppController {
             if (is_null($pasajerogrupoID)) {
                 $responsablesTable = TableRegistry::get('Responsables');
                 $responsable = $responsablesTable->find('all', ['contain' => ['Pasajeros']])
-                    ->where(['Responsables.persona_id' => $userID])
+                    ->where(['Responsables.persona_id' => $userID, 'pasajero_eliminado' => 0])
                     ->first();
 
                 if (is_null($responsable)) {
                     $pasajerosTable = TableRegistry::get('Pasajeros');
                     $pasajero = $pasajerosTable->find('all')
-                        ->where(['persona_id' => $userID])
+                        ->where(['persona_id' => $userID, 'pasajero_eliminado' => 0])
                         ->first();
                     $idPasajero = $pasajero['id'];
                 } else {
@@ -235,7 +238,7 @@ class PasajerosDeGruposController extends AppController {
             $pasajerogrupo = $this->Pasajerosdegrupos->get($pasajerogrupoID);
             $cuotasAplicadasTable = TableRegistry::get('CuotasAplicadas');
                 
-            $query = $cuotasAplicadasTable->find('all', ['contain' => ['Cuotas', 'pasajerosdegrupos']])
+            $query = $cuotasAplicadasTable->find('all', ['contain' => ['Cuotas', 'Pasajerosdegrupos']])
                 ->where(['pasajero_grupo_id' => $pasajerogrupoID, 'cuota_aplicada_eliminado' => 0]);
             $cuotas = $this->paginate($query);
 
@@ -318,5 +321,72 @@ class PasajerosDeGruposController extends AppController {
                 ['controller' => 'Error', 'action' => 'notAuthorized']
             );
         }
+    }
+
+    public function excel($idGrupo) {
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $this->viewBuilder()->layout('ajax');
+
+            $file = 'First Name \t Last Name \t Phone \n';
+            $file = $file . 'John \t Doe \t 5555555 \n';
+
+            $query = $this->Pasajerosdegrupos->find('all', ['contain' => ['Diccionarios',
+                'TarifasAplicadas' => ['Tarifas'], 'Pasajeros' => ['Personas'], 'Grupos' => ['TarifasAplicadas' => ['Tarifas']]]])
+                ->where(['id_grupo' => $idGrupo, 'pasajerodegrupo_eliminado' => 0]);
+
+            $pasajerosdegrupos = $this->paginate($query);
+            $diccionarios = $this->getDiccionariosPasajerosDeGrupo();
+
+            $regular_id = -1;
+            $activo_id = -1;
+            foreach ($diccionarios as $diccionario) {
+                if ($diccionario->param2 === "SITUACION" && $diccionario->param3 === "REGULAR") $regular_id = $diccionario->id;
+                if ($diccionario->param2 === "CUENTA" && $diccionario->param3 === "ACTIVO") $activo_id = $diccionario->id;
+
+            }
+
+            foreach ($pasajerosdegrupos as $pasajero) {
+                if ($pasajero->regularidad = $regular_id) $pasajero->regular = "Regular";
+                else $pasajero->regular = "Irregular";
+
+                if ($pasajero->actividad_cuenta = $activo_id) $pasajero->cuenta = "Activo";
+                else $pasajero->cuenta = "Inactivo";
+
+
+                if ($pasajero->tarifa_aceptada) {
+                    $pasajero->contratoaceptado = "Aceptado";
+                } else {
+                    $pasajero->contratoaceptado =  "Pendiente";
+                }
+
+                if ($pasajero->plan_aceptado) {
+                    $pasajero->planaceptado = "Aceptado";
+                } else {
+                    $pasajero->planaceptado =  "Pendiente";
+                }
+            }
+            $this->set('file', $file);
+
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
+    public function xls($idGrupo, $output_type = 'D', $file = 'my_spreadsheet.xlsx') {
+  //      $user = $this->Users->get($id);
+        $query = $this->Pasajerosdegrupos->find('all', ['contain' => ['Diccionarios',
+            'TarifasAplicadas' => ['Tarifas'], 'Pasajeros' => ['Personas'], 'Grupos' => ['TarifasAplicadas' => ['Tarifas']]]])
+            ->where(['pasajerodegrupo_eliminado' => 0]);
+       //     ->where(['id_grupo' => $idGrupo, 'pasajerodegrupo_eliminado' => 0]);
+
+        $pasajerosdegrupos = $this->paginate($query);
+        $this->set(compact('pasajerosdegrupos', 'output_type', 'file'));
+        $this->viewBuilder()->layout('xls/default');
+        $this->viewBuilder()->template('xls/spreadsheet');
+        $this->RequestHandler->respondAs('xlsx');
+        $this->render();
     }
 }

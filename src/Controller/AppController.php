@@ -127,13 +127,13 @@ class AppController extends Controller
     protected function getPasajeroID($userID) {
         $responsablesTable = TableRegistry::get('Responsables');
         $responsable = $responsablesTable->find('all', ['contain' => ['Pasajeros']])
-            ->where(['Responsables.persona_id' => $userID])
+            ->where(['Responsables.persona_id' => $userID, 'responsable_eliminado' => 0])
             ->first();
 
         if (is_null($responsable)) {
             $pasajerosTable = TableRegistry::get('Pasajeros');
             $pasajero = $pasajerosTable->find('all')
-                ->where(['persona_id' => $userID])
+                ->where(['persona_id' => $userID, 'pasajero_eliminado' => 0])
                 ->first();
             $idPasajero = $pasajero['id'];
         } else {
