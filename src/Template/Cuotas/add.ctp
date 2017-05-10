@@ -53,35 +53,26 @@
                             </div>
                     <h3 style="margin-bottom: 20px; color: red; background-color: #FBEFEF;"><?= h($error)?></h3>
                     <table id="example1" class="table table-bordered table-striped">
-                        <?php foreach ($cuotas as $cuota): ?>
-                        <?php $i = 0?>
-                        <?= $this->Form->create($cuota) ?>
-
+                        <?= $this->Form->create() ?>
+                        <?php foreach ($campos as $campo): ?>
                         <tbody>
                             <tr>
                                 <td>
                                     <div class="form-group">
-                                        <div class="input text required">
-                                            <?php  echo $this->Form->input('vencimiento',  ['required' => true, ['class' => 'form-control'] ] ); ?>
-                                        </div>
+                                            <?php  echo $this->Form->date($campo[2],  ['required' => true, 'class' => 'form-control', 'value'=>$campo[3]['vencimiento']]); ?>
                                     </div>
                                 </td>
-                                <td>
-                                    <div class="form-group">
-                                        <div class="input text required">
-                                            <?php  echo $this->Form->input('monto_pesos',  ['required' => true, 'class' => 'form-control' ] ); ?>
-                                        </div>
-                                    </div>
+                                <td> 
+                                    <div class="form-group"> 
+                                            <?php  echo $this->Form->number($campo[1],  ['required' => true, 'class' => 'form-control','value'=>$campo[3]['monto_pesos']]); ?> 
+                                    </div> 
                                 </td>
-                                <td>
-                                    <div class="form-group">
-                                        <div class="input text required">
-                                            <?php  echo $this->Form->input('monto_dolares',  ['required' => true, 'class' => 'form-control' ] ); ?>
-                                        </div>
+                                 <td> 
+                                    <div class="form-group"> 
+                                            <?php  echo $this->Form->number($campo[0],  ['required' => true, 'class' => 'form-control','value'=>$campo[3]['monto_dolares'] ] ); ?> 
                                     </div>
-                                </td>
+                                 </td>
                             </tr>
-                                                    <?php $i = $i + 1?>
                         <?php endforeach; ?>
                         </tbody>
                     </table>

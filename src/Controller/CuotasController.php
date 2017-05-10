@@ -7,22 +7,15 @@
  */
 
 namespace App\Controller;
+
 use Cake\ORM\TableRegistry;
 use Cake\I18n\Time;
-use Cake\View\Helper\FlashHelper;
-use Cake\Controller\Component\FlashComponent;
 
-class CuotasController extends AppController{
-
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
-     */
+class CuotasController extends AppController {
     public function add($tarifa_aplicada_id, $error = null) {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
+
             $cuotaTest = $this->Cuotas->newEntity();
             $tarifasAplicadasTable = TableRegistry::get('TarifasAplicadas');
             $tarifa_aplicada = $tarifasAplicadasTable->get($tarifa_aplicada_id, ['contain' => ['Tarifas']]);
@@ -42,15 +35,44 @@ class CuotasController extends AppController{
                 $date = Time::create($date->year, $date->month + 1, $date->day);
                 $meses = $meses + 1;
             }
+            $campos = array();
 
-
+            //Defino los montos de las cuotas
             if ((is_null($tarifa->monto_pesos) || $tarifa->monto_pesos == 0) && $tarifa->monto_dolares = !0) {
-                foreach ($cuotas as $cuota) {
-                    $cuota->monto_dolares = $tarifa->monto_dolares / $meses;
+                $cuotaPromedio = floor($tarifa->monto_dolares / $meses);
+                for ($i = 0; $i < count($cuotas); $i++) {
+                    if ($i == count($cuotas) - 1) {
+                        $cuotas[$i]->monto_dolares = $tarifa->monto_dolares - $cuotaPromedio * (count($cuotas) - 1);
+                    } else $cuotas[$i]->monto_dolares = $cuotaPromedio;
+
+                    $arrayCuota = array();
+                    $labelmontoDolares = "montoDolares" . $i;
+                    $labelmontoPesos = "montoPesos" . $i;
+                    $labelVencimiento = "vencimiento" . $i;
+                    array_push($arrayCuota, $labelmontoDolares);
+                    array_push($arrayCuota, $labelmontoPesos);
+                    array_push($arrayCuota, $labelVencimiento);
+                    array_push($arrayCuota, $cuotas[$i]);
+
+                    array_push($campos, $arrayCuota);
                 }
             } else if ($tarifa->monto_pesos != 0 && (is_null($tarifa->monto_dolares) || $tarifa->monto_dolares == 0)) {
-                foreach ($cuotas as $cuota) {
-                    $cuota->monto_pesos = $tarifa->monto_pesos / $meses;
+                $cuotaPromedio = floor($tarifa->monto_pesos / $meses);
+                for ($i = 0; $i < count($cuotas); $i++) {
+                    if ($i == count($cuotas) - 1) {
+                        $cuotas[$i]->monto_pesos = $tarifa->monto_pesos - $cuotaPromedio * (count($cuotas) - 1);
+                    } else $cuotas[$i]->monto_pesos = $cuotaPromedio;
+
+                    $arrayCuota = array();
+                    $labelmontoDolares = "montoDolares" . $i;
+                    $labelmontoPesos = "montoPesos" . $i;
+                    $labelVencimiento = "vencimiento" . $i;
+                    array_push($arrayCuota, $labelmontoDolares);
+                    array_push($arrayCuota, $labelmontoPesos);
+                    array_push($arrayCuota, $labelVencimiento);
+                    array_push($arrayCuota, $cuotas[$i]);
+
+                    array_push($campos, $arrayCuota);
                 }
             } else {
                 $dolaresEnPesosAprox = $tarifa->monto_dolares * 16;
@@ -61,95 +83,76 @@ class CuotasController extends AppController{
                 $cantidadCuotasPesos = $meses - $cantidadCuotasDolares;
 
                 $index = 0;
-                foreach ($cuotas as $cuota) {
+
+                for ($i = 0; $i < count($cuotas); $i++) {
                     if ($index < $cantidadCuotasDolares) {
-                        $cuota->monto_dolares = $tarifa->monto_dolares / $cantidadCuotasDolares;
-                        $cuota->monto_pesos = 0;
+                        $cuotas[$i]->monto_dolares = $tarifa->monto_dolares / $cantidadCuotasDolares;
+                        $cuotas[$i]->monto_pesos = 0;
                     } else {
-                        $cuota->monto_pesos = $tarifa->monto_pesos / $cantidadCuotasPesos;
-                        $cuota->monto_dolares = 0;
+                        $cuotas[$i]->monto_pesos = $tarifa->monto_pesos / $cantidadCuotasPesos;
+                        $cuotas[$i]->monto_dolares = 0;
                     }
                     $index = $index + 1;
-                }
-                for ($cuotaIndex = 0; $cuotaIndex < count($cuotas); $cuotaIndex++){
-                    for ($paramIndex = 0; $paramIndex < 3; $paramIndex++) {
-                        if ($paramIndex == 0 )$result[$cuotaIndex][$paramIndex] = array("vencimiento" . $cuotaIndex => $cuotas[$cuotaIndex]['vencimiento']);
-                    }
+
+
+                    $arrayCuota = array();
+                    $labelmontoDolares = "montoDolas" . $i;
+                    $labelmontoPesos = "montoPesos" . $i;
+                    $labelVencimiento = "vencimiento" . $i;
+                    array_push($arrayCuota, $labelmontoDolares);
+                    array_push($arrayCuota, $labelmontoPesos);
+                    array_push($arrayCuota, $labelVencimiento);
+                    array_push($arrayCuota, $cuotas[$i]);
+
+                    array_push($campos, $arrayCuota);
                 }
             }
+            $this->set(compact('campos'));
 
 
             if ($this->request->is('post')) {
-                $cuotasTableRegistry = TableRegistry::get('Cuotas');
-                $entities = $cuotasTableRegistry->newEntities($this->request->data);
-                $requestData = $this->request->data;
+                $data = $this->request->data;
 
                 $sumPesos = 0;
                 $sumDolares = 0;
                 $cantCuotas = 0;
 
+                //Valido que los montos estén ok
                 for ($i = 0; $i < count($cuotas); $i++) {
-                    $sumPesos += $cuotas[$i]->monto_pesos;
-                    $sumDolares += $cuotas[$i]->monto_dolares;
-                    $cantCuotas +=1;
+                    $sumPesos += $data['montoPesos' . $i];
+                    $sumDolares += $data['montoDolares' . $i];
                 }
+                if ($sumPesos == $tarifa->monto_pesos && $sumDolares == $tarifa->monto_dolares) {
 
-//                foreach ($cuotas as $cuota) {
-//                    $sumPesos += $cuota->monto_pesos;
-//                    $sumDolares += $cuota->monto_dolares;
-//                    $cantCuotas +=1;
-//                }
-
-        //        if ($tarifa_aplicada->tarifa->monto_pesos == $sumPesos && $tarifa_aplicada->tarifa->monto_dolares == $sumDolares) {
-
-
-
-                    /*             $cuotasTableRegistry->connection()->transactional(function () use ($cuotasTableRegistry, $entities) {
-                                    foreach ($entities as $entity) {
-                                       $entity->tarifa_id = $tarifa->id;
-                            $cuotasTableRegistry->save($entity, ['atomic' => false]);
-                        }
-                    });*/
+                    for ($i = 0; $i < count($cuotas); $i++) {
+                        $vencimientoCargado =Time::create($data['vencimiento' . $i]['year'],
+                            $data['vencimiento' . $i]['month'], $data['vencimiento' . $i]['day']);
+                        $cuotaCargada = $this->Cuotas->newEntity();
+                        $cuotaCargada->tarifa_aplicada_id = $tarifa_aplicada_id;
+                        $cuotaCargada->monto_pesos = $data['montoPesos' . $i];
+                        $cuotaCargada->monto_dolares = $data['montoDolares' . $i];
+                        $cuotaCargada->vencimiento = $vencimientoCargado;
+                        $cuotaCargada->usuario_creacion = $this->Auth->user('id');;
+                        $cuotaCargada->fecha_creacion = Time::now();
+                        $cuotaCargada->cuota_eliminado = 0;
+                        $this->Cuotas->save($cuotaCargada);
+                    }
 
                     foreach ($cuotas as $cuota) {
                         $entity = $this->Cuotas->newEntity();
                         $entity->monto_pesos = $cuota->monto_pesos;
                         $entity->monto_dolares = $cuota->monto_dolares;
                     }
-
-
-                    /*
-                                foreach ($entities as $cuota) {
-                                   // $cuota = $this->Cuotas->patchEntity($cuota, $this->request->data);
-                                    $cuota->tarifa_id = $tarifa->id;
-                                    $cuota->usuario_creacion = 2;
-                                    $cuota->fecha_creacion = Time::now();
-                                    $cuota->eliminado = 0;
-
-                                    $this->Cuotas->save($cuota);
-                                }*/
-                    /*            $colegio = $this->Colegios->patchEntity($colegio, $this->request->data);
-                                $colegio->usuario_creacion = 2;
-                                $colegio->fecha_creacion = Time::now();
-                                $colegio->eliminado = 0;
-                                $colegio->direccion_id = 1;
-
-                                if ($this->Colegios->save($colegio)) {
-                                    $this->Flash->success(__('El colegio fue guardado'));
-
-                                    return $this->redirect(['action' => 'index']);
-                                }
-                                else {
-                                    $this->Flash->error(__('El colegio no pudo ser guardado. Por favor, intente nuevamente'));
-                                }*/
-            //    }
-//                } else {
-//                    return $this->redirect(['action' => 'add', $tarifa_aplicada_id,
-//                        "La suma de los montos de las cuotas no coincide con el total de la tarifa"]);
-//                }
-
+                    $this->set(compact('data'));
+                } else {
+                    //TODO mostrar un mensaje de que los montos no coinciden
+                }
             }
-            $this->set(compact('result'));
+            $indice = 0;
+            $this->set(compact('indice'));
+//            $this->set(compact('cuota'));
+//            $this->set('_serialize', ['cuota']);
+            $this->set(compact('cuotaPromedio'));
             $this->set('_serialize', ['result']);
             $this->set(compact('tarifa'));
             $this->set('_serialize', ['tarifa']);
@@ -175,6 +178,8 @@ class CuotasController extends AppController{
             $this->set('_serialize', ['requestData']);
             $this->set(compact('cuotaTest'));
             $this->set('_serialize', ['cuotaTest']);
+            $this->set('campos', $campos);
+
         } else {
             return $this->redirect(
                 ['controller' => 'Error', 'action' => 'notAuthorized']
