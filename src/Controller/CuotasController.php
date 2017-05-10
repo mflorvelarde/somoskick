@@ -204,8 +204,76 @@ class CuotasController extends AppController {
 
             $cuotas = $this->Cuotas->find('all')->where(['tarifa_aplicada_id' => $tarifa_aplicada_id,'cuota_eliminado' => 0]);
 
+            $this->set('tarifa_aplicada_id', $tarifa_aplicada_id);
             $this->set('tarifa', $tarifa);
             $this->set('cuotas', $cuotas);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
+    public function edit ($tarifa_aplicada_id) {
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $error = '';
+            $tarifasAplicadasTable = TableRegistry::get('TarifasAplicadas');
+            $tarifa_aplicada = $tarifasAplicadasTable->get($tarifa_aplicada_id, ['contain' => ['Tarifas']]);
+            $tarifa = $tarifa_aplicada->tarifa;
+
+            $cuotasQuery = $this->Cuotas->find('all')->where(['tarifa_aplicada_id' => $tarifa_aplicada_id,'cuota_eliminado' => 0]);
+            $cuotas = $cuotasQuery->toList();
+            $campos = array();
+            for ($i = 0; $i < count($cuotas); $i++) {
+                $arrayCuota = array();
+                $labelmontoDolares = "montoDolares" . $i;
+                $labelmontoPesos = "montoPesos" . $i;
+                $labelVencimiento = "vencimiento" . $i;
+                array_push($arrayCuota, $labelmontoDolares);
+                array_push($arrayCuota, $labelmontoPesos);
+                array_push($arrayCuota, $labelVencimiento);
+                array_push($arrayCuota, $cuotas[$i]);
+
+                array_push($campos, $arrayCuota);
+            }
+            if ($this->request->is('post')) {
+                $data = $this->request->data;
+
+                $sumPesos = 0;
+                $sumDolares = 0;
+
+                //Valido que los montos estén ok
+                for ($i = 0; $i < count($cuotas); $i++) {
+                    $sumPesos += $data['montoPesos' . $i];
+                    $sumDolares += $data['montoDolares' . $i];
+                }
+                if ($sumPesos == $tarifa->monto_pesos && $sumDolares == $tarifa->monto_dolares) {
+                    for ($i = 0; $i < count($cuotas); $i++) {
+                        $vencimientoCargado =Time::create($data['vencimiento' . $i]['year'],
+                            $data['vencimiento' . $i]['month'], $data['vencimiento' . $i]['day']);
+
+                        $cuotas[$i]->vencimiento = $vencimientoCargado;
+                        $cuotas[$i]->monto_pesos = $data['montoPesos' . $i];
+                        $cuotas[$i]->monto_dolares = $data['montoDolares' . $i];
+                        $cuotas[$i]->vencimiento = $vencimientoCargado;
+                        $cuotas[$i]->usuario_modificacion = $this->Auth->user('id');;
+                        $cuotas[$i]->fecha_modificacion = Time::now();
+
+                    }
+                    $this->Cuotas->saveMany($cuotas);
+                    $this->generarCuotasAplicadas($tarifa_aplicada_id);
+                    return $this->redirect(
+                        ['controller' => 'Tarifas', 'action' => 'index']
+                    );
+                } else {
+                    $error = "La suma de los montos de las cuotas no coincide con el total de la tarifa";
+                }
+            }
+            $this->set('error', $error);
+            $this->set('tarifa', $tarifa);
+            $this->set('cuotas', $cuotas);
+            $this->set('campos', $campos);
         } else {
             return $this->redirect(
                 ['controller' => 'Error', 'action' => 'notAuthorized']
