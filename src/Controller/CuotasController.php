@@ -165,7 +165,7 @@ class CuotasController extends AppController {
         }
     }
 
-    public function generarCuotasAplicadas($tarifa_aplicada_id){
+    private function generarCuotasAplicadas($tarifa_aplicada_id){
         $pasajerosdegruposTable = TableRegistry::get('Pasajerosdegrupos');
         $queryPasajeros = $pasajerosdegruposTable->find('all',['contain' => ['Grupos']])
             ->where(['grupo_eliminado' => 0, 'pasajerodegrupo_eliminado' => 0,
@@ -192,6 +192,24 @@ class CuotasController extends AppController {
         if (count($cuotasAplicadasParaPasajeros) > 0) {
             $entities = $cuotasAplicadasTable->newEntities($cuotasAplicadasParaPasajeros);
             $cuotasAplicadasTable->saveMany($entities);
+        }
+    }
+
+    public function view ($tarifa_aplicada_id) {
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $tarifasAplicadasTable = TableRegistry::get('TarifasAplicadas');
+            $tarifa_aplicada = $tarifasAplicadasTable->get($tarifa_aplicada_id, ['contain' => ['Tarifas']]);
+            $tarifa = $tarifa_aplicada->tarifa;
+
+            $cuotas = $this->Cuotas->find('all')->where(['tarifa_aplicada_id' => $tarifa_aplicada_id,'cuota_eliminado' => 0]);
+
+            $this->set('tarifa', $tarifa);
+            $this->set('cuotas', $cuotas);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
         }
     }
 }

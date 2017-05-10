@@ -51,32 +51,36 @@
                                 </div>
                                 <!-- /.row -->
                             </div>
-                    <h3 style="margin-bottom: 20px; color: red; background-color: #FBEFEF;"><?= h($error)?></h3>
+                            <div class="box box-widget widget-user">
+                                <div class="widget-user-header bg-maroon-active" style="height: 30px;padding-top: 5px;padding-bottom: 5px;">
+                                    <h5 style='font-size:20px' class="widget-user-username" id="nombre-grupo">Plan de pagos</h5>
+                                </div>
+                            </div>
                     <table id="example1" class="table table-bordered table-striped">
-                        <?= $this->Form->create() ?>
-                        <tbody>
-                        <?php foreach ($campos as $campo): ?>
+                        <thead>
                             <tr>
-                                <td>
-                                    <div class="form-group">
-                                            <?php  echo $this->Form->date($campo[2],  ['required' => true, 'class' => 'form-control', 'value'=>$campo[3]['vencimiento']]); ?>
-                                    </div>
-                                </td>
-                                <td> 
-                                    <div class="form-group"> 
-                                            <?php  echo $this->Form->number($campo[1],  ['required' => true, 'class' => 'form-control','value'=>$campo[3]['monto_pesos']]); ?> 
-                                    </div> 
-                                </td>
-                                 <td> 
-                                    <div class="form-group"> 
-                                            <?php  echo $this->Form->number($campo[0],  ['required' => true, 'class' => 'form-control','value'=>$campo[3]['monto_dolares'] ] ); ?> 
-                                    </div>
-                                 </td>
+                                <td>Vencimiento</td>
+                                <td>Monto en pesos</td>
+                                <td>Monto en dolares</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($cuotas as $cuota): ?>
+                            <tr>
+                                <td><?= h($cuota->vencimiento)?></td>
+                                <td><?= h($cuota->monto_pesos)?></td>
+                                <td><?= h($cuota->monto_dolares)?></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Vencimiento</td>
+                                <td>Monto en pesos</td>
+                                <td>Monto en dolares</td>
+                            </tr>
+                        </tfoot>
                     </table>
-                    <?= $this->Form->button(__('Guardar'), ['class'=>'btn btn-success', 'style' => 'margin-top:1em']) ?>
                 </div>
             </div>
         </div>

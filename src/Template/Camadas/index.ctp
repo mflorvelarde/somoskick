@@ -19,7 +19,7 @@ $( document ).ready(function(){
             <div class="box">
                 <div class="box-body">
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-xs-12">
                             <?= $this->Html->link(__('Nueva camada'), ['action' => 'add'] , array('class'=>'btn bg-maroon margin-bottom') ) ?>
                         </div>
                     </div>
@@ -32,9 +32,6 @@ $( document ).ready(function(){
                                 <th>Código</th>
                                 <th>Vendedor</th>
                                 <th>Estado</th>
-<!--                                <th>En lista de espera</th>
-                                <th>Regulares</th>
-                                <th>Registrados</th> -->
                                 <th>Por contrato</th>
                                 <th></th>
                             </tr>
@@ -48,9 +45,6 @@ $( document ).ready(function(){
                                 <td><?= h($camada->grupo->codigo_grupo)?></td>
                                 <td><?= h($camada->persona->nombre)?></td>
                                 <td><span class="label label-success"><?= h($camada->diccionario->value)?></span></td>
-<!--                                 <td>No</td>
-                                <td>18</td>
-                                <td>18</td> -->
                                 <td><?= h($camada->grupo->pasajeros_estimados)?></td>
                                 <td>
                                     <div class="btn-group">
@@ -72,9 +66,6 @@ $( document ).ready(function(){
                                 <th>Año</th>
                                 <th>Vendedor</th>
                                 <th>Estado</th>
-   <!--                             <th>En lista de espera</th>
-                                <th>Regulares</th>
-                                <th>Registrados</th> -->
                                 <th>Por contrato</th>
                                 <th></th>
                             </tr>
