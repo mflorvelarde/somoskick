@@ -1,55 +1,65 @@
-
-     
-	       <!-- Page Heading -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        
-                        <h1 class="page-header">
-                            Vista de Persona
-                        </h1>
-                     <ol class="breadcrumb">
-			<li>
-			    <i class="fa fa-wrench"></i>  <a href="index.html">Administraci&oacute;n</a>
-			</li>
-			<li class="active">
-			    <i class="fa fa-user"> </i> <a href="<?php echo $this->Url->build(["controller" => "Personas", "action" => "index"]);?>"> Usuarios </a>
-			</li>
-			
-			<li class="active">
-			    <i class="fa fa-eye"></i> Vista Persona <?= h($persona->email) ?>
-			</li>
-			
-		    </ol>
+<section class="content-header">
+	<h1 class="page-header">
+	    <?= h($tarifa->descripcion)?>
+	</h1>
+	<ol class="breadcrumb">
+	    <li>
+		<i class="fa fa-wrench"></i>  <a href="index.html">Administraci&oacute;n</a>
+	    </li>
+	    <li class="active">Tarifas</li>
+	</ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <!-- Widget: user widget style 1 -->
+                            <div class="box box-widget widget-user">
+                            <div class="box box-widget widget-user">
+                                <div class="widget-user-header bg-maroon-active" style="height: 55px">
+                                    <h3 class="widget-user-username" id="nombre-grupo"><?= h($tarifa->viaje->destino)?></h3>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                <div class="row">
+                                    <!-- /.col -->
+                                    <div class="col-sm-4 border-right">
+                                        <div class="description-block">
+                                            <h5 class="description-header"><?= h($tarifa->fin_pago)?></h5>
+                                            <span class="description-text">Fin de pagos</span>
+                                        </div>
+                                        <!-- /.description-block -->
+                                    </div>
+                                    <div class="col-sm-4 border-right">
+                                        <div class="description-block">
+                                            <h5 class="description-header"><?= h($tarifa->monto_pesos)?></h5>
+                                            <span class="description-text">Monto en pesos</span>
+                                        </div>
+                                        <!-- /.description-block -->
+                                    </div>
+                                    <!-- /.col -->
+                                    <div class="col-sm-4 border-right">
+                                        <div class="description-block">
+                                            <h5 class="description-header"><?= h($tarifa->monto_dolares)?></h5>
+                                            <span class="description-text">Monto en dólares</span>
+                                        </div>
+                                        <!-- /.description-block -->
+                                    </div>
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <?= $this->Html->link(__('Volver'), ['action' => 'index'] , array('class'=>'btn bg-maroon margin-bottom') ) ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- /.row -->
-
-                <div class="row">
-                    <div class="col-lg-12">
-
-                            <div class="form-group">
-                                <label>ID: </label> <?= h($persona->id) ?>
-                            </div>
-                            
-                             <div class="form-group">
-                                <label>Nombre y Apellido: </label> <?= h($persona->apellido) ?>, <?= h($persona->nombre) ?>
-                            </div>
-                            
-                             <div class="form-group">
-                                <label>DNI: </label> <?= h($persona->dni) ?>
-                            </div>
-
-                    </div>
-                    
-                 
-                </div>
-                <!-- /.row -->
-
             </div>
-            <!-- /.container-fluid -->
-
         </div>
-        <!-- /#page-wrapper -->
-
     </div>
-    <!-- /#wrapper -->
+</section>

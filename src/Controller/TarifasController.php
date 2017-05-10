@@ -40,7 +40,7 @@ class TarifasController extends AppController {
     public function view($id = null) {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
-            $tarifa = $this->Tarifas->get($id);
+            $tarifa = $this->Tarifas->get($id, ['contain' => ['Viajes']]);
 
             $this->set('tarifa', $tarifa);
             $this->set('_serialize', ['tarifa']);
