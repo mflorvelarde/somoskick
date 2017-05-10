@@ -257,7 +257,9 @@ class CamadasController extends AppController{
                 $camada = $this->Camadas->get($id);
                 $camada->camada_eliminado = 1;
                 $camada->usuario_eliminado = $this->Auth->user('id');;
-                $camada->fecha_eliminado = date("d/m/Y");
+                $camada->fecha_eliminado = Time::now();
+
+                $this->deleteGroup($camada->grupo_id);
                 if ($this->Camadas->save($camada)) {
                     $this->Flash->success(__('La camada fue eliminada'));
                 } else {
@@ -269,6 +271,16 @@ class CamadasController extends AppController{
                 ['controller' => 'Error', 'action' => 'notAuthorized']
             );
         }
+    }
+
+    private function deleteGroup($id) {
+        $gruposTable = TableRegistry::get('Grupos');
+        $grupo = $gruposTable->get($id);
+        $grupo->grupo_eliminado = 1;
+        $grupo->usuario_eliminado = $this->Auth->user('id');;
+        $grupo->fecha_eliminado = Time::now();
+
+        $gruposTable->save($grupo);
     }
 
     public function buscartarifas($camada_id) {
