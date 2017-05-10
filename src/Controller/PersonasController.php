@@ -21,10 +21,17 @@ class PersonasController extends AppController{
     }
 
     public function index() {
-        $personas = $this->Personas->find('all')->where(['persona_eliminado'=>0, 'perfil <>'=> 'CLIENTE']);
+        $userID = $this->Auth->user('id');
+        if ($this->isAdmin($userID)) {
+            $personas = $this->Personas->find('all')->where(['persona_eliminado'=>0, 'perfil <>'=> 'CLIENTE']);
 
-        $this->set(compact('personas'));
-        $this->set('_serialize', ['personas']);
+            $this->set(compact('personas'));
+            $this->set('_serialize', ['personas']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
     }
 
     public function view($id = null) {
