@@ -45,12 +45,8 @@ class GruposController  extends AppController{
                 $this->agregarTarifaAplicadaApasajerosdDeGrupos($entity->Grupos, $tarifaAplicadaID);
 
                 return $this->redirect(
-                    ['controller' => 'Tarifas', 'action' => 'index']
+                    ['controller' => 'Cuotas', 'action' => 'add', $tarifaAplicadaID]
                 );
-
-//                return $this->redirect(
-//                    ['controller' => 'Cuotas', 'action' => 'add', $tarifaAplicadaID]
-//                );
             }
 
             $this->set('grupo', $grupo);

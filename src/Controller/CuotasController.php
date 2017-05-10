@@ -15,8 +15,6 @@ class CuotasController extends AppController {
     public function add($tarifa_aplicada_id, $error = null) {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
-
-            $cuotaTest = $this->Cuotas->newEntity();
             $tarifasAplicadasTable = TableRegistry::get('TarifasAplicadas');
             $tarifa_aplicada = $tarifasAplicadasTable->get($tarifa_aplicada_id, ['contain' => ['Tarifas']]);
             $tarifa = $tarifa_aplicada->tarifa;
@@ -44,6 +42,7 @@ class CuotasController extends AppController {
                     if ($i == count($cuotas) - 1) {
                         $cuotas[$i]->monto_dolares = $tarifa->monto_dolares - $cuotaPromedio * (count($cuotas) - 1);
                     } else $cuotas[$i]->monto_dolares = $cuotaPromedio;
+                    $cuotas[$i]->monto_pesos = 0;
 
                     $arrayCuota = array();
                     $labelmontoDolares = "montoDolares" . $i;
@@ -62,6 +61,7 @@ class CuotasController extends AppController {
                     if ($i == count($cuotas) - 1) {
                         $cuotas[$i]->monto_pesos = $tarifa->monto_pesos - $cuotaPromedio * (count($cuotas) - 1);
                     } else $cuotas[$i]->monto_pesos = $cuotaPromedio;
+                    $cuotas[$i]->monto_dolares = 0;
 
                     $arrayCuota = array();
                     $labelmontoDolares = "montoDolares" . $i;
@@ -115,7 +115,6 @@ class CuotasController extends AppController {
 
                 $sumPesos = 0;
                 $sumDolares = 0;
-                $cantCuotas = 0;
 
                 //Valido que los montos estén ok
                 for ($i = 0; $i < count($cuotas); $i++) {
@@ -137,23 +136,14 @@ class CuotasController extends AppController {
                         $cuotaCargada->cuota_eliminado = 0;
                         $this->Cuotas->save($cuotaCargada);
                     }
-
-                    foreach ($cuotas as $cuota) {
-                        $entity = $this->Cuotas->newEntity();
-                        $entity->monto_pesos = $cuota->monto_pesos;
-                        $entity->monto_dolares = $cuota->monto_dolares;
-                    }
-                    $this->set(compact('data'));
+                    $this->generarCuotasAplicadas($tarifa_aplicada_id);
+                    return $this->redirect(
+                        ['controller' => 'Tarifas', 'action' => 'index']
+                    );
                 } else {
-                    //TODO mostrar un mensaje de que los montos no coinciden
+                    $error = "La suma de los montos de las cuotas no coincide con el total de la tarifa";
                 }
             }
-            $indice = 0;
-            $this->set(compact('indice'));
-//            $this->set(compact('cuota'));
-//            $this->set('_serialize', ['cuota']);
-            $this->set(compact('cuotaPromedio'));
-            $this->set('_serialize', ['result']);
             $this->set(compact('tarifa'));
             $this->set('_serialize', ['tarifa']);
             $this->set(compact('error'));
@@ -166,24 +156,42 @@ class CuotasController extends AppController {
             $this->set('_serialize', ['inicioPago']);
             $this->set(compact('date'));
             $this->set('_serialize', ['date']);
-            $this->set(compact('finPago'));
-            $this->set('_serialize', ['finPago']);
-            $this->set(compact('cantCuotas'));
-            $this->set('_serialize', ['cantCuotas']);
-            $this->set(compact('sumPesos'));
-            $this->set('_serialize', ['sumPesos']);
-            $this->set(compact('sumDolares'));
-            $this->set('_serialize', ['sumDolares']);
-            $this->set(compact('requestData'));
-            $this->set('_serialize', ['requestData']);
-            $this->set(compact('cuotaTest'));
-            $this->set('_serialize', ['cuotaTest']);
             $this->set('campos', $campos);
 
         } else {
             return $this->redirect(
                 ['controller' => 'Error', 'action' => 'notAuthorized']
             );
+        }
+    }
+
+    public function generarCuotasAplicadas($tarifa_aplicada_id){
+        $pasajerosdegruposTable = TableRegistry::get('Pasajerosdegrupos');
+        $queryPasajeros = $pasajerosdegruposTable->find('all',['contain' => ['Grupos']])
+            ->where(['grupo_eliminado' => 0, 'pasajerodegrupo_eliminado' => 0,
+                'grupos.tarifa_aplicada_id' => $tarifa_aplicada_id]);
+        $resultPasajeros = $queryPasajeros->toList();
+
+        $cuotas = $this->Cuotas->find('all')->where(['tarifa_aplicada_id' => $tarifa_aplicada_id,'cuota_eliminado' => 0]);
+
+        $cuotasAplicadasTable = TableRegistry::get('CuotasAplicadas');
+        $cuotasAplicadasParaPasajeros = array();
+        foreach ($resultPasajeros as $pasajero) {
+            if (!(!is_null($pasajero->tarifa_aplicada_id) && $pasajero->tarifa_aplicada_id != $tarifa_aplicada_id)) {
+                foreach ($cuotas as $cuota) {
+                    $cuotaAplicada = $cuotasAplicadasTable->newEntity();
+                    $cuotaAplicada->cuota_id = $cuota->id;
+                    $cuotaAplicada->pasajero_grupo_id = $pasajero->id;
+                    $cuotaAplicada->usuario_creacion = $this->Auth->user('id');;
+                    $cuotaAplicada->fecha_creacion = Time::now();
+                    $cuotaAplicada->cuota_aplicada_eliminado = 0;
+                    array_push($cuotasAplicadasParaPasajeros, $cuota);
+                }
+            }
+        }
+        if (count($cuotasAplicadasParaPasajeros) > 0) {
+            $entities = $cuotasAplicadasTable->newEntities($cuotasAplicadasParaPasajeros);
+            $cuotasAplicadasTable->saveMany($entities);
         }
     }
 }

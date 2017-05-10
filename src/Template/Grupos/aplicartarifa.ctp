@@ -55,10 +55,7 @@
                         <div class="col-xs-12">
                         <?= $this->Form->create($grupo) ?>
                             <div class="form-group">
-                                <?php echo $this->Form->input('Grupos', array(
-                                    'options' => $grupos_options,
-                                    'multiple' => 'checkbox'
-                                    )); ?>
+                                <?php echo $this->Form->input('Grupos', ['options' => $grupos_options]); ?>
                             </div>
                             <div class="form-group">
                                 <label>Fecha de vencimiento de primera cuota</label>
