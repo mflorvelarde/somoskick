@@ -21,7 +21,7 @@ class PersonasController extends AppController{
     }
 
     public function index() {
-        $personas = $this->paginate($this->Personas);
+        $personas = $this->Personas->find('all')->where(['persona_eliminado'=>0, 'perfil <>'=> 'CLIENTE']);
 
         $this->set(compact('personas'));
         $this->set('_serialize', ['personas']);
@@ -165,6 +165,37 @@ class PersonasController extends AppController{
         $this->set('_serialize', ['persona']);
     }
 
+    public function addkick() {
+        $userID = $this->Auth->user('id');
+        if ($this->isAdmin($userID)) {
+            $persona = $this->Personas->newEntity();
+            if ($this->request->is('post')) {
+                $persona = $this->Personas->patchEntity($persona, $this->request->data);
+
+                $contrasena = md5($persona->dni . Time::now()->toDateTimeString());
+                $result = $query = $this->Personas->query()
+                    ->insert(['nombre', 'apellido', 'dni', 'telefono', 'celular', 'mail', 'contrasena',
+                        'perfil', 'contrasena_reset', 'persona_eliminado','fecha_creacion', 'usuario_creacion'])
+                    ->values(['nombre' => $persona->nombre, 'apellido' => $persona->apellido, 'dni' => $persona->dni,
+                        'telefono' => $persona->telefono, 'celular' => $persona->celular, 'nacionalidad' => $persona->nacionalidad,
+                        'mail' => $persona->mail, 'contrasena' => $contrasena,
+                        'perfil' => $persona->perfil,'contrasena_reset' => 1, 'persona_eliminado' => 0,
+                        'fecha_creacion' => Time::now(), 'usuario_creacion' => $this->Auth->user('id')])
+                    ->execute();
+
+                $mail = $persona->mail;
+                $this->sendWelcomeEmail($contrasena, $mail);
+                return $this->redirect(['action' => 'index']);
+            }
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+        $this->set(compact('persona'));
+        $this->set('_serialize', ['persona']);
+    }
+
     public function delete($id = null)
     {
         $userID = $this->Auth->user('id');
@@ -251,5 +282,17 @@ class PersonasController extends AppController{
                 ['controller' => 'Error', 'action' => 'notAuthorized']
             );
         }
+    }
+
+    private function sendWelcomeEmail($code, $mail) {
+        $email = new Email('default');
+        $email->sender('administracion@somoskick.com', 'Kick');
+        $email->from('administracion@somoskick.com')
+            ->addTo($mail)
+            ->subject('Se ha registrado correctamente')
+            ->emailFormat('html')
+            ->viewVars(['code' => $code])
+            ->template('default');
+        $email->send();
     }
 }

@@ -159,4 +159,22 @@ class GruposController  extends AppController{
         }
         $result = $pasajerosDeGruposTable->saveMany($pasajerosDeGrupos);
     }
+
+    public function verplanes($tarifa_id=null) {
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            if (is_null($tarifa_id)) {
+                $grupos = $this->Grupos->find('all', ['contain' => ['TarifasAplicadas' => ['Tarifas']]])
+                    ->where(['grupo_eliminado' => 0]);
+            } else {
+                $grupos = $this->Grupos->find('all', ['contain' => ['TarifasAplicadas' => ['Tarifas']]])
+                    ->where(['grupo_eliminado' => 0, 'tarifa_id' => $tarifa_id]);
+            }
+            $this->set('grupos', $grupos);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
 }

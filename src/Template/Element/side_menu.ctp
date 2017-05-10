@@ -17,7 +17,7 @@
         </li>
 		<li>
           <a href="<?php echo $this->Url->build(["controller" => "Pasajerosdegrupos", "action" => "index"]);?>">
-            <i class="fa fa-users"></i> <span>Pasajeros</span>
+            <i class="fa fa-plane"></i> <span>Pasajeros</span>
           </a>
         </li>
 		<li>
@@ -30,16 +30,26 @@
             <i class="fa fa-bookmark-o"></i> <span>Tarifas</span>
           </a>
         </li>
-		<li>
-          <a href="<?php echo $this->Url->build(["controller" => "Viajes", "action" => "index"]);?>">
-            <i class="fa fa-plane"></i> <span>Destinos</span>
+        <li>
+          <a href="<?php echo $this->Url->build(["controller" => "Grupos", "action" => "verplanes"]);?>">
+            <i class="fa fa-list"></i> <span>Planes de pago</span>
           </a>
         </li>
 		<li>
+          <a href="<?php echo $this->Url->build(["controller" => "Viajes", "action" => "index"]);?>">
+            <i class="fa fa-map-marker"></i> <span>Destinos</span>
+          </a>
+        </li>
+		<li>
+          <a href="<?php echo $this->Url->build(["controller" => "Personas", "action" => "index"]);?>">
+            <i class="fa fa-users"></i> <span>Usuarios Kick</span>
+          </a>
+        </li>
+<!--		<li>
           <a href="<?php echo $this->Url->build(["controller" => "Dolares", "action" => "index"]);?>">
             <i class="fa fa-money"></i> <span>Cotización dolar</span>
           </a>
-        </li>
+        </li> -->
 		<li class="header">MI CUENTA</li>
         <li>          <a href="<?php echo $this->Url->build(["controller" => "Personas", "action" => "miperfil"]);?>">
                             <i class="fa fa-circle-o text-aqua"></i> <span>Ver perfil</span></a></li>

@@ -81,6 +81,11 @@
                             </tr>
                         </tfoot>
                     </table>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?= $this->Html->link(__('Editar'), ['action' => 'edit', $tarifa_aplicada_id] , array('class'=>'btn bg-maroon margin-bottom') ) ?>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

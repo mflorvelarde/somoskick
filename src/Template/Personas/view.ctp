@@ -1,55 +1,78 @@
-
-     
-	       <!-- Page Heading -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        
-                        <h1 class="page-header">
-                            Vista de Persona
-                        </h1>
-                     <ol class="breadcrumb">
-			<li>
-			    <i class="fa fa-wrench"></i>  <a href="index.html">Administraci&oacute;n</a>
-			</li>
-			<li class="active">
-			    <i class="fa fa-user"> </i> <a href="<?php echo $this->Url->build(["controller" => "Personas", "action" => "index"]);?>"> Usuarios </a>
-			</li>
-			
-			<li class="active">
-			    <i class="fa fa-eye"></i> Vista Persona <?= h($persona->email) ?>
-			</li>
-			
-		    </ol>
+<section class="content-header">
+    <h1 class="page-header">
+        Nuevo Usuario kick
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <i class="fa fa-wrench"></i>  <a href="index.html">Administraci&oacute;n</a>
+        </li>
+        <li class="active">
+            <a href="<?php echo $this->Url->build(["controller" => "Personas", "action" => "index"]);?>"> Personas </a>
+        </li>
+        <li class="active">
+            <i class="fa fa-pencil"></i> Nuevo
+        </li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <?= $this->Form->create($persona) ?>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="col-sm-6"  style="padding: 0px">
+                                <div class="form-group">
+                                   <label>Nombre: </label> <?= h($persona->nombre)?>
+                                </div>
+                            </div>
+                            <div class="col-sm-6"  style="padding: 0px">
+                                <div class="form-group">
+                                   <label>Apellido: </label> <?= h($persona->apellido)?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-6"  style="padding: 0px">
+                                <div class="form-group">
+                                   <label>DNI: </label> <?= h($persona->dni)?>
+                                </div>
+                            </div>
+                            <div class="col-sm-6"  style="padding: 0px">
+                                <div class="form-group">
+                                   <label>Perfil: </label> <?= h($persona->perfil)?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-12"  style="padding: 0px">
+                                <div class="form-group">
+                                   <label>Email: </label> <?= h($persona->mail)?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-6"  style="padding: 0px">
+                                <div class="form-group">
+                                   <label>Teléfono: </label> <?= h($persona->telefono)?>
+                                </div>
+                            </div>
+                            <div class="col-sm-6"  style="padding: 0px">
+                                <div class="form-group">
+                                   <label>Celular: </label> <?= h($persona->celular)?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-12"  style="padding: 0px">
+                               <?= $this->Html->link(__('Volver'), ['action' => 'index'] , array('class'=>'btn bg-maroon margin-bottom') ) ?>
+                            </div>
+                        </div>
+                      </div>
                     </div>
                 </div>
-                <!-- /.row -->
-
-                <div class="row">
-                    <div class="col-lg-12">
-
-                            <div class="form-group">
-                                <label>ID: </label> <?= h($persona->id) ?>
-                            </div>
-                            
-                             <div class="form-group">
-                                <label>Nombre y Apellido: </label> <?= h($persona->apellido) ?>, <?= h($persona->nombre) ?>
-                            </div>
-                            
-                             <div class="form-group">
-                                <label>DNI: </label> <?= h($persona->dni) ?>
-                            </div>
-
-                    </div>
-                    
-                 
-                </div>
-                <!-- /.row -->
-
             </div>
-            <!-- /.container-fluid -->
-
         </div>
-        <!-- /#page-wrapper -->
-
     </div>
-    <!-- /#wrapper -->
+</section>

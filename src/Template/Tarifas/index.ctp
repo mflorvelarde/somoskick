@@ -1,3 +1,8 @@
+<script type="text/javascript">
+    $( document ).ready(function(){
+       $('#tarifas-table').dynatable();
+    });
+</script>
 <section class="content-header">
 	<h1 class="page-header">
 	    Tarifas
@@ -21,7 +26,7 @@
                             <?= $this->Html->link(__('Nueva tarifa'), ['action' => 'add'] , array('class'=>'btn bg-maroon margin-bottom') ) ?>
                         </div>
                     </div>
-                    <table id="example1" class="table table-bordered table-striped">
+                    <table id="tarifas-table" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Descripcion</th>
@@ -51,6 +56,8 @@
                                           <ul class="dropdown-menu" role="menu">
                                               <li><?= $this->Html->link('Ver tarifa', ['action' => 'view', $tarifa->id]) ?></li>
                                               <li><?= $this->Html->link('Aplicar a grupos', ['action' => 'aplicarGrupos', $tarifa->id]) ?></li>
+                                                <li><?= $this->Html->link('Ver planes asociados', ['controller'=>'Grupos','action' => 'verplanes', $tarifa->id]) ?></li>
+                                                                                        <li class="divider"></li>
                                               <li><?= $this->Form->postLink('Borrar tarifa', ['action' => 'delete', $tarifa->id], ['confirm' => __('Confirmar borrado de tarifa', $tarifa->id)] ) ?></li>
                                           </ul>
                                       </div>
@@ -74,19 +81,3 @@
     </div>
   </div>
 </div>
-
-
-
-<script>
-    $(function () {
-        $("#example1").DataTable();
-        $('#example2').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false
-        });
-    });
-</script>
