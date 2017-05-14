@@ -203,18 +203,18 @@ class PersonasController extends AppController{
         $this->set('_serialize', ['persona']);
     }
 
-    public function delete($id = null)
-    {
+    public function delete($id = null) {
         $userID = $this->Auth->user('id');
         if ($this->isAdmin($userID)) {
             $this->request->allowMethod(['post', 'delete']);
 
             $persona = $this->Personas->get($id);
-            if ($this->Personas->delete($persona)) {
-                $this->Flash->success(__('The user has been deleted.'));
-            } else {
-                $this->Flash->error(__('The user could not be deleted. Please, try again.'));
-            }
+            $persona->persona_eliminado = 1;
+            $persona->fecha_eliminado = Time::now();
+            $persona->usuario_eliminado = $this->Auth->user('id');
+
+            $this->Personas->save($persona);
+
         } else {
             return $this->redirect(
                 ['controller' => 'Error', 'action' => 'notAuthorized']
@@ -223,7 +223,6 @@ class PersonasController extends AppController{
 
         return $this->redirect(['action' => 'index']);
     }
-
     public function edit($id = null) {
         $userID = $this->Auth->user('id');
         if ($this->isAdmin($userID)) {
@@ -301,5 +300,19 @@ class PersonasController extends AppController{
             ->viewVars(['code' => $code])
             ->template('default');
         $email->send();
+    }
+
+    public function viewall() {
+        $userID = $this->Auth->user('id');
+        if ($this->isAdmin($userID)) {
+            $personas = $this->Personas->find('all')->where(['persona_eliminado'=>0]);
+
+            $this->set(compact('personas'));
+            $this->set('_serialize', ['personas']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
     }
 }
