@@ -22,19 +22,24 @@
                     <div class="row">
                         <div class="col-sm-12">
                               <div class="col-sm-12" style="padding: 0px">
-                                  <div class="col-sm-4" style="padding-left: 0px">
+                                  <div class="col-sm-6" style="padding-left: 0px">
                                         <div class="form-group">
                                             <?php  echo $this->Form->input('grupo.nombre',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                         </div>
                                   </div>
-                                  <div class="col-sm-4">
+                                  <div class="col-sm-2">
                                         <div class="form-group">
                                             <?php  echo $this->Form->input('año',  ['required' => true, 'class' => 'form-control' ] ); ?>
                                         </div>
                                   </div>
-                                  <div class="col-sm-4" style="padding-right: 0px">
+                                  <div class="col-sm-2" style="padding-left: 0px">
                                         <div class="form-group">
                                             <?php  echo $this->Form->input('grupo.pasajeros_estimados',  ['required' => false, 'class' => 'form-control' ] ); ?>
+                                        </div>
+                                  </div>
+                                  <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <?php  echo $this->Form->input('grupo.liberados',  ['required' => false, 'class' => 'form-control' ] ); ?>
                                         </div>
                                   </div>
                               </div>
@@ -48,29 +53,41 @@
                             <div class="form-group">
                                 <?php echo $this->Form->input('diccionario_id', ['options' => $estados, 'label' => 'Estado', 'value'=> $camada->diccionario_id]); ?>
                             </div>
+                          <div class="col-md-12" style="padding: 0px">
+                              <div class="col-md-6" style="padding-left: 0px">
+                                    <div class="form-group">
+                                        <?php  echo $this->Form->input('contacto1',  ['required' => false, 'class' => 'form-control', 'label' => 'Contacto'] ); ?>
+                                    </div>
+                              </div>
+                              <div class="col-md-6" style="padding-right: 0px">
+                                    <div class="form-group">
+                                        <?php  echo $this->Form->input('contacto2',  ['required' => false,
+                                        'class' => 'form-control', 'label' => 'Contacto' ] ); ?>
+                                    </div>
 
+                              </div>
+                          </div>
+                            <div class="col-md-12" style="padding: 0px">
+                                <div class="col-md-6" style="padding-left: 0px">
+                                      <div class="form-group">
+                                          <?php  echo $this->Form->input('firmante1',  ['required' => false, 'class' => 'form-control', 'label' => 'Firmante'] ); ?>
+                                      </div>
+                                </div>
+                                <div class="col-md-6" style="padding-right: 0px">
+                                      <div class="form-group">
+                                          <?php  echo $this->Form->input('firmante2',  ['required' => false,
+                                          'class' => 'form-control', 'label' => 'Firmante' ] ); ?>
+                                      </div>
 
-                                  <div class="col-md-12" style="padding: 0px">
-                                      <div class="col-md-6" style="padding-left: 0px">
-                                            <div class="form-group">
-                                                <?php  echo $this->Form->input('contacto1',  ['required' => false, 'class' => 'form-control', 'label' => 'Contacto'] ); ?>
-                                            </div>
-                                      </div>
-                                      <div class="col-md-6" style="padding-right: 0px">
-                                            <div class="form-group">
-                                                <?php  echo $this->Form->input('contacto2',  ['required' => false,
-                                                'class' => 'form-control', 'label' => 'Contacto' ] ); ?>
-                                            </div>
-
-                                      </div>
-                                  </div>
-                                  <div class="col-md-12" style="padding: 0px">
-                                      <div class="col-md-12" style="padding-left: 0px">
-                                            <div class="form-group">
-                                                <?php  echo $this->Form->file('file'); ?>
-                                            </div>
-                                      </div>
-                                  </div>
+                                </div>
+                            </div>
+                          <div class="col-md-12" style="padding: 0px">
+                              <div class="col-md-12" style="padding-left: 0px">
+                                    <div class="form-group">
+                                        <?php  echo $this->Form->file('file'); ?>
+                                    </div>
+                              </div>
+                          </div>
 
                             <?= $this->Form->button(__('Guardar'), ['class'=>'btn btn-success']) ?>
                             <?= $this->Html->link(__('Cancelar'), ['action' => 'index'] , array('class'=>'btn btn-danger') ) ?>

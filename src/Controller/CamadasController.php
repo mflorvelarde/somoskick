@@ -203,6 +203,7 @@ class CamadasController extends AppController{
                 $grupos->nombre = $camada->grupo->nombre;
                 $grupos->contrato = $camada->grupo->contrato;
                 $grupos->pasajeros_estimados = $camada->grupo->pasajeros_estimados;
+                $grupos->liberados = $camada->grupo->liberados;
                 $grupos->grupo_eliminado = 0;
                 $grupos->codigo_grupo = $this->generateGroupCode();
                 $grupos->fecha_creacion = Time::now();
