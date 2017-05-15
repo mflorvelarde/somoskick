@@ -24,14 +24,20 @@
     </div>
     <div class='box-body'>
         <dl class='dl-horizontal'>
-            <dt>Cuota</dt>
-            <dd><?= h($notificacion->cuota_aplicada_id)?></dd>
-            <dt>Medio de pago</dt>
-            <dd><?= h($notificacion->medio_pago)?></dd>
-            <dt>Monto</dt>
+            <dt>Monto de cuota</dt>
+            <dd><?= h($cuota->moneda)?><?= h($cuota->monto)?></dd>
+            <dt>Monto abonado</dt>
             <dd><?= h($notificacion->moneda)?><?= h($notificacion->monto)?></dd>
             <dt>Fecha de pago</dt>
             <dd><?= h($notificacion->fecha_pago)?></dd>
+            <dt>CUIT / CUIL</dt>
+            <dd><?= h($notificacion->cuit_cuil)?></dd>
+            <dt>Medio de pago</dt>
+            <dd><?= h($notificacion->medio_pago)?></dd>
+            <dt>Banco</dt>
+            <dd><?= h($notificacion->banco)?></dd>
+            <dt>Sucursal</dt>
+            <dd><?= h($notificacion->sucursal)?></dd>
         </dl>
     </div>
 </div>

@@ -52,10 +52,39 @@ class NotificacionesPagosController extends AppController{
     }
 
     public function view($id = null) {
-        $notificacionesPagos = $this->NotificacionesPagos->get($id);
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $notificacion = $this->NotificacionesPagos->get($id, ['contain' => [
+                'Diccionarios',
+                'CuotasAplicadas' => ['Cuotas'
+                ]
+            ]]);
 
-        $this->set('colegio', $notificacionesPagos);
-        $this->set('_serialize', ['notificacionesPagos']);
+            $cuota = $notificacion->cuotas_aplicada->cuota;
+
+            if ($cuota->monto_pesos != 0 && !is_null($cuota->monto_pesos)) {
+                $cuota->moneda = "ARS";
+                $cuota->monto = $cuota->monto_pesos;
+            } else {
+                $cuota->moneda = "US$";
+                $cuota->monto = $cuota->monto_dolares;
+            }
+
+            if ($notificacion->monto_pesos != 0 && !is_null($notificacion->monto_pesos)) {
+                $notificacion->moneda = "ARS";
+                $notificacion->monto = $notificacion->monto_pesos;
+            } else {
+                $notificacion->moneda = "US$";
+                $notificacion->monto = $notificacion->monto_dolares;
+            }
+
+            $this->set('cuota', $cuota);
+            $this->set('notificacion', $notificacion);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
     }
 
     public function viewnotifications($cuotaAplicadaID) {
@@ -164,7 +193,7 @@ class NotificacionesPagosController extends AppController{
             if ($this->request->is('post')) {
                 $requestData = $this->request->data;
 
-                if (strcmp($requestData["moneda"], "dolares")) $notificacion->monto_dolares = $requestData["monto_pesos"];
+                if ($requestData["moneda"] === "dolares") $notificacion->monto_dolares = $requestData["monto_pesos"];
                 else $notificacion->monto_pesos = $requestData["monto_pesos"];
 
                 $fechaPago = $requestData["fecha_pago"];
@@ -190,31 +219,31 @@ class NotificacionesPagosController extends AppController{
                         break;
                     }
                 }
-
-                $data = $this->request->data['file']['tmp_name'];
-                $base64 = base64_encode(file_get_contents($data));
-
-
-                $fileTable = TableRegistry::get('files');
-                $file = $fileTable->newEntity();
-                $file->contenido = $base64;
-                $fileResult = $fileTable->save($file);
-                $idFile = $fileResult->id;
-
-                if ($this->request->data['file']['type'] === "application/pdf") {
-                    $file->extension = "pdf";
-                } else {
-                    $file->extension = "png";
-                }
+//
+//                $data = $this->request->data['file']['tmp_name'];
+//                $base64 = base64_encode(file_get_contents($data));
+//
+//
+//                $fileTable = TableRegistry::get('files');
+//                $file = $fileTable->newEntity();
+//                $file->contenido = $base64;
+//                $fileResult = $fileTable->save($file);
+//                $idFile = $fileResult->id;
+//
+//                if ($this->request->data['file']['type'] === "application/pdf") {
+//                    $file->extension = "pdf";
+//                } else {
+//                    $file->extension = "png";
+//                }
 
                 $notificacion->status = $status;
                 $notificacion->notificacion_pago_eliminado = 0;
                 $notificacion->fecha_creacion = Time::now();
                 $notificacion->usuario_creacion = $this->Auth->user('id');
-                $notificacion->comprobante = $idFile;
-
+//                $notificacion->comprobante = $idFile;
+//
                 $this->NotificacionesPagos->save($notificacion);
-
+//
                 return $this->irCuotas();
             }
             $this->set(compact('cuotaAplicadaID'));
