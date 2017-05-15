@@ -74,4 +74,11 @@ class PersonasTable extends Table {
 
         return $rules;
     }
+
+    public function findAuth(\Cake\ORM\Query $query, array $options){
+        $query
+            ->select(['id', 'mail', 'contrasena'])
+            ->where(['Personas.persona_eliminado' => 0]);
+        return $query;
+    }
 }

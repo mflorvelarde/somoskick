@@ -54,7 +54,16 @@ class AppController extends Controller
                 'controller' => 'Personas',
                 'action' => 'login'
             ],
-            'authenticate' => ['Form' => ['userModel' => 'Personas','fields' => ['username' => 'mail', 'password' => 'contrasena']]]
+            'authenticate' => [
+                'Form' => [
+                    'userModel' => 'Personas',
+                    'finder'=> 'auth',
+                    'fields' => [
+                        'username' => 'mail',
+                        'password' => 'contrasena',
+                    ]
+                ]
+            ]
         ]);
 
 
