@@ -48,20 +48,34 @@
                             </div>
                               <div class="col-sm-12" style="padding: 0px">
                                   <div class="col-sm-4" style="padding-left: 0px">
+                                        <div><label>Colegio</label></div>
                                         <div class="form-group">
-                                            <?php echo $this->Form->input('colegio_id', ['options' => $colegios_options]); ?>
+                                            <?php echo $this->Form->input('colegio_id', ['options' => $colegios_options, 'label' => '']); ?>
                                         </div>
                                   </div>
-                                  <div class="col-sm-4">
+                                  <div class="col-sm-3">
+                                        <div><label>Vendedor</label></div>
                                         <div class="form-group">
-                                            <?php echo $this->Form->input('vendedor_id', ['options' => $vendedores]); ?>
+                                            <?php echo $this->Form->input('vendedor_id', ['options' => $vendedores, 'label' => '']); ?>
                                         </div>
                                   </div>
-                                  <div class="col-sm-4" style="padding-right: 0px">
+                                  <div class="col-sm-2" style="padding-right: 0px">
+                                        <div><label>Estado</label></div>
                                         <div class="form-group">
-                                            <?php echo $this->Form->input('diccionario_id', ['options' => $estados, 'label' => 'Estado']); ?>
+                                            <?php echo $this->Form->input('diccionario_id', ['options' => $estados, 'label' => '']); ?>
                                         </div>
                                   </div>
+                                    <div class="col-sm-3" style="padding-right: 0px">
+                                        <div class="form-group">
+                                            <div><label>Fecha de firma</label></div>
+                                            <?php  echo $this->Form->date('fecha_firma',  [
+                                                'required' => false,
+                                                'class' => 'form-control',
+                                                'minYear' => 2017,
+
+                                            ] ); ?>
+                                        </div>
+                                    </div>
                               </div>
                               <div class="col-md-12" style="padding: 0px">
                                   <div class="col-md-6" style="padding-left: 0px">

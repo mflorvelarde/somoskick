@@ -66,6 +66,7 @@
                                                                 <li><a href="<?php echo $this->Url->build(["action" => "vercontrato", $camada->grupo->contrato]);?>">Contrato <span class="pull-right badge bg-red">Ver</span></a></li>
                                                                 <li><a>Firmante <span class="pull-right badge bg-green"><?= h($camada->firmante1)?></span></a></li>
                                                                 <li><a>Firmante <span class="pull-right badge bg-blue"><?= h($camada->firmante2)?></span></a></li>
+                                                                <li><a>Vendedor <span class="pull-right badge bg-aqua"><?= h($camada->persona->nombre)?></span></a></li>
                                                                 <li><a>Contacto <span class="pull-right badge bg-green"><?= h($camada->contacto1)?></span></a></li>
                                                                 <li><a>Contacto <span class="pull-right badge bg-blue"><?= h($camada->contacto2)?></span></a></li>
                                                             </ul>

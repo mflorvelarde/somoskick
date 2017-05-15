@@ -170,11 +170,14 @@ class CamadasController extends AppController{
                 ));
                 $camada->colegio_id = $colegioId;
             } else {
-                $colegios_options = $colegiosTable->find('list', ['valueField' => 'nombre']);
+                $colegios_options = $colegiosTable
+                    ->find('list', ['valueField' => 'nombre'])
+                    ->where(['colegio_eliminado' => 0]);
+
             }
 
             $vendedores = TableRegistry::get('Personas')->find('list', array(
-                'conditions' => array('perfil != ' => 'CLIENTE'),
+                'conditions' => ['perfil != ' => 'CLIENTE', 'persona_eliminado' => 0],
                 'order'=> array('nombre'),
                 'valueField' => array('nombre')
             ));
@@ -356,6 +359,15 @@ class CamadasController extends AppController{
                 'conditions' => array('param1' => 'CAMADAS', 'param2' => 'STATUS'),
                 'valueField' => array('value')
             ));
+            $colegios_options = TableRegistry::get('Colegios')
+                ->find('list', ['valueField' => 'nombre'])
+                ->where(['colegio_eliminado' => 0]);
+
+            $vendedores = TableRegistry::get('Personas')->find('list', array(
+                'conditions' => ['perfil != ' => 'CLIENTE', 'persona_eliminado' => 0],
+                'order'=> array('nombre'),
+                'valueField' => array('nombre')
+            ));
 
             if ($this->request->is(['patch', 'post', 'put'])) {
                 $camada = $this->Camadas->patchEntity($camada, $this->request->data, [
@@ -394,6 +406,10 @@ class CamadasController extends AppController{
                     $this->Flash->error(__('La camada no pudo ser guardada. Por favor, intente nuevamente'));
                 }
             }
+            $this->set(compact('vendedores'));
+            $this->set('_serialize', ['vendedores']);
+            $this->set(compact('colegios_options'));
+            $this->set('_serialize', ['colegios_options']);
             $this->set(compact('estados'));
             $this->set('_serialize', ['estados']);
             $this->set(compact('camada'));
