@@ -212,7 +212,7 @@
                                     <h3 class="box-title">Datos del padre / Tutor</h3>
                                 </div>
                                 <h4 style="color: orangered; margin-left:10px"> <?= h($mensaje)?></h4>
-                                <div>
+                                <div class="col-md-12">
                                     <button type="button" onclick="padreNoVive();return false;"  class="btn btn-default next-step">No vive</button>
                                 </div>
                                 <div class="box-body">
@@ -413,7 +413,7 @@
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Datos de la madre / Tutora</h3>
                                 </div>
-                                <div>
+                                <div class="col-md-12">
                                     <button type="button" onclick="madreNoVive();return false;"  class="btn btn-default next-step">No vive</button>
                                 </div>
                                 <h4 style="color: orangered; margin-left:10px"> <?= h($mensaje)?></h4>

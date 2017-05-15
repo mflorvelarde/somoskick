@@ -39,7 +39,7 @@
                                   </div>
                                   <div class="col-sm-2">
                                         <div class="form-group">
-                                            <?php  echo $this->Form->input('grupo.liberados',  ['required' => false, 'class' => 'form-control' ] ); ?>
+                                            <?php  echo $this->Form->input('grupo.liberados',  ['required' => false, 'type' => 'number', 'class' => 'form-control' ] ); ?>
                                         </div>
                                   </div>
                               </div>
