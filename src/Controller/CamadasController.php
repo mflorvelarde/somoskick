@@ -13,6 +13,15 @@ use Cake\I18n\Time;
 
 class CamadasController extends AppController{
 
+    public $paginate = [
+        'limit' => 200,
+    ];
+
+    public function initialize(){
+        parent::initialize();
+        $this->loadComponent('Paginator');
+    }
+
     public function index($colegio_id = null) {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {

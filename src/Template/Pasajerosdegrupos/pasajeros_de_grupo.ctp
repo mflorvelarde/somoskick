@@ -1,3 +1,18 @@
+    <style>
+        #dynatable-pagination-links-table_senat{
+            display:none;
+        }
+    </style>
+
+<script type="text/javascript">
+
+$( document ).ready(function(){
+   $('#pasajeros-table').dynatable();
+   $('#pasajeros-table').paginationPerPage.set(20);
+});
+</script>
+
+
 <div class="row">
     <div class="col-xs-12">
         <!-- Widget: user widget style 1 -->
@@ -88,14 +103,6 @@
                     </tr>
                     <?php endforeach; ?>
                 </table>
-                <div class="paginator">
-                    <ul class="pagination">
-                        <?= $this->Paginator->prev('< ' . __('previous')) ?>
-                        <?= $this->Paginator->numbers() ?>
-                        <?= $this->Paginator->next(__('next') . ' >') ?>
-                    </ul>
-                    <p><?= $this->Paginator->counter() ?></p>
-                </div>
             </div>
             <!-- /.box-body -->
         </div>
