@@ -10,6 +10,7 @@ namespace App\Controller;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 use Cake\Mailer\Email;
+use Cake\ORM\ResultSet;
 
 
 
