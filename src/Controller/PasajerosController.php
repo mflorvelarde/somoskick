@@ -68,26 +68,23 @@ class PasajerosController extends AppController {
                             $responsable1mail = $personasTable->find('all')
                                 ->where(['mail' => $requestData['responsable1']['persona']['mail'], 'persona_eliminado' => 0])
                                 ->first();
-                            if (is_null($responsable1mail)) {
-                                if (strlen($requestData['responsable2']['persona']['mail']) > 0) {
-                                    $responsable2mail = $personasTable->find('all')
-                                        ->where(['mail' => $requestData['responsable2']['persona']['mail'], 'persona_eliminado' => 0])
-                                        ->first();
-                                    if (is_null($responsable2mail)) {
-
-                                    } else {
-                                        $validacionesOK = false;
-                                        $mensaje = 'Correo electrónico del paso 3 ya registrad';
-                                    }
-                                } else {
-                                    $responsable2vacio = true;
-                                }
-                            } else {
+                            if (!is_null($responsable1mail)) {
                                 $validacionesOK = false;
                                 $mensaje = 'Correo electrónico del paso 2 ya registrado';
                             }
                         } else {
                             $responsable1vacio = true;
+                        }
+                        if (strlen($requestData['responsable2']['persona']['mail']) > 0) {
+                            $responsable2mail = $personasTable->find('all')
+                                ->where(['mail' => $requestData['responsable2']['persona']['mail'], 'persona_eliminado' => 0])
+                                ->first();
+                            if (!is_null($responsable2mail)) {
+                                $validacionesOK = false;
+                                $mensaje = 'Correo electrónico del paso 3 ya registrado';
+                            }
+                        } else {
+                            $responsable2vacio = true;
                         }
                     } else {
                         $validacionesOK = false;
