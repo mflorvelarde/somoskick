@@ -56,7 +56,7 @@ class NotificacionesPagosController extends AppController{
         if ($this->isNotClient($userID)) {
             $notificacion = $this->NotificacionesPagos->get($id, ['contain' => [
                 'Diccionarios',
-                'CuotasAplicadas' => ['Cuotas'
+                'CuotasAplicadas' => ['Cuotas', 'Pasajerosdegrupos' => ['Grupos','Pasajeros' => ['Personas']]
                 ]
             ]]);
 

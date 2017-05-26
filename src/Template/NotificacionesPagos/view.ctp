@@ -24,6 +24,10 @@
     </div>
     <div class='box-body'>
         <dl class='dl-horizontal'>
+            <dt>Pasajero</dt>
+            <dd><?= h($notificacion->cuotas_aplicada->pasajerosdegrupo->pasajero->persona->apellido)?>, <?= h($notificacion->cuotas_aplicada->pasajerosdegrupo->pasajero->persona->nombre)?></dd>
+            <dt>Grupo</dt>
+            <dd><?= h($notificacion->cuotas_aplicada->pasajerosdegrupo->grupo->nombre)?></dd>
             <dt>Monto de cuota</dt>
             <dd><?= h($cuota->moneda)?><?= h($cuota->monto)?></dd>
             <dt>Monto abonado</dt>
