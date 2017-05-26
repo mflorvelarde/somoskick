@@ -66,6 +66,7 @@
                                                         'class' => 'form-control',
                                                         'label' => 'DNI'
                                                     ]); ?>
+                                                    <div><h>Ingresar el número sin puntos</h></div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6" style="padding-right: 0px">
@@ -134,6 +135,7 @@
                                                         'type' => 'number',
                                                         'class' => 'form-control'
                                                     ]); ?>
+                                                <div><h>Ingresar el número sin guiones</h></div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6" style="padding-right: 0px">
@@ -143,6 +145,7 @@
                                                         'type' => 'number',
                                                         'class' => 'form-control'
                                                     ]); ?>
+                                                <div><h>Ingresar el número sin guiones</h></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -245,6 +248,7 @@
                                                     'class' => 'form-control',
                                                     'id' => 'dni-padre'
                                                 ]); ?>
+                                            <div><h>Ingresar el número sin puntos</h></div>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -272,6 +276,7 @@
                                                     'id' => 'cuit-padre',
                                                     'label' => '' ]
                                                  );?>
+                                                <div><h>Ingresar el número sin guiones</h></div>
                                             </div>
                                         </div>
                                     </div>
@@ -328,6 +333,7 @@
                                                     'id' => 'telefono-padre',
                                                     'class' => 'form-control'
                                                 ]); ?>
+                                            <div><h>Ingresar el número sin guiones</h></div>
                                             </div>
                                         </div>
                                         <div class="col-md-6" style="padding-right: 0px">
@@ -338,6 +344,7 @@
                                                     'id' => 'celular-padre',
                                                     'class' => 'form-control'
                                                 ]); ?>
+                                            <div><h>Ingresar el número sin guiones</h></div>
                                             </div>
                                         </div>
                                     </div>
@@ -448,6 +455,7 @@
                                                     'id' => 'dni-madre',
                                                     'class' => 'form-control'
                                                 ]); ?>
+                                            <div><h>Ingresar el número sin puntos</h></div>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -474,6 +482,7 @@
                                                     'type' => 'number',
                                                     'label' => ''
                                                 ]); ?>
+                                            <div><h>Ingresar el número sin guiones</h></div>
                                             </div>
                                         </div>
                                     </div>
@@ -529,6 +538,7 @@
                                                     'id' => 'telefono-madre',
                                                     'class' => 'form-control'
                                                 ]); ?>
+                                            <div><h>Ingresar el número sin guiones</h></div>
                                             </div>
                                         </div>
                                         <div class="col-md-6" style="padding-right: 0px">
@@ -539,6 +549,7 @@
                                                     'id' => 'celular-madre',
                                                     'class' => 'form-control'
                                                 ]); ?>
+                                            <div><h>Ingresar el número sin guiones</h></div>
                                             </div>
                                         </div>
                                     </div>
@@ -659,8 +670,9 @@
                                                                 'type' => 'number',
                                                                 'label' => ''
                                                             ]);?>
+                                                         <div><h>Ingresar el número sin guiones</h></div>
                                                         </div>
-                                                    </div>
+                                                   </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <?php  echo $this->Form->input('medioPago.razon_social',  ['required' => true, 'class' => 'form-control' ] ); ?>

@@ -1,6 +1,20 @@
 <div class="login-box">
-    <div class="login-logo">
-      <?php echo $this->Html->image('logo.png', ['alt' => 'Kick', 'style' => 'width:150px;margin-left:10%;margin-right: 10%;']);?>
+    <div class="login-logo" style="height: 150px;">
+       <div class="col-sm-6"><?php echo $this->Html->image('logo.png', ['alt' => 'Kick',
+            'style' =>
+
+                'float: left;
+                width: 100%;
+                margin-left: 10%;
+                margin-right: 10%;'
+            ]);?>
+       </div>
+       <div class="col-sm-6"><?php echo $this->Html->image('jumplogo.png', ['alt' => 'Kick',
+            'style' => 'float: left;
+                            width: 96%;
+                            margin-left: 10%;
+                            margin-right: 10%;
+                            margin-top: 15px;']);?></div>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">

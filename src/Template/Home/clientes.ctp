@@ -1,2 +1,6 @@
-<?php echo $this->Html->image('background.png', ['alt' => 'Kick', 'style' => 'max-width:80%;margin-left:10%;margin-right: 10%;']);?>
+<?php echo $this->Html->image('background.png', ['alt' => 'Kick',
+    'style' => '    bottom: 0px;
+                    max-width: 25%;
+                    position: absolute;
+                    right: 0px;']);?>
 
