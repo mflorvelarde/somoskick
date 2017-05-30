@@ -93,8 +93,9 @@ $( document ).ready(function(){
                         <td>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ><i class="fa fa-align-center"></i></button>
-                                <ul class="dropdown-menu" role="menu">
+                                <ul class="dropdown-menu" role="menu" style="left:inherit">
                                     <li><?= $this->Form->postLink('Ver pasajero', ['action' => 'verPasajero', $regular->pasajero->id]) ?></li>
+                                    <li><?= $this->Html->link('Aplicar tarifa', ['controller' => 'Tarifas','action' => 'aplicarapasajero', $regular->pasajero->id]) ?></li>
                                     <li><?= $this->Html->link('Editar pasajero', ['action' => 'editarPasajero', $regular->pasajero->id] ) ?></li>
                                     <li><?= $this->Html->link('Borrar pasajero', ['action' => 'borrarPasajero', $regular->id] ) ?></li>
                                 </ul>
@@ -169,8 +170,9 @@ $( document ).ready(function(){
                         <td>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ><i class="fa fa-align-center"></i></button>
-                                <ul class="dropdown-menu" role="menu">
+                                <ul class="dropdown-menu" role="menu" style="left:inherit">
                                     <li><?= $this->Form->postLink('Ver pasajero', ['action' => 'verPasajero', $espera->pasajero->id]) ?></li>
+                                    <li><?= $this->Form->postLink('Ver pasajero', ['action' => 'aplicarapasajero', $espera->pasajero->id]) ?></li>
                                     <li><?= $this->Html->link('Editar pasajero', ['action' => 'editarPasajero', $espera->pasajero->id] ) ?></li>
                                     <li><?= $this->Html->link('Borrar pasajero', ['action' => 'borrarPasajero', $espera->id] ) ?></li>
                                 </ul>

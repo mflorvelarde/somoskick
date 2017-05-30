@@ -12,10 +12,7 @@ use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 
 class TarifasController extends AppController {
-    /**
-     * Index method
-     * @return \Cake\Network\Response|null
-     */
+
     public function index() {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
@@ -30,13 +27,6 @@ class TarifasController extends AppController {
         }
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function view($id = null) {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
@@ -51,11 +41,6 @@ class TarifasController extends AppController {
         }
     }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
-     */
     public function add() {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
@@ -97,13 +82,6 @@ class TarifasController extends AppController {
         );
     }
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function delete($id = null) {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
@@ -127,13 +105,6 @@ class TarifasController extends AppController {
         }
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function edit($id = null) {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
@@ -154,6 +125,61 @@ class TarifasController extends AppController {
             }
             $this->set(compact('tarifa'));
             $this->set('_serialize', ['tarifa']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
+    public function aplicarapasajero($idPasajerodegrupo) {
+        $userID = $this->Auth->user('id');
+        if ($this->isNotClient($userID)) {
+            $pasajerosTable = TableRegistry::get('Pasajerosdegrupos');
+            $pasajerodegrupo = $pasajerosTable->get($idPasajerodegrupo, ['contain' => ['Grupos','Pasajeros' => ['Personas']]]);
+
+            $tarifas_options = $this->Tarifas->find('list', array(
+                'conditions' => array('tarifa_eliminado' => 0),
+                'valueField' => array('descripcion')
+            ));
+            $primeracuota = Time::now();
+
+            if ($this->request->is(['post', 'put'])) {
+                $data = $this->request->data;
+                $json = json_encode($data);
+                $entity = json_decode($json);
+
+                $tarifasAplicadasTable = TableRegistry::get('TarifasAplicadas');
+                $tarifaAplicada = $tarifasAplicadasTable->newEntity();
+                $tarifaAplicada->tarifa_id = $entity->Tarifas;
+                $tarifaAplicada->tarifa_aplicada_eliminado = 0;
+                $tarifaAplicada->fecha_primer_pago = Time::create($entity->primeracuota->year,
+                    $entity->primeracuota->month, $entity->primeracuota->day);
+                $tarifaAplicada->fecha_creacion = Time::now();
+                $tarifaAplicada->usuario_creacion = $this->Auth->user('id');
+
+                $result = $tarifasAplicadasTable->save($tarifaAplicada);
+                $tarifaAplicadaID = $result->id;
+
+                $pasajerodegrupo->tarifa_aplicada_id = $tarifaAplicadaID;
+                $pasajerodegrupo->plan_aceptado = 0;
+                $pasajerodegrupo->fecha_modificaion = Time::now();
+                $pasajerodegrupo->usuario_modificacion = $this->Auth->user('id');
+                $resultPasajero = $pasajerosTable->save($pasajerodegrupo);
+
+
+                return $this->redirect(
+                    ['controller' => 'Cuotas', 'action' => 'addToPasajero', $tarifaAplicadaID]
+                );
+            }
+
+            $this->set('_serialize', ['entity']);
+            $this->set('primeracuota', $primeracuota);
+            $this->set('_serialize', ['primeracuota']);
+            $this->set(compact('tarifas_options'));
+            $this->set('_serialize', ['tarifas_options']);
+            $this->set(compact('pasajerodegrupo'));
+            $this->set('_serialize', ['pasajerodegrupo']);
         } else {
             return $this->redirect(
                 ['controller' => 'Error', 'action' => 'notAuthorized']
