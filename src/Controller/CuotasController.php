@@ -417,15 +417,27 @@ class CuotasController extends AppController {
 
                     $cuotasAplicadasTable = TableRegistry::get('CuotasAplicadas');
                     foreach ($resultPasajeros as $pasajero) {
+                        $this->eliminarCuotasAplicadasDePlanViejo($pasajero->id);
+                        $insert = $cuotasAplicadasTable->query();
+                        $insert->insert(['cuota_id', 'pasajero_grupo_id', 'cuota_aplicada_eliminado',
+                            'fecha_creacion', 'usuario_creacion']);
                             foreach ($cuotas as $cuota) {
-                                $cuotaAplicada = $cuotasAplicadasTable->newEntity();
-                                $cuotaAplicada->cuota_id = $cuota->id;
-                                $cuotaAplicada->pasajero_grupo_id = $pasajero->id;
-                                $cuotaAplicada->usuario_creacion = $this->Auth->user('id');;
-                                $cuotaAplicada->fecha_creacion = Time::now();
-                                $cuotaAplicada->cuota_aplicada_eliminado = 0;
-                                $cuotasAplicadasTable->save($cuotaAplicada);
+//                                $cuotaAplicada = $cuotasAplicadasTable->newEntity();
+//                                $cuotaAplicada->cuota_id = $cuota->id;
+//                                $cuotaAplicada->pasajero_grupo_id = $pasajero->id;
+//                                $cuotaAplicada->usuario_creacion = $this->Auth->user('id');
+//                                $cuotaAplicada->fecha_creacion = Time::now();
+//                                $cuotaAplicada->cuota_aplicada_eliminado = 0;
+//                                $cuotasAplicadasTable->save($cuotaAplicada);
+                                $insert->values([
+                                    'cuota_id' => $cuota->id,
+                                    'pasajero_grupo_id' => $pasajero->id,
+                                    'cuota_aplicada_eliminado' => 0,
+                                    'fecha_creacion' => Time::now(),
+                                    'usuario_creacion' => $this->Auth->user('id')
+                                ]);
                             }
+                            $insert->execute();
                     }
                     $this->set('$resultPasajeros', $resultPasajeros);
 //
@@ -455,5 +467,14 @@ class CuotasController extends AppController {
                 ['controller' => 'Error', 'action' => 'notAuthorized']
             );
         }
+    }
+
+    private function eliminarCuotasAplicadasDePlanViejo($idPasajeroGrupo) {
+        $cuotasAplicadasTable = TableRegistry::get('CuotasAplicadas');
+        $query = $cuotasAplicadasTable->query();
+        $query->update()
+            ->set(['cuota_aplicada_eliminado' => 1, 'fecha_eliminado' => Time::now(), 'usuario_eliminado' => $this->Auth->user('id')])
+            ->where(['pasajero_grupo_id' => $idPasajeroGrupo])
+            ->execute();
     }
 }

@@ -29,7 +29,7 @@
             <div class="col-xs-10">
                 <?php  echo $this->Form->select('paymentType',
                 [
-                    'trasnferencia' => 'Transferencia bancaria',
+                    'transferencia' => 'Transferencia bancaria',
                     'deposito' => 'Depósito',
                     'oficina' => 'Oficina'
 
@@ -157,12 +157,81 @@
                 </div>
             </div>
             <div class="form-group">
+                <label for="sobre" class="col-sm-2 control-label">Número de sobre</label>
+                <div class="col-sm-10">
+                        <?php  echo $this->Form->input('numero_sobre',  [
+                            'class' => 'form-control',
+                            'id' => 'sobre',
+                            'label' => false
+                            ]); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="transaccion" class="col-sm-2 control-label">Número de transacción</label>
+                <div class="col-sm-10">
+                        <?php  echo $this->Form->input('numero_transaccion',  [
+                            'class' => 'form-control',
+                            'id' => 'transaccion',
+                            'label' => false
+                            ]); ?>
+                </div>
+            </div>
+        </div>
+        <div id="form-transferencia">
+            <div class="form-group">
+                <label for="numero-comprobante" class="col-sm-2 control-label">Número de comprobante</label>
+                <div class="col-sm-10">
+                    <?php  echo $this->Form->input('numero_comprobante',  [
+                        'class' => 'form-control',
+                        'id' => 'numero-comprobante',
+                        'required' => true,
+                        'label' => false
+                    ]); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="cuit" class="col-sm-2 control-label">CUIT/CUIL</label>
+                <div class="col-sm-10">
+                    <?php  echo $this->Form->input('cuit',  [
+                        'name' => 'cuit',
+                        'required' => true,
+                        'class' => 'form-control',
+                        'label' => false,
+                        'id' => 'cuit'
+                        ]);
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="banco-destino" class="col-sm-2 control-label">Banco de destino</label>
+                <div class="col-sm-10">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                            <?php  echo $this->Form->select('bancoDestino',
+                            [
+                                'santander' => 'Santander Rio',
+                                'galicia' => 'Banco Galicia',
+                                'icbc' => 'ICBC'
+                            ],
+                            [
+                                'required' => true,
+                                'id' => 'bancoDestino',
+                                'style' => 'width: 100%',
+                                'label' => false,
+                                'class' => 'form-control'
+                            ] ); ?>
+                        </div>
+                </div>
+            </div>
+        </div>
+                </div>
+            <div class="form-group">
                 <label for="sucursal" class="col-sm-2 control-label">Sucursal</label>
                 <!--Agregar leyenda de que sea exacto lo que dice el ticket-->
                 <div class="col-sm-10">
                     <?php  echo $this->Form->input('sucursal',  [
                         'name' => 'sucursal',
-                        'required' => false,
+                        'required' => true,
                         'class' => 'form-control',
                         'label' => false,
                         'id' => 'sucursal',
@@ -170,51 +239,13 @@
                     ?>
                 </div>
             </div>
-        </div>
-        <div id="form-transferencia">
-            <div class="form-group">
-                <label for="cuit" class="col-sm-2 control-label">CUIT/CUIL</label>
-                <div class="col-sm-10">
-                    <?php  echo $this->Form->input('cuit',  [
-                        'name' => 'cuit',
-                        'required' => false,
-                        'class' => 'form-control',
-                        'label' => false,
-                        'id' => 'cuit',
-                        ]);
-                    ?>
-                </div>
+
+                            <div class="form-group" >
+                                <label class="col-sm-2 control-label" >Comprobante</label>
+                                <?php  echo $this->Form->file('file', ['class' => 'col-sm-10']); ?>
+                            </div>
             </div>
-            <div class="form-group">
-                <label for="banco-destino" class="col-sm-2 control-label">Banco de destino</label>
-            <div class="col-sm-10">
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                        <?php  echo $this->Form->select('bancoDestino',
-                        [
-                            'santander' => 'Santander Rio',
-                            'galicia' => 'Banco Galicia',
-                            'icbc' => 'ICBC'
-                        ],
-                        [
-                            'required' => true,
-                            'id' => 'bancoDestino',
-                            'style' => 'width: 100%',
-                            'label' => false,
-                            'class' => 'form-control'
-                        ] ); ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-          <label for="comprobante" class="col-sm-2 control-label">Comprobante de pago</label>
-          <div class="col-sm-10">
-                  <?php echo $this->Form->file('submittedfile'); ?>
-              <p class="help-block">Example block-level help text here.</p>
-            </div>
-        </div>
+
     </div>
     <!-- /.box-body -->
     <div class="box-footer">
@@ -236,9 +267,19 @@
 		if (paymentType === "deposito") {
 			$('#form-transferencia').addClass('hidden-element');
 			$('#form-deposito').removeClass('hidden-element');
+            $('#transaccion').attr("required", "true");
+            $('#sobre').attr("required", "true");
+            $('#numero-comprobante').removeAttr("required");
+            $('#cuit').removeAttr("required");
+
+
 		} else {
 			$('#form-transferencia').removeClass('hidden-element');
 			$('#form-deposito').addClass('hidden-element');
+            $('#numero-comprobante').attr("required", "true");
+            $('#cuit').attr("required", "true");
+            $('#transaccion').removeAttr("required");
+            $('#sobre').removeAttr("required");
 		}
 	}
 </script>

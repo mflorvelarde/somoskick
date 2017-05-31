@@ -25,14 +25,33 @@
     </div>
     <div class='box-body'>
         <dl class='dl-horizontal'>
-            <dt>Cuota</dt>
-            <dd><?= h($notificacion->cuota_aplicada_id)?></dd>
-            <dt>Medio de pago</dt>
-            <dd><?= h($notificacion->medio_pago)?></dd>
-            <dt>Monto</dt>
+            <dt>Pasajero</dt>
+            <dd><?= h($notificacion->cuotas_aplicada->pasajerosdegrupo->pasajero->persona->apellido)?>, <?= h($notificacion->cuotas_aplicada->pasajerosdegrupo->pasajero->persona->nombre)?></dd>
+            <dt>Grupo</dt>
+            <dd><?= h($notificacion->cuotas_aplicada->pasajerosdegrupo->grupo->nombre)?></dd>
+            <dt>Monto de cuota</dt>
+            <dd><?= h($notificacion->cuotas_aplicada->cuota->moneda)?><?= h($notificacion->cuotas_aplicada->cuota->monto)?></dd>
+            <dt>Monto abonado</dt>
             <dd><?= h($notificacion->moneda)?><?= h($notificacion->monto)?></dd>
             <dt>Fecha de pago</dt>
             <dd><?= h($notificacion->fecha_pago)?></dd>
+            <dt>CUIT / CUIL</dt>
+            <dd><?= h($notificacion->cuit_cuil)?></dd>
+            <dt>Medio de pago</dt>
+            <dd><?= h($notificacion->medio_pago)?></dd>
+            <?php if(strcmp($notificacion->medio_pago, "transferencia") == 0) {?>
+            <dt>Número de comprobante</dt>
+            <?php } else { ?>
+            <dd><?= h($notificacion->numero_comprobante)?></dd>
+            <dt>Número de transacción</dt>
+            <dd><?= h($notificacion->numero_transaccion)?></dd>
+            <dt>Número de sobre</dt>
+            <dd><?= h($notificacion->numero_sobre)?></dd>
+            <?php } ?>
+            <dt>Banco</dt>
+            <dd><?= h($notificacion->banco)?></dd>
+            <dt>Sucursal</dt>
+            <dd><?= h($notificacion->sucursal)?></dd>
         </dl>
     </div>
     <?php endforeach; ?>

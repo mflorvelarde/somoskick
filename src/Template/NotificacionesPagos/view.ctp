@@ -38,6 +38,15 @@
             <dd><?= h($notificacion->cuit_cuil)?></dd>
             <dt>Medio de pago</dt>
             <dd><?= h($notificacion->medio_pago)?></dd>
+            <?php if(strcmp($notificacion->medio_pago, "transferencia") == 0) {?>
+            <dt>Número de comprobante</dt>
+            <?php } else { ?>
+            <dd><?= h($notificacion->numero_comprobante)?></dd>
+            <dt>Número de transacción</dt>
+            <dd><?= h($notificacion->numero_transaccion)?></dd>
+            <dt>Número de sobre</dt>
+            <dd><?= h($notificacion->numero_sobre)?></dd>
+            <?php } ?>
             <dt>Banco</dt>
             <dd><?= h($notificacion->banco)?></dd>
             <dt>Sucursal</dt>

@@ -158,13 +158,30 @@ class NotificacionesPagosController extends AppController{
     public function verNotificacionesPasajero($cuotaAplicadaID) {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
-            $notificacionesQuery = $this->NotificacionesPagos->find('all', ['contain' => ['Diccionarios']])
+            $notificacionesQuery = $this->NotificacionesPagos->find('all', ['contain' => [
+                'Diccionarios',
+                'CuotasAplicadas' => ['Cuotas', 'Pasajerosdegrupos' => ['Grupos','Pasajeros' => ['Personas']]]]])
                 ->where(['notificacion_pago_eliminado' => 0,
                     'cuota_aplicada_id' => $cuotaAplicadaID
                 ]);
+
+            /*            $notificacion = $this->NotificacionesPagos->get($id, ['contain' => [
+                'Diccionarios',
+                'CuotasAplicadas' => ['Cuotas', 'Pasajerosdegrupos' => ['Grupos','Pasajeros' => ['Personas']]
+                ]
+            ]]);*/
             $notificaciones = $this->paginate($notificacionesQuery);
 
             foreach ($notificaciones as $notificacion) {
+                if ($notificacion->cuotas_aplicada->cuota->monto_pesos != 0 &&
+                    !is_null($notificacion->cuotas_aplicada->cuota->monto_pesos)) {
+                    $notificacion->cuotas_aplicada->cuota->moneda = "ARS";
+                    $notificacion->cuotas_aplicada->cuota->monto = $notificacion->cuotas_aplicada->cuota->monto_pesos;
+                } else {
+                    $notificacion->cuotas_aplicada->cuota->moneda= "US$";
+                    $notificacion->cuotas_aplicada->cuota->monto= $notificacion->cuotas_aplicada->cuota->monto__dolares;
+                }
+
                 if ($notificacion->monto_pesos != 0 && !is_null($notificacion->monto_pesos)) {
                     $notificacion->moneda = "ARS";
                     $notificacion->monto = $notificacion->monto_pesos;
@@ -200,15 +217,19 @@ class NotificacionesPagosController extends AppController{
                 $notificacion->fecha_pago = Time::create($fechaPago["year"], $fechaPago["month"], $fechaPago["day"]);
                 $notificacion->cuota_aplicada_id = $cuotaAplicadaID;
 
-                if (strcmp($requestData["paymentType"], "deposito")) {
+                if (strcmp($requestData["paymentType"], "deposito") == 0) {
                     $notificacion->medio_pago = "deposito";
                     $notificacion->medio_deposito = $requestData["tipoDeposito"];
                     $notificacion->banco = $requestData["banco"];
                     $notificacion->sucursal = $requestData["sucursal"];
-                } else if (strcmp($requestData["paymentType"], "transferencia")) {
+                    $notificacion->numero_sobre = $requestData["numero_sobre"];
+                    $notificacion->numero_transaccion = $requestData["numero_transaccion"];
+
+                } else if (strcmp($requestData["paymentType"], "transferencia") == 0) {
                     $notificacion->medio_pago = "transferencia";
                     $notificacion->cuit_cuil = $requestData["cuit"];
                     $notificacion->banco = $requestData["bancoDestino"];
+                    $notificacion->numero_comprobante = $requestData["numero_comprobante"];
                 }
 
                 $diccionarios = $this->getDiccionariosStatus();
@@ -347,24 +368,24 @@ class NotificacionesPagosController extends AppController{
         return $row->id;
     }
 
-    public function fileupload() {
-        $notificacion = $this->NotificacionesPagos->newEntity();
-        if ($this->request->is('post')) {
-            $file = $this->request->data['file'];
-            $fileName = $this->request->data['file']['name'];
-            $uploadPath = 'uploads/files/';
-            $uploadFile = $uploadPath . $fileName;
-            $data = $this->request->data['file']['tmp_name'];
-            $base64 = base64_encode(file_get_contents($data));
-//            if (move_uploaded_file($this->request->data['file']['tmp_name'], $uploadFile)) {
+//    public function fileupload() {
+//        $notificacion = $this->NotificacionesPagos->newEntity();
+//        if ($this->request->is('post')) {
+//            $file = $this->request->data['file'];
+//            $fileName = $this->request->data['file']['name'];
+//            $uploadPath = 'uploads/files/';
+//            $uploadFile = $uploadPath . $fileName;
+//            $data = $this->request->data['file']['tmp_name'];
+//            $base64 = base64_encode(file_get_contents($data));
+////            if (move_uploaded_file($this->request->data['file']['tmp_name'], $uploadFile)) {
+////
+////            }
+//            $this->set(compact('data'));
+//            $this->set(compact('base64'));
+//            $this->set('_serialize', ['base64']);
 //
-//            }
-            $this->set(compact('data'));
-            $this->set(compact('base64'));
-            $this->set('_serialize', ['base64']);
-
-        }
-        $this->set(compact('notificacion'));
-
-    }
+//        }
+//        $this->set(compact('notificacion'));
+//
+//    }
 }
