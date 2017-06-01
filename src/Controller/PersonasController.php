@@ -290,6 +290,27 @@ class PersonasController extends AppController{
         }
     }
 
+    //Método para admins
+    public function cambiarcontrasenadeusuario($idPersona) {
+        $userID = $this->Auth->user('id');
+        if ($this->isAdmin($userID)) {
+            $persona = $this->Personas->get($idPersona, ['contain' => ['Direcciones']]);
+            $contrasena = md5($persona->dni . Time::now()->toDateTimeString());
+            $query = $this->Personas->query();
+            $query->update()
+                ->set(['contrasena' => $contrasena, 'contrasena_reset' => 1, 'usuario_modificacion' => $userID,
+                    'fecha_modificacion' => Time::now()])
+                ->where(['id' => $idPersona])
+                ->execute();
+            $this->sendResetPasswordMail($contrasena, $persona->mail);
+            return $this->redirect(['action' => 'viewall']);
+        } else {
+            return $this->redirect(
+                ['controller' => 'Error', 'action' => 'notAuthorized']
+            );
+        }
+    }
+
     private function sendWelcomeEmail($code, $mail) {
         $email = new Email('default');
         $email->sender('administracion@somoskick.com', 'Kick');

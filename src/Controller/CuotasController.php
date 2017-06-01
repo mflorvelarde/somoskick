@@ -20,24 +20,23 @@ class CuotasController extends AppController {
             $tarifa = $tarifa_aplicada->tarifa;
 
             $inicioPago = $tarifa_aplicada->fecha_primer_pago;
-            $finPago = $tarifa->fin_pago;
 
             $cuotas = array();
             $date = Time::create($inicioPago->year, $inicioPago->month, $inicioPago->day);
-            $meses = 0;
 
-            while ($date < $finPago) {
+            for ($i = 0; $i < $tarifa->cantidad_cuotas; $i++) {
                 $cuota = $this->Cuotas->newEntity();
                 $cuota->vencimiento = $date;
                 array_push($cuotas, $cuota);
-                $date = Time::create($date->year, $date->month + 1, $date->day);
-                $meses = $meses + 1;
+                $date = Time::create($date->year, $date->month + 1, 10);
+
             }
+
             $campos = array();
 
             //Defino los montos de las cuotas
             if ((is_null($tarifa->monto_pesos) || $tarifa->monto_pesos == 0) && $tarifa->monto_dolares = !0) {
-                $cuotaPromedio = floor($tarifa->monto_dolares / $meses);
+                $cuotaPromedio = floor($tarifa->monto_dolares / $tarifa->cantidad_cuotas);
                 for ($i = 0; $i < count($cuotas); $i++) {
                     if ($i == count($cuotas) - 1) {
                         $cuotas[$i]->monto_dolares = $tarifa->monto_dolares - $cuotaPromedio * (count($cuotas) - 1);
@@ -56,7 +55,7 @@ class CuotasController extends AppController {
                     array_push($campos, $arrayCuota);
                 }
             } else if ($tarifa->monto_pesos != 0 && (is_null($tarifa->monto_dolares) || $tarifa->monto_dolares == 0)) {
-                $cuotaPromedio = floor($tarifa->monto_pesos / $meses);
+                $cuotaPromedio = floor($tarifa->monto_pesos / $tarifa->cantidad_cuotas);
                 for ($i = 0; $i < count($cuotas); $i++) {
                     if ($i == count($cuotas) - 1) {
                         $cuotas[$i]->monto_pesos = $tarifa->monto_pesos - $cuotaPromedio * (count($cuotas) - 1);
@@ -78,9 +77,9 @@ class CuotasController extends AppController {
                 $dolaresEnPesosAprox = $tarifa->monto_dolares * 16;
                 $porcentajePesos = ($tarifa->monto_pesos / $dolaresEnPesosAprox);
                 $porcentajeDolares = 1 - $porcentajePesos;
-                $cantidadCuotasDolares = round($porcentajeDolares * $meses / 100);
+                $cantidadCuotasDolares = round($porcentajeDolares * $tarifa->cantidad_cuotas / 100);
                 if ($cantidadCuotasDolares == 0) $cantidadCuotasDolares = 1;
-                $cantidadCuotasPesos = $meses - $cantidadCuotasDolares;
+                $cantidadCuotasPesos = $tarifa->cantidad_cuotas - $cantidadCuotasDolares;
 
                 $index = 0;
 
@@ -124,7 +123,7 @@ class CuotasController extends AppController {
                 if ($sumPesos == $tarifa->monto_pesos && $sumDolares == $tarifa->monto_dolares) {
 
                     for ($i = 0; $i < count($cuotas); $i++) {
-                        $vencimientoCargado =Time::create($data['vencimiento' . $i]['year'],
+                        $vencimientoCargado = Time::create($data['vencimiento' . $i]['year'],
                             $data['vencimiento' . $i]['month'], $data['vencimiento' . $i]['day']);
                         $cuotaCargada = $this->Cuotas->newEntity();
                         $cuotaCargada->tarifa_aplicada_id = $tarifa_aplicada_id;
@@ -144,6 +143,13 @@ class CuotasController extends AppController {
                     $error = "La suma de los montos de las cuotas no coincide con el total de la tarifa";
                 }
             }
+
+            $this->set(compact('sumPesos'));
+            $this->set('_serialize', ['sumPesos']);
+            $this->set(compact('sumDolares'));
+            $this->set('_serialize', ['sumDolares']);
+
+
             $this->set(compact('tarifa'));
             $this->set('_serialize', ['tarifa']);
             $this->set(compact('error'));
@@ -290,24 +296,23 @@ class CuotasController extends AppController {
             $tarifa = $tarifa_aplicada->tarifa;
 
             $inicioPago = $tarifa_aplicada->fecha_primer_pago;
-            $finPago = $tarifa->fin_pago;
 
             $cuotas = array();
             $date = Time::create($inicioPago->year, $inicioPago->month, $inicioPago->day);
-            $meses = 0;
 
-            while ($date < $finPago) {
+            for ($i = 0; $i < $tarifa->cantidad_cuotas; $i++) {
                 $cuota = $this->Cuotas->newEntity();
                 $cuota->vencimiento = $date;
                 array_push($cuotas, $cuota);
-                $date = Time::create($date->year, $date->month + 1, $date->day);
-                $meses = $meses + 1;
+                $date = Time::create($date->year, $date->month + 1, 10);
+
             }
+
             $campos = array();
 
             //Defino los montos de las cuotas
             if ((is_null($tarifa->monto_pesos) || $tarifa->monto_pesos == 0) && $tarifa->monto_dolares = !0) {
-                $cuotaPromedio = floor($tarifa->monto_dolares / $meses);
+                $cuotaPromedio = floor($tarifa->monto_dolares / $tarifa->cantidad_cuotas);
                 for ($i = 0; $i < count($cuotas); $i++) {
                     if ($i == count($cuotas) - 1) {
                         $cuotas[$i]->monto_dolares = $tarifa->monto_dolares - $cuotaPromedio * (count($cuotas) - 1);
@@ -326,7 +331,7 @@ class CuotasController extends AppController {
                     array_push($campos, $arrayCuota);
                 }
             } else if ($tarifa->monto_pesos != 0 && (is_null($tarifa->monto_dolares) || $tarifa->monto_dolares == 0)) {
-                $cuotaPromedio = floor($tarifa->monto_pesos / $meses);
+                $cuotaPromedio = floor($tarifa->monto_pesos / $tarifa->cantidad_cuotas);
                 for ($i = 0; $i < count($cuotas); $i++) {
                     if ($i == count($cuotas) - 1) {
                         $cuotas[$i]->monto_pesos = $tarifa->monto_pesos - $cuotaPromedio * (count($cuotas) - 1);
@@ -348,9 +353,9 @@ class CuotasController extends AppController {
                 $dolaresEnPesosAprox = $tarifa->monto_dolares * 16;
                 $porcentajePesos = ($tarifa->monto_pesos / $dolaresEnPesosAprox);
                 $porcentajeDolares = 1 - $porcentajePesos;
-                $cantidadCuotasDolares = round($porcentajeDolares * $meses / 100);
+                $cantidadCuotasDolares = round($porcentajeDolares * $tarifa->cantidad_cuotas / 100);
                 if ($cantidadCuotasDolares == 0) $cantidadCuotasDolares = 1;
-                $cantidadCuotasPesos = $meses - $cantidadCuotasDolares;
+                $cantidadCuotasPesos = $tarifa->cantidad_cuotas - $cantidadCuotasDolares;
 
                 $index = 0;
 
@@ -408,7 +413,7 @@ class CuotasController extends AppController {
                     }
 
                     $pasajerosdegruposTable = TableRegistry::get('Pasajerosdegrupos');
-                    $queryPasajeros = $pasajerosdegruposTable->find('all')
+                    $queryPasajeros = $pasajerosdegruposTable->find('all', ['contain' => ['Pasajeros']])
                         ->where(['pasajerodegrupo_eliminado' => 0, 'tarifa_aplicada_id' => $tarifa_aplicada_id]);
 
                     $resultPasajeros = $queryPasajeros->toList();
@@ -416,22 +421,15 @@ class CuotasController extends AppController {
                     $cuotas = $this->Cuotas->find('all')->where(['tarifa_aplicada_id' => $tarifa_aplicada_id,'cuota_eliminado' => 0]);
 
                     $cuotasAplicadasTable = TableRegistry::get('CuotasAplicadas');
-                    foreach ($resultPasajeros as $pasajero) {
-                        $this->eliminarCuotasAplicadasDePlanViejo($pasajero->id);
+                    foreach ($resultPasajeros as $pasajerodegrupo) {
+                        $this->eliminarCuotasAplicadasDePlanViejo($pasajerodegrupo->id);
                         $insert = $cuotasAplicadasTable->query();
                         $insert->insert(['cuota_id', 'pasajero_grupo_id', 'cuota_aplicada_eliminado',
                             'fecha_creacion', 'usuario_creacion']);
                             foreach ($cuotas as $cuota) {
-//                                $cuotaAplicada = $cuotasAplicadasTable->newEntity();
-//                                $cuotaAplicada->cuota_id = $cuota->id;
-//                                $cuotaAplicada->pasajero_grupo_id = $pasajero->id;
-//                                $cuotaAplicada->usuario_creacion = $this->Auth->user('id');
-//                                $cuotaAplicada->fecha_creacion = Time::now();
-//                                $cuotaAplicada->cuota_aplicada_eliminado = 0;
-//                                $cuotasAplicadasTable->save($cuotaAplicada);
                                 $insert->values([
                                     'cuota_id' => $cuota->id,
-                                    'pasajero_grupo_id' => $pasajero->id,
+                                    'pasajero_grupo_id' => $pasajerodegrupo->id,
                                     'cuota_aplicada_eliminado' => 0,
                                     'fecha_creacion' => Time::now(),
                                     'usuario_creacion' => $this->Auth->user('id')
@@ -440,10 +438,10 @@ class CuotasController extends AppController {
                             $insert->execute();
                     }
                     $this->set('$resultPasajeros', $resultPasajeros);
-//
-//                    return $this->redirect(
-//                        ['controller' => 'Grupos', 'action' => 'verplanes']
-//                    );
+
+                    return $this->redirect(
+                        ['controller' => 'Pasajeros', 'action' => 'view', $resultPasajeros[0]->pasajero->id]
+                    );
                 } else {
                     $error = "La suma de los montos de las cuotas no coincide con el total de la tarifa";
                 }

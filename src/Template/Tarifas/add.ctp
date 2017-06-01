@@ -39,7 +39,7 @@
                                 <?php  echo $this->Form->input('monto_dolares',  ['required' => true, 'class' => 'form-control' ] ); ?>
                             </div>
                             <div class="form-group">
-                                <?php  echo $this->Form->input('fin_pago',  ['required' => true, 'class' => 'form-control' ] ); ?>
+                                <?php  echo $this->Form->input('cantidad_cuotas',  ['required' => true, 'class' => 'form-control' ] ); ?>
                             </div>
                             <?= $this->Html->link(__('Volver'), ['action' => 'index'] , array('class'=>'btn btn-danger') ) ?>
                             <?= $this->Form->button(__('Guardar'), ['class'=>'btn btn-success']) ?>

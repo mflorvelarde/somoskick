@@ -1,7 +1,8 @@
 <script type="text/javascript">
-    $( document ).ready(function(){
-       $('#tarifas-table').dynatable();
-    });
+
+$( document ).ready(function(){
+   $('#example1').dynatable();
+});
 </script>
 <section class="content-header">
 	<h1 class="page-header">
@@ -21,17 +22,14 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <?= $this->Html->link(__('Nuevo usuario'), ['action' => 'addkick'] , array('class'=>'btn bg-maroon margin-bottom') ) ?>
-                        </div>
-                    </div>
-                    <table id="tarifas-table" class="table table-bordered table-striped">
+                    <table id="example1" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Nombre</th>
                                 <th>Apellido</th>
                                 <th>Email</th>
+                                <th>Contraseña reseteada</th>
+                                <th>Contraseña</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,6 +38,9 @@
                                 <td><?= h($persona->nombre) ?></td>
                                 <td><?= h($persona->apellido) ?></td>
                                 <td><?= h($persona->mail) ?></td>
+                                <td><?= h($persona->contrasena_reset) ?></td>
+                                <td><?= h($persona->contrasena) ?></td>
+
                                 <td>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default">Acciones</button>
@@ -49,6 +50,7 @@
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
                                             <li><?= $this->Form->postLink('Ver', ['action' => 'view', $persona->id]) ?></li>
+                                            <li><?= $this->Form->postLink('Resetear contraseña', ['action' => 'cambiarcontrasenadeusuario', $persona->id]) ?></li>
                                             <li><?= $this->Form->postLink('Eliminar', ['action' => 'delete', $persona->id]) ?></li>
                                         </ul>
                                     </div>

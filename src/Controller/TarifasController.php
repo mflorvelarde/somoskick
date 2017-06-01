@@ -109,6 +109,11 @@ class TarifasController extends AppController {
         $userID = $this->Auth->user('id');
         if ($this->isNotClient($userID)) {
             $tarifa = $this->Tarifas->get($id, ['contain' => []]);
+            $viajesTable = TableRegistry::get('Viajes');
+            $viajes_options = $viajesTable->find('list', array(
+                'conditions' => array('viaje_eliminado' => 0),
+                'valueField' => array('destino')
+            ));
 
             if ($this->request->is(['patch', 'post', 'put'])) {
                 $tarifa = $this->Tarifas->patchEntity($tarifa, $this->request->data);
@@ -123,6 +128,8 @@ class TarifasController extends AppController {
                     $this->Flash->error(__('La tarifa no pudo ser guardada. Por favor, intente nuevamente'));
                 }
             }
+            $this->set(compact('viajes_options'));
+            $this->set('_serialize', ['viajes_options']);
             $this->set(compact('tarifa'));
             $this->set('_serialize', ['tarifa']);
         } else {

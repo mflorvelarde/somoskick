@@ -28,8 +28,8 @@
                                     <!-- /.col -->
                                     <div class="col-sm-4 border-right">
                                         <div class="description-block">
-                                            <h5 class="description-header"><?= h($tarifa->fin_pago)?></h5>
-                                            <span class="description-text">Fin de pagos</span>
+                                            <h5 class="description-header"><?= h($tarifa->cantidad_cuotas)?></h5>
+                                            <span class="description-text">Cantidad de cuotas</span>
                                         </div>
                                         <!-- /.description-block -->
                                     </div>
