@@ -316,7 +316,7 @@ class PasajerosController extends AppController {
         $cuotasTable = TableRegistry::get('Cuotas');
         $query = $cuotasTable->find('all')
             ->where(['tarifa_aplicada_id' => $tarifaID]);
-        $cuotas = $this->paginate($query);
+        $cuotas = $query->all();
 
         $cuotasAplicadas = array();
         foreach ($cuotas as $cuota) {
