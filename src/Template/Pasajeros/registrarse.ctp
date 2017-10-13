@@ -283,6 +283,9 @@
                                     <div class="col-md-12" style="padding: 0px">
                                         <div class="col-md-12" style="padding-left: 0px">
                                             <div class="form-group">
+                                                <div>
+                                                    <label>Fecha de nacimiento</label>
+                                                </div>
                                                 <?php  echo $this->Form->date('responsable1.persona.fecha_nacimiento',  [
                                                     'required' => true,
                                                     'class' => 'form-control',
@@ -489,6 +492,9 @@
                                     <div class="col-md-12" style="padding: 0px">
                                         <div class="col-md-12" style="padding-left: 0px">
                                             <div class="form-group">
+                                                <div>
+                                                    <label>Fecha de nacimiento</label>
+                                                </div>
                                                 <?php  echo $this->Form->date('responsable2.persona.fecha_nacimiento',  [
                                                     'required' => true,
                                                     'class' => 'form-control',
