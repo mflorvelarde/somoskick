@@ -35,7 +35,7 @@ class CuotasController extends AppController {
             $campos = array();
 
             //Defino los montos de las cuotas
-            if ((is_null($tarifa->monto_pesos) || $tarifa->monto_pesos == 0) && $tarifa->monto_dolares = !0) {
+            if ((is_null($tarifa->monto_pesos) || $tarifa->monto_pesos == 0) && $tarifa->monto_dolares != 0) {
                 $cuotaPromedio = floor($tarifa->monto_dolares / $tarifa->cantidad_cuotas);
                 for ($i = 0; $i < count($cuotas); $i++) {
                     if ($i == count($cuotas) - 1) {
